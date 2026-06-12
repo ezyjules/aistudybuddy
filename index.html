@@ -170,7 +170,7 @@
     <h1><span class="mark">AI Study Buddy</span></h1>
     <span class="scorebar">⭐ <b id="pts">0</b> &nbsp; 🔥 <b id="streak">0</b></span>
   </header>
-  <div class="ver" id="verLine">v1.6 · published 12 Jun 2026 · web edition</div>
+  <div class="ver" id="verLine">v1.7 · published 12 Jun 2026 · web edition</div>
   <p class="sub">Snap a photo of a question, highlight it, and work through it together — any subject, any year level, any school system. Points for every question you finish — streaks for getting them right.</p>
 
   <div class="pbar">
@@ -275,6 +275,10 @@
 
   <!-- STEP 3: tutoring -->
   <div id="results">
+    <div class="next-row" style="justify-content:flex-start; margin:0 0 14px;">
+      <button class="primary" onclick="goNewPhoto()">📷 Check another question</button>
+      <button onclick="goNextOnPage()">📄 Next question on this page</button>
+    </div>
     <span class="chip" id="topicChip"></span>
     <div class="block">
       <div class="section-label">The question, read back</div>
@@ -330,9 +334,9 @@
     </div>
 
     <div class="next-row">
-      <button class="primary" id="nextOnPageBtn">📄 Next question on this page</button>
+      <button class="primary" onclick="goNewPhoto()">📷 Check another question</button>
+      <button onclick="goNextOnPage()">📄 Next question on this page</button>
       <button id="similarBtn">🔁 Similar question to practise</button>
-      <button class="quiet" id="resetBtn">📷 New photo</button>
     </div>
   </div>
 </div>
@@ -622,7 +626,7 @@ $('tutorSelBtn').addEventListener('click', () => {
 $('wholePageBtn').addEventListener('click', () => {
   prepImage(pageDataUrl, null, (b64, url) => { imageData = b64; focusDataUrl = url; startTutoring(); });
 });
-$('nextOnPageBtn').addEventListener('click', () => { stopSpeak(); openSelector(pageDataUrl); });
+function goNextOnPage(){ stopSpeak(); openSelector(pageDataUrl); }
 
 /* ================= API ================= */
 /* ================= class profile (agnostic tutoring) ================= */
@@ -912,14 +916,14 @@ $('similarBtn').addEventListener('click', async () => {
   }finally{ $('loading').style.display='none'; $('similarBtn').disabled=false; $('similarBtn').textContent='🔁 Similar question to practise'; }
 });
 
-$('resetBtn').addEventListener('click', () => {
+function goNewPhoto(){
   stopSpeak();
   pageDataUrl = null; imageData = null; coaching = null; history = [];
   $('selector').style.display='none'; $('results').style.display='none';
   $('cameraPanel').style.display='block';
   startCamera();
   window.scrollTo({top:0, behavior:'smooth'});
-});
+}
 function showError(msg){ $('errorBox').textContent=msg; $('errorBox').style.display='block'; $('loading').style.display='none'; }
 
 /* ================= speech: system voices + optional premium (ElevenLabs) ================= */
