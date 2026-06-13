@@ -318,7 +318,7 @@
   <div class="scoreboard-row">
     <span class="scorebar">⭐ <b id="pts">0</b> &nbsp; 🔥 <b id="streak">0</b></span>
   </div>
-  <div class="ver" id="verLine">v2.10 beta · published 12 Jun 2026 · web edition</div>
+  <div class="ver" id="verLine">v2.11 beta · published 12 Jun 2026 · web edition</div>
   <p class="sub">Snap a photo of a question, highlight it, and work through it together — any subject, any year level, any school system. Points for every question you finish — streaks for getting them right.</p>
   <p class="ver">🧪 This is a beta — the tutor occasionally makes a mistake, especially with arithmetic or messy handwriting. If an answer looks off, say so in the chat: checking is half the learning.</p>
 
@@ -874,7 +874,7 @@ function buildSystem(){
 
 You'll be shown a photo of one question (sometimes with the student's handwritten or typed working), and the student will ask follow-up questions in conversation.
 
-Always: warm, never condescending. Works for any subject — maths, sciences, languages, humanities. If maths notation is involved, write it as plain unicode text (√, ², ³, ×, ÷, ≈, °, π, fractions like 3/4) — never LaTeX. Keep language natural to read aloud.
+Always: warm, never condescending. Speak DIRECTLY TO the student in the second person — say "you" ("you've simplified this correctly", "your next step is…", "you made a small slip here"). NEVER refer to them in the third person as "the student" or "they"; that wording is for these instructions only and must never appear in your replies. Works for any subject — maths, sciences, languages, humanities. If maths notation is involved, write it as plain unicode text (√, ², ³, ×, ÷, ≈, °, π, fractions like 3/4) — never LaTeX. Keep language natural to read aloud.
 
 When the request asks for JSON, respond with ONLY valid JSON — no markdown fences, no preamble. When the request is a conversational follow-up, reply in plain friendly text, 1–5 sentences. In follow-ups, never state the final answer unless told it has already been revealed; guide toward it instead.
 
@@ -883,8 +883,8 @@ If the photo shows more than one question, work on the most prominent/complete o
 Accuracy check: arithmetic slips are unacceptable in a tutor. Before responding, silently recompute every numeric and algebraic step a second, independent way (e.g. substitute a value, or re-add coefficients separately) and confirm the final answer matches the worked solution; fix any discrepancy before you reply.`;
 }
 
-const SOLVE_SHAPE = `{"topic":"short label e.g. Trigonometry","question_readback":"the question read back in full as natural speech","approach":"2-4 sentences on HOW to think about and start it, naming the rule or idea. Do NOT state or strongly imply the final answer.","hints":["gentle nudge","names the exact technique or first step","walks to the brink of the answer without stating it"],"final_answer":"concise final answer","worked_solution":[{"explain":"what this step does and why","working":"the maths"}]}`;
-const CHECK_SHAPE = `{"topic":"short label","question_readback":"the question read back as natural speech","student_answer":"the student's OWN final answer, transcribed exactly as written in the photo (their handwriting). Empty string if no attempt is visible.","verdict":"correct" or "not_quite" or "no_working","summary":"1-3 sentences. If correct: confirm warmly, note anything done especially well. If not_quite: say roughly where it goes off track WITHOUT giving the correct final answer. If no_working: explain you can see the question but no attempt, ask to retake with the working in the highlighted area.","step_review":[{"working":"the student's step as written","status":"ok" or "issue","comment":"confirm why it's right, or unpack what went wrong and the idea to fix it"}],"correct_answer":"the correct final answer","worked_solution":[{"explain":"...","working":"..."}]}`;
+const SOLVE_SHAPE = `{"topic":"short label e.g. Trigonometry","question_readback":"the question read back in full as natural speech","approach":"2-4 sentences addressed to you (\"start by…\", \"you\u2019ll want to…\") on HOW to think about and start it, naming the rule or idea. Do NOT state or strongly imply the final answer.","hints":["gentle nudge","names the exact technique or first step","walks to the brink of the answer without stating it"],"final_answer":"concise final answer","worked_solution":[{"explain":"what this step does and why, spoken to you as \"you\"","working":"the maths"}]}`;
+const CHECK_SHAPE = `{"topic":"short label","question_readback":"the question read back as natural speech","student_answer":"the student's OWN final answer, transcribed exactly as written in the photo (their handwriting). Empty string if no attempt is visible.","verdict":"correct" or "not_quite" or "no_working","summary":"1-3 sentences addressed to the student as \"you\". If correct: confirm warmly (e.g. \"You\u2019ve nailed this\"), note anything you did especially well. If not_quite: say roughly where you go off track WITHOUT giving the correct final answer. If no_working: say you can see the question but no attempt from you, and ask to retake with your working in the highlighted area.","step_review":[{"working":"the student's step as written","status":"ok" or "issue","comment":"addressed to you in second person: confirm why your step is right, or unpack what went wrong and the idea to fix it"}],"correct_answer":"the correct final answer","worked_solution":[{"explain":"...","working":"..."}]}`;
 
 function toOpenAIMessages(messages){
   const out = [{ role:'system', content: buildSystem() }];
