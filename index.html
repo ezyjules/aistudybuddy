@@ -26,6 +26,10 @@
   h1{font-family:var(--display); font-weight:800; font-size:clamp(1.7rem,4vw,2.4rem); letter-spacing:-0.02em;}
   h1 .mark{background:linear-gradient(transparent 55%, var(--hi) 55%); padding:0 4px;}
   .scorebar{font-family:var(--mono); font-size:.95rem; background:var(--card); border:1.5px solid var(--ink); border-radius:999px; padding:7px 16px; box-shadow:0 2px 0 var(--ink); white-space:nowrap;}
+  .head-tools{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+  .voice-toggle{width:118px; justify-content:center; display:inline-flex; align-items:center; gap:6px; white-space:nowrap;}
+  .voice-toggle.is-off{position:relative; opacity:.7;}
+  .voice-toggle.is-off #muteWord{text-decoration:line-through; text-decoration-thickness:2px;}
   .scorebar b{font-size:1.05rem;}
   .sub{color:var(--ink-soft); max-width:64ch; margin-bottom:18px; font-size:.95rem;}
   .ver{font-family:var(--mono); font-size:.68rem; color:var(--ink-soft); opacity:.75; margin:-2px 0 8px; letter-spacing:.04em;}
@@ -302,13 +306,13 @@
 <div class="wrap">
   <header>
     <h1><span class="mark">AI Study Buddy</span></h1>
-    <span style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+    <span class="head-tools">
       <span class="scorebar">⭐ <b id="pts">0</b> &nbsp; 🔥 <b id="streak">0</b></span>
-      <button class="quiet" id="muteBtn" title="Turn the tutor's spoken voice on or off">🔊 Tutor voice: On</button>
+      <button class="quiet voice-toggle" id="muteBtn" title="Turn the tutor's spoken voice on or off"><span id="muteIcon">🗣️</span> <span id="muteWord">Voice on</span></button>
       <button class="quiet" id="helpBtn" title="What this is and how to get set up">❓ What's this?</button>
     </span>
   </header>
-  <div class="ver" id="verLine">v2.6 beta · published 12 Jun 2026 · web edition</div>
+  <div class="ver" id="verLine">v2.7 beta · published 12 Jun 2026 · web edition</div>
   <p class="sub">Snap a photo of a question, highlight it, and work through it together — any subject, any year level, any school system. Points for every question you finish — streaks for getting them right.</p>
   <p class="ver">🧪 This is a beta — the tutor occasionally makes a mistake, especially with arithmetic or messy handwriting. If an answer looks off, say so in the chat: checking is half the learning.</p>
 
@@ -395,19 +399,19 @@
   <div class="panel" id="cameraPanel">
     <div class="capture-hero">
       <button class="primary big" id="takePhotoBtn">📷 Take a photo of the question</button>
-      <p class="cap-note" id="capNote">On a <b>phone or iPad</b> this opens the camera straight away — point, shoot, done. On the <b>Mac</b> it opens a picker: in Safari choose <b>Take Photo</b> to snap with your iPhone, or pick an existing photo.</p>
     </div>
-    <div class="cam-stage" id="camStage" style="display:none">
-      <div class="cam-off" id="camOff"></div>
-      <video id="camVideo" autoplay playsinline style="display:none"></video>
-      <div class="countdown" id="countdown">3</div>
-      <div class="flash" id="flash"></div>
-    </div>
-    <div class="btn-row">
+    <div class="btn-row" style="margin-top:12px">
       <button class="quiet" id="liveCamBtn">🎥 Try live camera view</button>
       <button class="primary" id="autoSnapBtn" style="display:none">📷 Hold it up — capture in 3…2…1</button>
       <button id="snapNowBtn" style="display:none">Snap now</button>
       <select id="camSelect" title="Choose camera" style="display:none"></select>
+    </div>
+    <p class="cap-note" id="capNote">On a <b>phone or iPad</b> this opens the camera straight away — point, shoot, done. On the <b>Mac</b> it opens a picker: in Safari choose <b>Take Photo</b> to snap with your iPhone, or pick an existing photo.</p>
+    <div class="cam-stage" id="camStage" style="display:none; margin-top:6px;">
+      <div class="cam-off" id="camOff"></div>
+      <video id="camVideo" autoplay playsinline style="display:none"></video>
+      <div class="countdown" id="countdown">3</div>
+      <div class="flash" id="flash"></div>
     </div>
     <div class="fallback">Question on this screen? <kbd>⌃⌘⇧4</kbd> to screenshot it, then <kbd>⌘V</kbd> anywhere on this page. You can also drag an image in or <a href="#" id="fileLink">choose a file</a>.</div>
     <input type="file" id="takePhotoInput" accept="image/*" capture="environment" style="display:none">
@@ -1410,11 +1414,17 @@ $('testVoiceBtn').addEventListener('click', () => {
   speak("G'day! This is how I'll sound when we work through your questions together. The square root of 144 is... well, that would be telling.");
   muted = wasMuted;
 });
+function setVoiceBtn(){
+  $('muteIcon').textContent = muted ? '🔇' : '🗣️';
+  $('muteWord').textContent = muted ? 'Voice off' : 'Voice on';
+  $('muteBtn').classList.toggle('is-off', muted);
+}
 $('muteBtn').addEventListener('click', () => {
   muted = !muted;
-  $('muteBtn').textContent = muted ? '🔇 Tutor voice: Off' : '🔊 Tutor voice: On';
+  setVoiceBtn();
   if (muted) stopSpeak();
 });
+setVoiceBtn();
 
 function speechText(text){
   let t = String(text)
