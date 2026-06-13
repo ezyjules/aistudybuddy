@@ -50,7 +50,7 @@
   .sub{color:var(--ink-soft); max-width:64ch; margin-bottom:18px; font-size:.95rem;}
   .ver{font-family:var(--mono); font-size:.68rem; color:var(--ink-soft); opacity:.75; margin:-2px 0 8px; letter-spacing:.04em;}
   .tagline{font-family:var(--display); font-weight:800; font-size:1.12rem; line-height:1.4; margin:4px 0 0;}
-  .creed{color:var(--ink); font-size:.98rem; line-height:1.5; margin:0 0 10px; max-width:46ch;}
+  .creed{color:var(--ink); font-size:.98rem; line-height:1.5; margin:0 0 10px; max-width:62ch;}
   .sub-compact{color:var(--ink-soft); font-size:.9rem; margin-bottom:16px;}
   .beta-tag{display:inline-block; font-size:.8rem; opacity:.85;}
   .fb-inline{font-size:.8rem; color:var(--ink-soft); text-decoration:underline;}
@@ -208,7 +208,11 @@
   #queueBanner{display:flex; align-items:center; gap:12px; flex-wrap:wrap; background:var(--mode-active); border:1.5px solid var(--hi-deep); border-radius:12px; padding:10px 14px; margin-bottom:14px;}
   #queueText{font-weight:700; font-size:.9rem;}
   #strategyWrap{margin:6px 0 18px; padding:16px; background:var(--mode-active); border:1.5px solid var(--hi-deep); border-radius:12px;}
-  #workedWrap{margin-top:18px; padding-top:18px; border-top:2px dashed var(--line);}
+  #workedWrap{margin-top:18px;}
+  #pathChoice{margin:10px 0 4px;}
+  .path-q{font-weight:700; margin:0 0 10px;}
+  .path-btns{display:flex; gap:10px; flex-wrap:wrap;}
+  .path-btns button{flex:1; min-width:180px;}
   .strat-q{font-weight:700; margin:6px 0 10px;}
   .strat-opt{display:block; width:100%; text-align:left; border:1.5px solid var(--line); border-radius:10px; background:var(--card); color:var(--ink); padding:12px 15px; margin:8px 0; cursor:pointer; box-shadow:0 2px 0 var(--line); font-family:var(--body); font-size:.95rem; transition:transform .08s;}
   .strat-opt:hover{transform:translateY(-1px);}
@@ -263,10 +267,13 @@
   /* thinking: a bold accent border that chases around the whole window edge */
   #fxGlow{position:fixed; inset:0; pointer-events:none; z-index:159; display:none;}
   #fxGlow.on{display:block;}
-  #fxGlow::before{content:''; position:fixed; inset:0; pointer-events:none;
-    background:radial-gradient(ellipse 120% 80% at 50% 50%, transparent 45%, rgba(120,75,160,.45) 125%);
-    animation:partyPulse 1.2s ease-in-out infinite;}
-  @keyframes partyPulse{0%,100%{opacity:.25}50%{opacity:.75}}
+  #fxGlow::before{content:''; position:fixed; inset:0; pointer-events:none; border-radius:2px;
+    box-shadow:inset 0 0 70px 18px rgba(255,60,172,.0), inset 0 0 130px 30px rgba(120,75,160,.0);
+    animation:edgePulse 1.25s ease-in-out infinite;}
+  @keyframes edgePulse{
+    0%,100%{ box-shadow:inset 0 0 50px 8px rgba(255,60,172,.18), inset 0 0 110px 22px rgba(43,134,197,.14); }
+    50%{ box-shadow:inset 0 0 95px 26px rgba(255,60,172,.42), inset 0 0 170px 46px rgba(120,75,160,.34); }
+  }
   #fxGlow span{position:fixed; pointer-events:none;}
   #fxGlow .e-top, #fxGlow .e-bottom{left:0; right:0; height:5px;}
   #fxGlow .e-left, #fxGlow .e-right{top:0; bottom:0; width:5px;}
@@ -281,10 +288,10 @@
   #fxBeam{display:none;}
 
   /* celebration: bold full-screen flash that phases in then out */
-  #audioDock{position:fixed; right:14px; bottom:16px; z-index:160; display:flex; gap:6px; background:var(--card); border:1.5px solid var(--ink); border-radius:999px; padding:6px 8px; box-shadow:0 2px 0 var(--ink);}
-  #audioDock button{border:none; background:transparent; box-shadow:none; font-size:1.15rem; padding:6px 8px; border-radius:50%;}
-  #audioDock button:hover{background:var(--mode-active); transform:none;}
-  #fbTab{position:fixed; left:14px; bottom:16px; z-index:160; font-family:var(--display); font-weight:700; font-size:.85rem; border:1.5px solid var(--ink); background:var(--card); color:var(--ink); border-radius:999px; padding:9px 15px; box-shadow:0 2px 0 var(--ink); cursor:pointer;}
+  #audioDock{position:fixed; right:14px; bottom:16px; z-index:160; display:flex; align-items:center; gap:6px;}
+  #audioDock button{width:44px; height:44px; flex:0 0 44px; display:flex; align-items:center; justify-content:center; border:1.5px solid var(--ink); background:var(--card); box-shadow:0 2px 0 var(--ink); font-size:1.15rem; padding:0; border-radius:50%;}
+  #audioDock button:hover{background:var(--mode-active); transform:translateY(-1px); box-shadow:0 3px 0 var(--ink);}
+  #fbTab{position:fixed; left:14px; bottom:16px; z-index:160; height:44px; display:inline-flex; align-items:center; font-family:var(--display); font-weight:700; font-size:.85rem; border:1.5px solid var(--ink); background:var(--card); color:var(--ink); border-radius:999px; padding:0 16px; box-shadow:0 2px 0 var(--ink); cursor:pointer;}
   #fbTab:hover{transform:translateY(-1px); box-shadow:0 3px 0 var(--ink);}
   #fbPanel{position:fixed; left:14px; bottom:16px; z-index:170; width:min(330px, calc(100vw - 28px)); background:var(--card); border:1.5px solid var(--ink); border-radius:16px; box-shadow:0 8px 0 rgba(0,0,0,.08), 0 2px 0 var(--ink); padding:16px;}
   .fb-head{display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:12px;}
@@ -419,7 +426,7 @@
   <div class="scoreboard-row">
     <span class="scorebar">⭐ <b id="pts">0</b> &nbsp; 🔥 <b id="streak">0</b></span>
   </div>
-  <div class="ver" id="verLine">v3.19 beta · published 13 Jun 2026 · web edition</div>
+  <div class="ver" id="verLine">v3.24 beta · published 13 Jun 2026 · web edition</div>
   <p class="creed">Understanding isn't given, it's guided. Plaito walks you through the thinking, never just the answer.</p>
   <p class="sub-compact">Snap a question, highlight it, and work through it together. <span class="beta-tag">🧪 Beta — double-check the tutor's arithmetic.</span></p>
 
@@ -460,6 +467,7 @@
         </div>
         <div class="key-row">
           <input type="password" id="apiKeyInput" placeholder="sk-ant-…" autocomplete="off" aria-label="API key">
+          <button id="apiKeyBtn">Connect</button>
         </div>
         <p class="key-status" id="keyStatus" style="display:none"></p>
         <label class="remember-row"><input type="checkbox" id="rememberKey" checked> Remember on this device (don't tick on shared computers)</label>
@@ -584,7 +592,7 @@
         <div id="stepReview"></div>
       </div>
       <div class="speak-row">
-        <button class="quiet" onclick="speak(sectionText.main)">🔊 Read this explanation aloud</button>
+        <button class="quiet" onclick="speak(sectionText.main)">🔁 Repeat aloud</button>
       </div>
     </div>
 
@@ -603,16 +611,29 @@
     <div class="block answer-block" id="answerBlock">
       <div class="section-label">Answer</div>
       <span class="answer-final" id="finalAnswer"></span>
-      <div id="strategyWrap">
+
+      <div id="pathChoice">
+        <p class="path-q">How would you like to get there?</p>
+        <div class="path-btns">
+          <button class="primary" id="choiceStrategy">🧭 Walk me through the strategy</button>
+          <button id="choiceSolution">📝 Show the worked solution</button>
+        </div>
+      </div>
+
+      <div id="strategyWrap" style="display:none">
         <div class="section-label">Strategy — your call at each step</div>
         <div id="strategyArea"></div>
+        <div class="btn-row" id="afterStrategyRow" style="display:none; justify-content:flex-start; margin-top:14px">
+          <button id="seeSolutionBtn">📝 See the worked solution</button>
+        </div>
       </div>
-      <div id="workedWrap">
+
+      <div id="workedWrap" style="display:none">
         <div class="section-label">Worked solution</div>
         <ol class="steps" id="workedSteps"></ol>
-      </div>
-      <div class="speak-row">
-        <button class="quiet" onclick="speak(sectionText.solution)">🔊 Read the solution aloud</button>
+        <div class="speak-row">
+          <button class="quiet" onclick="speak(sectionText.solution)">🔁 Repeat aloud</button>
+        </div>
       </div>
     </div>
 
@@ -741,6 +762,24 @@ function checkKeyLive(){
 }
 $('apiKeyInput').addEventListener('input', checkKeyLive);
 document.querySelectorAll('input[name=provider]').forEach(r=>r.addEventListener('change', () => { updateKeyPlaceholder(); checkKeyLive(); }));
+function connectKey(){
+  const chosen = document.querySelector('input[name=provider]:checked')?.value || 'anthropic';
+  const v = $('apiKeyInput').value.trim();
+  const st = $('keyStatus');
+  if (!v){ st.style.display='block'; st.className='key-status bad'; st.textContent='Paste a key first.'; return; }
+  if (chosen === 'anthropic' && !v.startsWith('sk-ant-')){ st.style.display='block'; st.className='key-status bad'; st.textContent="That doesn't look like a Claude key (sk-ant-…)."; return; }
+  if (chosen === 'openai' && !v.startsWith('sk-')){ st.style.display='block'; st.className='key-status bad'; st.textContent="That doesn't look like a ChatGPT key (sk-…)."; return; }
+  apiKey = v; provider = chosen;
+  if ($('rememberKey').checked) localStorage.setItem('sb_api_key', apiKey); else localStorage.removeItem('sb_api_key');
+  localStorage.setItem('sb_provider', provider);
+  $('apiKeyInput').value = '';
+  updateKeyPlaceholder();
+  st.style.display='block'; st.className='key-status ok';
+  st.textContent = '✓ ' + (provider==='openai'?'ChatGPT':'Claude') + ' key connected on this device';
+  toast((provider==='openai'?'ChatGPT':'Claude') + ' key connected ✓');
+}
+$('apiKeyBtn').addEventListener('click', connectKey);
+$('apiKeyInput').addEventListener('keydown', e => { if (e.key==='Enter'){ e.preventDefault(); connectKey(); } });
 $('setupDoneBtn').addEventListener('click', () => {
   const chosen = document.querySelector('input[name=provider]:checked')?.value || 'anthropic';
   const typed = $('apiKeyInput').value.trim();
@@ -1107,7 +1146,16 @@ function buildSystem(){
 
 You'll be shown a photo of one question (sometimes with the student's handwritten or typed working), and the student will ask follow-up questions in conversation.
 
-Always: warm, never condescending. Speak DIRECTLY TO the student in the second person — say "you" ("you've simplified this correctly", "your next step is…", "you made a small slip here"). NEVER refer to them in the third person as "the student" or "they"; that wording is for these instructions only and must never appear in your replies. Works for any subject — maths, sciences, languages, humanities. If maths notation is involved, write it as plain unicode text (√, ², ³, ×, ÷, ≈, °, π, fractions like 3/4) — never LaTeX. Keep language natural to read aloud.
+Speak DIRECTLY TO the student in the second person — say "you" ("you've simplified this correctly", "your next step is…", "you made a small slip here"). NEVER refer to them in the third person as "the student" or "they"; that wording is for these instructions only and must never appear in your replies. Works for any subject — maths, sciences, languages, humanities. If maths notation is involved, write it as plain unicode text (√, ², ³, ×, ÷, ≈, °, π, fractions like 3/4) — never LaTeX. Keep language natural to read aloud.
+
+ENCOURAGEMENT — this is core to who you are. You are a warm, genuinely encouraging tutor who builds students up the way a great human teacher does. Follow these principles, which matter as much as correctness:
+- Lead with something real and specific they did well, before any correction. Praise the MOVE, not the person ("starting by factoring was exactly the right instinct"), never empty flattery ("great job!", "amazing!").
+- Even when an answer is wrong, find and name the genuine thing that was right — the setup, the method, the first three steps — so a mistake never feels like total failure. Locate the slip precisely and treat it as a small, fixable thing.
+- Praise EFFORT and PROCESS, not innate ability. Say "you stuck with a tricky step" or "you reasoned that through well", never "you're so smart" — this builds resilience.
+- Normalise struggle and mistakes as useful information, not verdicts ("that's a really common place to trip, and a helpful one because…"). Make it safe to be wrong.
+- Be warm but always honest — never hide or soften a real error to be nice; the kindness is in HOW you point it out, gently and constructively, not in pretending it isn't there.
+- NO obsequious AI-speak: no exclamation-mark confetti, no gushing, no "what a fantastic question". Calm, sincere, earned warmth — like a patient teacher who actually believes in this student.
+- When they get something right, let genuine, proportionate delight show — a brief, warm acknowledgement that they earned it. This is meant to be read aloud, so write encouragement that sounds good spoken: natural, warm, human.
 
 When the request asks for JSON, respond with ONLY valid JSON — no markdown fences, no preamble. When the request is a conversational follow-up, reply in plain friendly text, 1–5 sentences. In follow-ups, never state the final answer unless told it has already been revealed; guide toward it instead.
 
@@ -1119,7 +1167,7 @@ Accuracy check: arithmetic slips are unacceptable in a tutor. Before responding,
 }
 
 const SOLVE_SHAPE = `{"topic":"short label e.g. Trigonometry","question_readback":"the question read back in full as natural speech","approach":"2-4 sentences addressed to you (\"start by…\", \"you\u2019ll want to…\") on HOW to think about and start it, naming the rule or idea. Do NOT state or strongly imply the final answer.","hints":["gentle nudge","names the exact technique or first step","walks to the brink of the answer without stating it"],"final_answer":"concise final answer","worked_solution":[{"explain":"what this step does and why, spoken to you as \"you\"","working":"the maths"}],"strategy":[{"prompt":"a decision the student faces at this step, asked to you e.g. \"What\u2019s your first move?\"","options":["3-4 plausible next moves, only ONE clearly best"],"correct":0,"why":"why the correct option is the smart strategic choice, and briefly why the others are weaker"}]}`;
-const CHECK_SHAPE = `{"topic":"short label","question_readback":"the question read back as natural speech","student_answer":"the student's OWN final answer, transcribed exactly as written in the photo (their handwriting). Empty string if no attempt is visible.","verdict":"correct" or "not_quite" or "no_working","summary":"1-3 sentences addressed to the student as \"you\". If correct: confirm warmly (e.g. \"You\u2019ve nailed this\"), note anything you did especially well. If not_quite: say roughly where you go off track WITHOUT giving the correct final answer. If no_working: say you can see the question but no attempt from you, and ask to retake with your working in the highlighted area.","step_review":[{"working":"the student's step as written","status":"ok" or "issue","comment":"addressed to you in second person: confirm why your step is right, or unpack what went wrong and the idea to fix it"}],"correct_answer":"the correct final answer","worked_solution":[{"explain":"...","working":"..."}],"strategy":[{"prompt":"a decision faced at this step, asked to you e.g. \"What\u2019s the first move?\"","options":["3-4 plausible moves, only ONE clearly best"],"correct":0,"why":"why the correct option is the smart choice and why the others are weaker"}]}`;
+const CHECK_SHAPE = `{"topic":"short label","question_readback":"the question read back as natural speech","student_answer":"the student's OWN final answer, transcribed exactly as written in the photo (their handwriting). Empty string if no attempt is visible.","verdict":"correct" or "not_quite" or "no_working","summary":"1-3 sentences addressed to you as \"you\", in the warm encouraging tutor voice. If correct: open with specific genuine praise for what you did well, then confirm. If not_quite: FIRST name something you genuinely got right (setup, method, early steps), THEN say roughly where it goes off track WITHOUT giving the correct final answer, framed as a small fixable slip. If no_working: warmly note you can see the question but no attempt yet, and invite a retake with your working in the highlighted area.","step_review":[{"working":"the student's step as written","status":"ok" or "issue","comment":"addressed to you in second person: confirm why your step is right, or unpack what went wrong and the idea to fix it"}],"correct_answer":"the correct final answer","worked_solution":[{"explain":"...","working":"..."}],"strategy":[{"prompt":"a decision faced at this step, asked to you e.g. \"What\u2019s the first move?\"","options":["3-4 plausible moves, only ONE clearly best"],"correct":0,"why":"why the correct option is the smart choice and why the others are weaker"}]}`;
 
 function toOpenAIMessages(messages){
   const out = [{ role:'system', content: buildSystem() }];
@@ -1388,7 +1436,34 @@ function fillSolution(lead){
     sol += (s.explain||'') + '. ';
   });
   sectionText.solution = sol;
+  // reset the two paths to hidden + present the choice each time
+  resetPathChoice();
+}
+function resetPathChoice(){
+  if (!$('pathChoice')) return;
+  $('pathChoice').style.display='block';
+  $('strategyWrap').style.display='none';
+  $('workedWrap').style.display='none';
+  if ($('afterStrategyRow')) $('afterStrategyRow').style.display='none';
+}
+function showStrategyPath(){
+  $('pathChoice').style.display='none';
+  $('workedWrap').style.display='none';
+  $('strategyWrap').style.display='block';
   buildStrategy();
+  // spoken lead-in, then the first question is read by renderStratStep
+  speak("Let's work out the strategy together. " + (strategyHasSteps() ? "Here's your first decision." : ""));
+  $('strategyWrap').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function showSolutionPath(){
+  $('pathChoice').style.display='none';
+  $('strategyWrap').style.display='none';
+  $('workedWrap').style.display='block';
+  speak(sectionText.solution);
+  $('workedWrap').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function strategyHasSteps(){
+  return (coaching.strategy||[]).filter(x => x && x.prompt && Array.isArray(x.options) && x.options.length).length > 0;
 }
 
 /* ===== interactive strategy walkthrough ===== */
@@ -1429,8 +1504,10 @@ function renderStratStep(strat, i){
   if (i >= strat.length){
     const done = document.createElement('div');
     done.className='strat-done';
-    done.textContent = '🎯 That\u2019s the full strategy — now you know the why, not just the what.';
+    done.textContent = "🎯 That's the full strategy — now you know the why, not just the what.";
     area.appendChild(done);
+    speak("That's the strategy worked through. If you'd like to see the full written solution, tap to see it below.");
+    if ($('afterStrategyRow')) $('afterStrategyRow').style.display='flex';
     return;
   }
   const step = strat[i];
@@ -1479,6 +1556,7 @@ $('revealBtn').addEventListener('click', () => {
   answerRevealed = true;
   $('vault').style.display='none';
   $('answerBlock').style.display='block';
+  resetPathChoice();
   const e = session[currentIdx];
   if (e) e.revealed = true;
   if (!scored){
@@ -1488,8 +1566,12 @@ $('revealBtn').addEventListener('click', () => {
     logPerf({ t:Date.now(), topic:coaching.topic, mode: e && e.isPractice ? 'practice' : 'solve', result:'completed', hints:hintsUsed });
   }
   renderSessionChips();
-  speak(sectionText.solution);
+  // ask, aloud, which path they'd like — the tutor leads verbally
+  speak("Nice work having a go. Would you like me to walk you through the strategy step by step, or show you the full worked solution?");
 });
+$('choiceStrategy').addEventListener('click', showStrategyPath);
+$('choiceSolution').addEventListener('click', showSolutionPath);
+$('seeSolutionBtn').addEventListener('click', () => { $('workedWrap').style.display='block'; speak(sectionText.solution); $('workedWrap').scrollIntoView({behavior:'smooth', block:'nearest'}); });
 
 /* ================= follow-up questions ================= */
 function addBubble(who, text){
@@ -1778,6 +1860,7 @@ $('elKeyBtn').addEventListener('click', () => {
   loadElVoices();
 });
 if (elKey){ $('elKeyInput').placeholder = '⭐ premium voices connected (remembered)'; loadElVoices(); }
+if (apiKey){ const st=$('keyStatus'); if (st){ st.style.display='block'; st.className='key-status ok'; st.textContent='✓ ' + (provider==='openai'?'ChatGPT':'Claude') + ' key connected (remembered on this device)'; } }
 
 $('testVoiceBtn').addEventListener('click', () => {
   const wasMuted = muted; muted = false;
