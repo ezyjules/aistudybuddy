@@ -27,6 +27,7 @@
   h1 .mark{background:linear-gradient(transparent 55%, var(--hi) 55%); padding:0 4px;}
   .scorebar{font-family:var(--mono); font-size:.95rem; background:var(--card); border:1.5px solid var(--ink); border-radius:999px; padding:7px 16px; box-shadow:0 2px 0 var(--ink); white-space:nowrap;}
   .head-tools{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+  .scoreboard-row{display:flex; justify-content:center; margin:6px 0 14px;}
   .voice-toggle{width:118px; justify-content:center; display:inline-flex; align-items:center; gap:6px; white-space:nowrap;}
   .voice-toggle.is-off{position:relative; opacity:.7;}
   .voice-toggle.is-off #muteWord{text-decoration:line-through; text-decoration-thickness:2px;}
@@ -65,8 +66,9 @@
   .btn-row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:14px; align-items:center;}
   .capture-hero{text-align:center; padding:10px 0 4px;}
   .capture-hero .big{font-size:1.15rem; padding:16px 28px;}
-  .capture-options{display:flex; flex-direction:column; gap:10px;}
-  .capture-options .big{font-size:1.05rem; padding:15px 22px; width:100%;}
+  .capture-options{display:flex; gap:10px; flex-wrap:wrap;}
+  .capture-options .big{font-size:1rem; padding:14px 16px; flex:1 1 0; min-width:150px; text-align:center;}
+  @media (max-width:520px){ .capture-options{flex-direction:column;} .capture-options .big{flex:none; width:100%;} }
   .cap-note{font-size:.85rem; color:var(--ink-soft); margin-top:10px; max-width:54ch; margin-left:auto; margin-right:auto;}
   .fallback{text-align:center; margin-top:10px; font-size:.82rem; color:var(--ink-soft);}
   .fallback a{color:var(--ink-soft);}
@@ -309,12 +311,14 @@
   <header>
     <h1><span class="mark">AI Study Buddy</span></h1>
     <span class="head-tools">
-      <span class="scorebar">⭐ <b id="pts">0</b> &nbsp; 🔥 <b id="streak">0</b></span>
       <button class="quiet voice-toggle" id="muteBtn" title="Turn the tutor's spoken voice on or off"><span id="muteIcon">🗣️</span> <span id="muteWord">Voice on</span></button>
       <button class="quiet" id="helpBtn" title="What this is and how to get set up">❓ What's this?</button>
     </span>
   </header>
-  <div class="ver" id="verLine">v2.8 beta · published 12 Jun 2026 · web edition</div>
+  <div class="scoreboard-row">
+    <span class="scorebar">⭐ <b id="pts">0</b> &nbsp; 🔥 <b id="streak">0</b></span>
+  </div>
+  <div class="ver" id="verLine">v2.10 beta · published 12 Jun 2026 · web edition</div>
   <p class="sub">Snap a photo of a question, highlight it, and work through it together — any subject, any year level, any school system. Points for every question you finish — streaks for getting them right.</p>
   <p class="ver">🧪 This is a beta — the tutor occasionally makes a mistake, especially with arithmetic or messy handwriting. If an answer looks off, say so in the chat: checking is half the learning.</p>
 
