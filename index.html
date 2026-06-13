@@ -65,6 +65,8 @@
   .btn-row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:14px; align-items:center;}
   .capture-hero{text-align:center; padding:10px 0 4px;}
   .capture-hero .big{font-size:1.15rem; padding:16px 28px;}
+  .capture-options{display:flex; flex-direction:column; gap:10px;}
+  .capture-options .big{font-size:1.05rem; padding:15px 22px; width:100%;}
   .cap-note{font-size:.85rem; color:var(--ink-soft); margin-top:10px; max-width:54ch; margin-left:auto; margin-right:auto;}
   .fallback{text-align:center; margin-top:10px; font-size:.82rem; color:var(--ink-soft);}
   .fallback a{color:var(--ink-soft);}
@@ -312,7 +314,7 @@
       <button class="quiet" id="helpBtn" title="What this is and how to get set up">❓ What's this?</button>
     </span>
   </header>
-  <div class="ver" id="verLine">v2.7 beta · published 12 Jun 2026 · web edition</div>
+  <div class="ver" id="verLine">v2.8 beta · published 12 Jun 2026 · web edition</div>
   <p class="sub">Snap a photo of a question, highlight it, and work through it together — any subject, any year level, any school system. Points for every question you finish — streaks for getting them right.</p>
   <p class="ver">🧪 This is a beta — the tutor occasionally makes a mistake, especially with arithmetic or messy handwriting. If an answer looks off, say so in the chat: checking is half the learning.</p>
 
@@ -397,16 +399,15 @@
 
   <!-- STEP 1: get the question in -->
   <div class="panel" id="cameraPanel">
-    <div class="capture-hero">
-      <button class="primary big" id="takePhotoBtn">📷 Take a photo of the question</button>
+    <div class="capture-options">
+      <button class="primary big" id="takePhotoBtn">🖼️ Upload a photo or screenshot</button>
+      <button class="primary big" id="autoSnapBtn">📷 Camera — 3·2·1 countdown</button>
+      <button class="big" id="snapNowBtn">⚡ Camera — one-shot snap</button>
     </div>
-    <div class="btn-row" style="margin-top:12px">
-      <button class="quiet" id="liveCamBtn">🎥 Try live camera view</button>
-      <button class="primary" id="autoSnapBtn" style="display:none">📷 Hold it up — capture in 3…2…1</button>
-      <button id="snapNowBtn" style="display:none">Snap now</button>
+    <div class="btn-row" style="margin-top:10px">
       <select id="camSelect" title="Choose camera" style="display:none"></select>
     </div>
-    <p class="cap-note" id="capNote">On a <b>phone or iPad</b> this opens the camera straight away — point, shoot, done. On the <b>Mac</b> it opens a picker: in Safari choose <b>Take Photo</b> to snap with your iPhone, or pick an existing photo.</p>
+    <p class="cap-note" id="capNote">Upload works everywhere. The two camera options open a live view — the countdown gives you a hands-free 3·2·1, the one-shot snaps the moment you press it.</p>
     <div class="cam-stage" id="camStage" style="display:none; margin-top:6px;">
       <div class="cam-off" id="camOff"></div>
       <video id="camVideo" autoplay playsinline style="display:none"></video>
@@ -649,9 +650,9 @@ function award(points, msg, bumpStreak){
 /* ================= capture: photo first ================= */
 // Honest labelling: on desktop this button opens a picker, not a camera
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-if (!isMobile){
-  $('takePhotoBtn').textContent = '🖼️ Upload a photo or screenshot';
-  $('capNote').innerHTML = 'Pick any image of the question. In <b>Safari</b> the picker includes <b>Take Photo</b>, which snaps with your iPhone. The live camera below and <kbd>⌘V</kbd> paste work too.';
+if (isMobile){
+  $('takePhotoBtn').textContent = '📷 Take a photo';
+  $('capNote').innerHTML = 'Upload/Take a photo opens your camera directly. The countdown and one-shot options use a live in-page view.';
 }
 function stopCamera(){
   if (camStream){ camStream.getTracks().forEach(t => t.stop()); camStream = null; }
@@ -699,15 +700,12 @@ async function startCamera(deviceId){
     $('camOff').style.display='none';
     const v = $('camVideo');
     v.srcObject = camStream; v.style.display='block';
-    $('autoSnapBtn').style.display='inline-block';
-    $('snapNowBtn').style.display='inline-block';
-    $('liveCamBtn').style.display='none';
     listCameras();
   }catch(err){
     $('camStage').style.display='flex';
     $('camVideo').style.display='none';
     $('camOff').style.display='block';
-    $('camOff').textContent = "Camera permission was blocked. Click the camera icon in the address bar (or System Settings → Privacy & Security → Camera) to allow it, then press Try live camera view. Or just use 📷 Take a photo above.";
+    $('camOff').textContent = "Camera permission was blocked. Click the camera icon in the address bar (or System Settings → Privacy & Security → Camera) to allow it, then try a camera option again. Or just use Upload above.";
   }
 }
 // This version runs as its own page, so the live camera (incl. iPhone Continuity Camera) works — start it straight away.
@@ -730,7 +728,6 @@ async function listCameras(){
   }catch(e){}
 }
 $('camSelect').addEventListener('change', e => startCamera(e.target.value));
-$('liveCamBtn').addEventListener('click', () => startCamera());
 
 function grabFrame(){
   const v = $('camVideo');
@@ -739,8 +736,12 @@ function grabFrame(){
   c.getContext('2d').drawImage(v, 0, 0);
   openSelector(c.toDataURL('image/png'));
 }
-$('snapNowBtn').addEventListener('click', grabFrame);
-$('autoSnapBtn').addEventListener('click', () => {
+$('snapNowBtn').addEventListener('click', async () => {
+  if (!camStream){ await startCamera(); if (!camStream) return; }
+  grabFrame();
+});
+$('autoSnapBtn').addEventListener('click', async () => {
+  if (!camStream){ await startCamera(); if (!camStream) return; }
   let n = 3;
   const cd = $('countdown');
   cd.style.display='flex'; cd.textContent = n; speak(String(n));
