@@ -168,7 +168,9 @@
   .good-val{color:var(--tick);}
   .ans-tick{font-family:var(--display); font-weight:800; color:var(--tick); margin-left:auto;}
   .ans-arrow{font-family:var(--mono); font-size:.8rem; color:var(--ink-soft);}
-  .ans-confirm{font-size:.82rem; color:var(--ink-soft); margin-bottom:10px;}
+  .ans-fixrow{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:2px 0 12px;}
+  .ans-fix-input{font-family:var(--mono); font-size:.95rem; padding:8px 12px; border:1.5px solid var(--hi-deep); border-radius:8px; background:var(--card); color:var(--ink); min-width:140px;}
+  .ans-fix-input:focus{outline:3px solid var(--hi);}
   #queueBanner{display:flex; align-items:center; gap:12px; flex-wrap:wrap; background:var(--mode-active); border:1.5px solid var(--hi-deep); border-radius:12px; padding:10px 14px; margin-bottom:14px;}
   #queueText{font-weight:700; font-size:.9rem;}
   #strategyWrap{margin:6px 0 14px;}
@@ -341,7 +343,7 @@
   <div class="scoreboard-row">
     <span class="scorebar">⭐ <b id="pts">0</b> &nbsp; 🔥 <b id="streak">0</b></span>
   </div>
-  <div class="ver" id="verLine">v3.0 beta · published 13 Jun 2026 · web edition</div>
+  <div class="ver" id="verLine">v3.1 beta · published 13 Jun 2026 · web edition</div>
   <p class="sub">Snap a photo of a question, highlight it, and work through it together — any subject, any year level, any school system. Points for every question you finish — streaks for getting them right.</p>
   <p class="ver">🧪 This is a beta — the tutor occasionally makes a mistake, especially with arithmetic or messy handwriting. If an answer looks off, say so in the chat: checking is half the learning.</p>
 
@@ -448,7 +450,7 @@
 
   <!-- STEP 2: highlight one question -->
   <div class="panel" id="selector">
-    <div class="sel-help">📄 Page captured. <b>Drag a box around ONE question</b> (include the working if you're checking an answer) — or use the whole page if there's just one. ✍️ Tip: the clearer the handwriting, the better the tutor reads your working.</div>
+    <div class="sel-help">📄 Page captured. Box the part you want help with:<br>• <b>Single, self-contained question</b> → box just that one.<br>• <b>Multi-part question</b> (a shared instruction with i, ii, iii…) → box the instruction <i>and</i> all its parts; I'll offer to split them and work through one at a time.<br>Checking an answer? Include your working in the box. ✍️ Clearer handwriting reads more accurately.</div>
     <div class="sel-stage" id="selStage">
       <img id="pageImg" alt="The captured page">
       <div class="sel-rect" id="selRect"></div>
@@ -1116,26 +1118,36 @@ function renderResults(isPractice, restore){
     if (coaching.verdict === 'correct'){ v.className='verdict good'; v.textContent='✓ Correct — nice work'; }
     else if (coaching.verdict === 'no_working'){ v.className='verdict bad'; v.textContent='Can\u2019t see your working'; }
     else { v.className='verdict bad'; v.textContent='Not quite — let\u2019s unpack it'; }
-    // show what the tutor read as the student's answer, so they can confirm the handwriting was read right
+    // show what the tutor read as the student's answer, editable so a handwriting misread can be fixed & re-checked
     const ar = $('answerRead'); ar.innerHTML='';
     const sa = (coaching.student_answer || '').trim();
     if (sa){
       const correct = coaching.verdict === 'correct';
+      const box = document.createElement('div');
+      box.className = 'ans-cmp ' + (correct ? 'ok' : 'diff');
       if (correct){
-        const box = document.createElement('div');
-        box.className = 'ans-cmp ok';
-        box.innerHTML = '<span class="ans-label">Your answer</span><span class="ans-val">' + escapeHtml(sa) + '</span><span class="ans-tick">✓ correct</span>';
-        ar.appendChild(box);
+        box.innerHTML = '<span class="ans-label">I read your answer as</span><span class="ans-val">' + escapeHtml(sa) + '</span><span class="ans-tick">✓ correct</span>';
       } else {
-        const wrap = document.createElement('div'); wrap.className='ans-cmp diff';
-        wrap.innerHTML =
-          '<div class="ans-col"><span class="ans-label">Your answer</span><span class="ans-val">' + escapeHtml(sa) + '</span></div>' +
+        box.innerHTML =
+          '<div class="ans-col"><span class="ans-label">I read your answer as</span><span class="ans-val">' + escapeHtml(sa) + '</span></div>' +
           '<div class="ans-arrow">vs</div>' +
           '<div class="ans-col"><span class="ans-label">Correct answer</span><span class="ans-val good-val">' + escapeHtml(coaching.correct_answer||'—') + '</span></div>';
-        ar.appendChild(wrap);
-        const note = document.createElement('p'); note.className='ans-confirm'; note.textContent = 'Is "' + sa + '" what you actually wrote? If the tutor misread your handwriting, retake the photo a bit clearer.';
-        ar.appendChild(note);
       }
+      ar.appendChild(box);
+      // non-blocking correction affordance
+      const fixRow = document.createElement('div'); fixRow.className='ans-fixrow';
+      const fixBtn = document.createElement('button'); fixBtn.className='quiet'; fixBtn.textContent='✏️ Misread? Fix my answer';
+      fixRow.appendChild(fixBtn); ar.appendChild(fixRow);
+      fixBtn.addEventListener('click', () => {
+        if (fixRow.querySelector('input')) return;
+        const inp = document.createElement('input'); inp.type='text'; inp.value=sa; inp.className='ans-fix-input'; inp.setAttribute('aria-label','Correct your answer');
+        const go = document.createElement('button'); go.className='primary'; go.textContent='Re-check';
+        fixBtn.style.display='none';
+        fixRow.appendChild(inp); fixRow.appendChild(go); inp.focus(); inp.select();
+        const submit = () => { const v=inp.value.trim(); if (v && v!==sa) recheckWithAnswer(v); };
+        go.addEventListener('click', submit);
+        inp.addEventListener('keydown', e => { if (e.key==='Enter'){ e.preventDefault(); submit(); } });
+      });
     }
     $('checkSummary').textContent = coaching.summary || '';
     const sr = $('stepReview'); sr.innerHTML='';
@@ -1197,6 +1209,29 @@ function renderResults(isPractice, restore){
     $('results').scrollIntoView({behavior:'smooth'});
     speak(mainSpeech);
   }
+}
+
+async function recheckWithAnswer(corrected){
+  stopSpeak();
+  $('results').style.display='none';
+  setLoading('re-checking with your corrected answer');
+  $('analyzeThumb').src = focusDataUrl || ''; $('analyzeThumb').style.display = focusDataUrl ? 'block' : 'none';
+  $('loading').style.display='block'; thinkingOn();
+  const prompt = "Re-check this question. Ignore any handwriting you read for the final answer — the student confirms their actual final answer is: \"" + corrected + "\". Use THAT as their answer. Respond ONLY with JSON in this exact shape: " + CHECK_SHAPE;
+  history = [{ role:"user", content:[
+    { type:"image", source:{ type:"base64", media_type:"image/png", data:imageData } },
+    { type:"text", text:prompt }
+  ]}];
+  try{
+    const text = await callAPI(history);
+    history.push({ role:"assistant", content:text });
+    coaching = parseJSON(text);
+    if (coaching.student_answer !== corrected) coaching.student_answer = corrected;  // trust the confirmed value
+    if (session[currentIdx]){ session[currentIdx].coaching = coaching; session[currentIdx].history = history; }
+    renderResults(false, true);   // re-render without re-scoring
+  }catch(err){
+    showError("Couldn't re-check just then — give it another go.");
+  }finally{ $('loading').style.display='none'; thinkingOff(); }
 }
 
 function fillSolution(lead){
