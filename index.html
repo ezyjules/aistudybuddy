@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Study Buddy — the ultimate study companion, by your side</title>
-<meta name="description" content="AI Study Buddy reads a photo of any homework question and works through it with you — checking your answer step by step or coaching you when you're stuck. Any subject, any age. It guides you to the answer instead of just handing it over.">
+<title>Plaito — the AI tutor that guides you to the answer</title>
+<meta name="description" content="Plaito is the AI tutor that reads a photo of any homework question and works through it with you — checking your answer step by step or coaching you when you're stuck. Any subject, any age. It guides you towards the answer instead of just handing it over.">
 <meta name="theme-color" content="#FFD60A">
-<meta property="og:title" content="AI Study Buddy — the ultimate study companion">
-<meta property="og:description" content="Snap a photo of any homework question and work through it together. Any subject, any age — guided to the answer, not just given it.">
+<meta property="og:title" content="Plaito — the AI tutor that guides, not gives">
+<meta property="og:description" content="Snap a photo of any homework question and work through it together. The relentless, patient AI tutor — any subject, any age. Guides towards, not gives, the answers.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <style>
@@ -42,6 +42,7 @@
   .sub{color:var(--ink-soft); max-width:64ch; margin-bottom:18px; font-size:.95rem;}
   .ver{font-family:var(--mono); font-size:.68rem; color:var(--ink-soft); opacity:.75; margin:-2px 0 8px; letter-spacing:.04em;}
   .tagline{font-family:var(--display); font-weight:800; font-size:1.12rem; line-height:1.4; margin:2px 0 8px;}
+  .creed{color:var(--ink); font-size:.98rem; line-height:1.5; margin:0 0 10px; max-width:46ch;}
   .sub-compact{color:var(--ink-soft); font-size:.9rem; margin-bottom:16px;}
   .beta-tag{display:inline-block; font-size:.8rem; opacity:.85;}
 
@@ -300,8 +301,8 @@
 
 <div class="modal-bg" id="helpModal" role="dialog" aria-modal="true" aria-label="What is this and how to get set up">
   <div class="guide">
-    <h2>AI Study Buddy — what it is &amp; how to start</h2>
-    <p class="lead">A friendly tutor that reads a photo of a homework question and works through it with you — checking your answer step by step, or coaching you when you're stuck, with hints before answers. Any subject, any year level. This is a beta and can occasionally make a mistake, so always sanity-check its arithmetic.</p>
+    <h2>Plaito — what it is &amp; how to start</h2>
+    <p class="lead"><b>Plaito</b> (a nod to Plato, with the <b>AI</b> built in) is your relentless, patient AI tutor. It reads a photo of a homework question and works through it with you — checking your answer step by step, or coaching you when you're stuck, with hints before answers. The idea is simple: it <b>guides you towards the answer, rather than just handing it over</b>. Any subject, any year level. This is a beta and can occasionally make a mistake, so always sanity-check its arithmetic.</p>
     <p class="lead"><a href="#" onclick="openProgress();return false;"><b>📈 See my progress &amp; review →</b></a> — a private, on-device summary of what you've practised and where you're improving.</p>
 
     <div class="box safe"><b>Honestly, it's easier than it looks.</b> "API key" sounds technical, but the whole thing is just: make an account, add a few dollars, click <i>Create key</i>, and copy-paste a long password into this app. No coding, no installing anything. Most parents are done in about five minutes — and you only do it once per device. The links below each open in a new tab, so keep this page open to paste back into.</div>
@@ -372,17 +373,18 @@
 
 <div class="wrap">
   <header>
-    <h1><span class="mark">AI Study Buddy</span></h1>
+    <h1><span class="mark">Plaito</span></h1>
     <span class="head-tools">
       <button class="voice-toggle" id="muteBtn" title="Tutor voice — tap to turn on or off" aria-label="Tutor voice"><span class="v-dot"></span> Voice</button>
-      <button class="quiet" id="helpBtn" title="What AI Study Buddy is">❓ About</button>
+      <button class="quiet" id="helpBtn" title="What Plaito is">❓ About</button>
     </span>
   </header>
   <div class="scoreboard-row">
     <span class="scorebar">⭐ <b id="pts">0</b> &nbsp; 🔥 <b id="streak">0</b></span>
   </div>
-  <div class="ver" id="verLine">v3.11 beta · published 13 Jun 2026 · web edition</div>
-  <p class="tagline">The ultimate study companion. Any age, any subject… by your side.</p>
+  <div class="ver" id="verLine">v3.15 beta · published 13 Jun 2026 · web edition</div>
+  <p class="tagline">The relentless, patient AI tutor — for any age, any subject.</p>
+  <p class="creed">Understanding isn't given, it's guided. Plaito walks you through the thinking, never just the answer.</p>
   <p class="sub-compact">Snap a question, highlight it, and work through it together. <span class="beta-tag">🧪 Beta — double-check the tutor's arithmetic.</span></p>
 
   <div class="panel" id="setupPanel">
@@ -391,7 +393,16 @@
       <p class="key-note" style="margin-top:0">This app has no company behind it — no accounts, no server, nothing collected. Everything it needs lives right here on your device, which is why we set it up once at the top. Takes about two minutes, then it folds away. <a href="#" id="setupHelpLink">New here? Read the full guide →</a></p>
 
       <div class="setup-step">
-        <span class="p-label">1 · Pick a look</span>
+        <span class="p-label">1 · Tell us a bit about yourself</span>
+        <div class="key-row">
+          <input type="text" id="profileInput" placeholder="e.g. Year 9, NSW Australia — surds, indices and trigonometry" aria-label="Where you're studying, your year level and topics of focus">
+          <button id="profileMicBtn" title="Dictate this">🎙️</button>
+        </div>
+        <p class="key-note">Where are you studying, what year are you in, and any topics of focus? This shapes the terminology, methods, and practice level the tutor uses, so it pitches things just right for you.</p>
+      </div>
+
+      <div class="setup-step">
+        <span class="p-label">2 · Pick a look</span>
         <div class="p-group" role="radiogroup" aria-label="Colour theme" style="margin-top:6px">
           <button class="swatch active" data-theme="graph" style="--a:#F2F5F3;--b:#FFD60A" title="Graph paper" aria-label="Graph paper theme"></button>
           <button class="swatch" data-theme="midnight" style="--a:#0F1626;--b:#FFD60A" title="Midnight" aria-label="Midnight theme"></button>
@@ -405,7 +416,7 @@
       </div>
 
       <div class="setup-step">
-        <span class="p-label">2 · Connect an AI key</span>
+        <span class="p-label">3 · Connect an AI key</span>
         <p class="key-note">The tutoring brain is rented directly from an AI company — that's what the key is for. Think of it like a prepaid SIM card for AI: you load a little credit with Claude or ChatGPT, and each question sips about a cent of it. $5–10 of credit typically lasts a whole school term. No subscription, and you can see exactly what's been spent on the provider's site.</p>
         <div class="provider-row">
           <label><input type="radio" name="provider" value="anthropic" checked> Claude (Anthropic)</label>
@@ -419,7 +430,7 @@
       </div>
 
       <div class="setup-step">
-        <span class="p-label">3 · Pick a voice</span>
+        <span class="p-label">4 · Pick a voice</span>
         <p class="key-note">The tutor reads questions and explanations aloud. The voices in this list come free with your device — quality varies, so hit ▶ Test and pick the least robotic. (Mac tip: System Settings → Accessibility → Spoken Content → Manage Voices lets you download much nicer "Premium" ones for free — they'll appear here.)</p>
         <div class="p-group" style="margin:6px 0 12px">
           <select id="voiceSelect" aria-label="Choose a voice"></select>
@@ -431,15 +442,6 @@
           <input type="password" id="elKeyInput" placeholder="sk_…  (optional)" autocomplete="off" aria-label="ElevenLabs API key">
           <button id="elKeyBtn">Connect voices</button>
         </div>
-      </div>
-
-      <div class="setup-step">
-        <span class="p-label">4 · Your class (optional)</span>
-        <div class="key-row">
-          <input type="text" id="profileInput" placeholder="e.g. Year 9, NSW Australia — surds, indices and trigonometry" aria-label="Your country, year level and topic">
-          <button id="profileMicBtn" title="Dictate your class">🎙️</button>
-        </div>
-        <p class="key-note">Country, year level, school system, current topic — shapes terminology, methods, and practice difficulty. Leave blank and the tutor adapts to each photo.</p>
       </div>
 
       <div class="btn-row" style="justify-content:flex-start; margin-top:4px">
@@ -545,7 +547,7 @@
         <div id="stepReview"></div>
       </div>
       <div class="speak-row">
-        <button class="quiet" onclick="speak(sectionText.main)">🔁 Repeat this</button>
+        <button class="quiet" onclick="speak(sectionText.main)">🔊 Read this explanation aloud</button>
       </div>
     </div>
 
@@ -573,7 +575,7 @@
         <ol class="steps" id="workedSteps"></ol>
       </div>
       <div class="speak-row">
-        <button class="quiet" onclick="speak(sectionText.solution)">🔁 Repeat this</button>
+        <button class="quiet" onclick="speak(sectionText.solution)">🔊 Read the solution aloud</button>
       </div>
     </div>
 
@@ -1752,7 +1754,21 @@ function speak(text){
     return;
   }
   if (!('speechSynthesis' in window)){ audioState='idle'; setDock(); return; }
-  if (!voiceList.length) populateVoices();
+  // voices may not have loaded yet on first speak — wait briefly, then speak once
+  if (!voiceList.length){
+    populateVoices();
+    if (!voiceList.length){
+      let tries=0;
+      const wait=setInterval(()=>{
+        populateVoices();
+        if (voiceList.length || ++tries>20){ clearInterval(wait); if (voiceList.length && audioState==='playing') speakNow(spoken, selVal, rate); else if(!voiceList.length){ audioState='idle'; setDock(); } }
+      },150);
+      return;
+    }
+  }
+  speakNow(spoken, selVal, rate);
+}
+function speakNow(spoken, selVal, rate){
   const u = new SpeechSynthesisUtterance(spoken);
   let v = null;
   if (selVal.startsWith('sys:')) v = voiceList[+selVal.slice(4)];
