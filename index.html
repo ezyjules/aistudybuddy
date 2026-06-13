@@ -75,10 +75,13 @@
   .countdown{position:absolute; inset:0; display:none; align-items:center; justify-content:center; font-family:var(--display); font-weight:800; font-size:6rem; color:var(--hi); background:rgba(11,18,38,.45);}
   .flash{position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; transition:opacity .25s;}
   .btn-row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:14px; align-items:center;}
-  .capture-hero{text-align:center;}
-  .capture-secondary{display:flex; gap:10px; margin-top:10px;}
-  .capture-secondary button{flex:1; font-size:.9rem; padding:10px 8px;}
-  .capture-secondary button i{display:none;}
+  .capture-choices{display:flex; gap:12px;}
+  .cap-box{flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:20px 12px; border:1.5px solid var(--ink); border-radius:12px; background:var(--card); box-shadow:0 2px 0 var(--ink); cursor:pointer;}
+  .cap-box:hover{transform:translateY(-1px); box-shadow:0 3px 0 var(--ink); background:var(--mode-active);}
+  .cap-box:active{transform:translateY(1px); box-shadow:0 1px 0 var(--ink);}
+  .cap-ico{font-size:1.8rem; line-height:1;}
+  .cap-title{font-family:var(--display); font-weight:800; font-size:1rem;}
+  .cap-sub{font-size:.78rem; color:var(--ink-soft);}
   .cap-note{font-size:.85rem; color:var(--ink-soft); margin-top:10px; max-width:54ch; margin-left:auto; margin-right:auto;}
   .fallback{text-align:center; margin-top:10px; font-size:.82rem; color:var(--ink-soft);}
   .fallback a{color:var(--ink-soft);}
@@ -363,7 +366,7 @@
   <div class="scoreboard-row">
     <span class="scorebar">⭐ <b id="pts">0</b> &nbsp; 🔥 <b id="streak">0</b></span>
   </div>
-  <div class="ver" id="verLine">v3.5 beta · published 13 Jun 2026 · web edition</div>
+  <div class="ver" id="verLine">v3.6 beta · published 13 Jun 2026 · web edition</div>
   <p class="sub-compact">Photograph a question, highlight it, and work through it together. <span class="beta-tag">🧪 Beta — double-check the tutor's arithmetic.</span></p>
 
   <div class="panel" id="setupPanel">
@@ -442,10 +445,17 @@
 
   <!-- STEP 1: get the question in -->
   <div class="panel" id="cameraPanel">
-    <p class="cap-note" id="capNote">Upload works everywhere. The camera option opens a live view — line up the question, then tap the shutter to snap.</p>
-    <button class="primary big" id="takePhotoBtn" style="width:100%">🖼️ Upload a photo or screenshot</button>
-    <div class="capture-secondary">
-      <button id="liveCamBtn" style="width:100%">📷 Use the camera</button>
+    <div class="capture-choices">
+      <button class="cap-box" id="uploadBtn">
+        <span class="cap-ico">🖼️</span>
+        <span class="cap-title">Upload an image</span>
+        <span class="cap-sub">a photo or screenshot</span>
+      </button>
+      <button class="cap-box" id="cameraBtn">
+        <span class="cap-ico">📷</span>
+        <span class="cap-title">Use camera</span>
+        <span class="cap-sub" id="camBoxSub">snap the question live</span>
+      </button>
     </div>
     <div class="btn-row" style="margin-top:10px">
       <select id="camSelect" title="Choose camera" style="display:none"></select>
@@ -711,10 +721,7 @@ function award(points, msg, bumpStreak){
 /* ================= capture: photo first ================= */
 // Honest labelling: on desktop this button opens a picker, not a camera
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-if (isMobile){
-  $('takePhotoBtn').textContent = '📷 Take a photo';
-  $('capNote').innerHTML = 'Take a photo opens your camera directly, or upload an existing image.';
-}
+if (isMobile){ $('camBoxSub').textContent = 'opens your camera'; }
 function stopCamera(){
   if (camStream){ camStream.getTracks().forEach(t => t.stop()); camStream = null; }
 }
@@ -724,7 +731,15 @@ function readImageFile(file){
   r.onload = ev => openSelector(ev.target.result);
   r.readAsDataURL(file);
 }
-$('takePhotoBtn').addEventListener('click', () => $('takePhotoInput').click());
+$('uploadBtn').addEventListener('click', () => $('fileInput').click());
+$('cameraBtn').addEventListener('click', async () => {
+  if (isMobile){
+    $('takePhotoInput').click();          // native camera on phones/tablets — far better than a live view
+  } else {
+    await startCamera();                   // desktop: live in-page view + shutter
+    if (camStream) $('shutterRow').style.display='flex';
+  }
+});
 $('takePhotoInput').addEventListener('change', e => { readImageFile(e.target.files[0]); e.target.value=''; });
 $('fileLink').addEventListener('click', e => { e.preventDefault(); $('fileInput').click(); });
 $('fileInput').addEventListener('change', e => { readImageFile(e.target.files[0]); e.target.value=''; });
@@ -797,10 +812,6 @@ function grabFrame(){
   c.getContext('2d').drawImage(v, 0, 0);
   openSelector(c.toDataURL('image/png'));
 }
-$('liveCamBtn').addEventListener('click', async () => {
-  await startCamera();
-  if (camStream) $('shutterRow').style.display='flex';
-});
 $('snapNowBtn').addEventListener('click', () => {
   if (!camStream) return;
   $('flash').style.opacity='0.9'; setTimeout(()=>$('flash').style.opacity='0',180);
