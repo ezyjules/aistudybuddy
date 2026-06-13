@@ -28,12 +28,14 @@
   .scorebar{font-family:var(--mono); font-size:.95rem; background:var(--card); border:1.5px solid var(--ink); border-radius:999px; padding:7px 16px; box-shadow:0 2px 0 var(--ink); white-space:nowrap;}
   .head-tools{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
   .scoreboard-row{display:flex; justify-content:center; margin:6px 0 14px;}
-  .voice-toggle{width:118px; justify-content:center; display:inline-flex; align-items:center; gap:6px; white-space:nowrap;}
-  .voice-toggle.is-off{position:relative; opacity:.7;}
-  .voice-toggle.is-off #muteWord{text-decoration:line-through; text-decoration-thickness:2px;}
+  .voice-toggle{display:inline-flex; align-items:center; gap:7px; white-space:nowrap; font-size:.85rem; padding:6px 13px; border:1.5px solid var(--line); background:var(--card); box-shadow:none; color:var(--ink);}
+  .voice-toggle:hover{transform:none; background:var(--mode-active); border-color:var(--ink-soft);}
+  .v-dot{width:10px; height:10px; border-radius:50%; background:var(--tick); display:inline-block; box-shadow:0 0 0 2px color-mix(in srgb, var(--tick) 25%, transparent);}
+  .voice-toggle.is-off .v-dot{background:var(--cross); box-shadow:0 0 0 2px color-mix(in srgb, var(--cross) 25%, transparent);}
   .scorebar b{font-size:1.05rem;}
   .sub{color:var(--ink-soft); max-width:64ch; margin-bottom:18px; font-size:.95rem;}
   .ver{font-family:var(--mono); font-size:.68rem; color:var(--ink-soft); opacity:.75; margin:-2px 0 8px; letter-spacing:.04em;}
+  .tagline{font-family:var(--display); font-weight:800; font-size:1.12rem; line-height:1.4; margin:2px 0 8px;}
   .sub-compact{color:var(--ink-soft); font-size:.9rem; margin-bottom:16px;}
   .beta-tag{display:inline-block; font-size:.8rem; opacity:.85;}
 
@@ -80,8 +82,10 @@
   .cap-box:hover{transform:translateY(-1px); box-shadow:0 3px 0 var(--ink); background:var(--mode-active);}
   .cap-box:active{transform:translateY(1px); box-shadow:0 1px 0 var(--ink);}
   .cap-ico{font-size:1.8rem; line-height:1;}
-  .cap-title{font-family:var(--display); font-weight:800; font-size:1rem;}
-  .cap-sub{font-size:.78rem; color:var(--ink-soft);}
+  .cap-title{font-family:var(--display); font-weight:800; font-size:1.02rem;}
+  .cap-box{padding:22px 12px;}
+  .cam-controls{margin-top:10px;}
+  .cam-controls #camSelect{display:block; width:100%; margin-bottom:10px;}
   .cap-note{font-size:.85rem; color:var(--ink-soft); margin-top:10px; max-width:54ch; margin-left:auto; margin-right:auto;}
   .fallback{text-align:center; margin-top:10px; font-size:.82rem; color:var(--ink-soft);}
   .fallback a{color:var(--ink-soft);}
@@ -237,6 +241,10 @@
   /* thinking: a bold accent border that chases around the whole window edge */
   #fxGlow{position:fixed; inset:0; pointer-events:none; z-index:159; display:none;}
   #fxGlow.on{display:block;}
+  #fxGlow::before{content:''; position:fixed; inset:0; pointer-events:none;
+    background:radial-gradient(ellipse 120% 80% at 50% 50%, transparent 45%, rgba(120,75,160,.45) 125%);
+    animation:partyPulse 1.2s ease-in-out infinite;}
+  @keyframes partyPulse{0%,100%{opacity:.25}50%{opacity:.75}}
   #fxGlow span{position:fixed; pointer-events:none;}
   #fxGlow .e-top, #fxGlow .e-bottom{left:0; right:0; height:5px;}
   #fxGlow .e-left, #fxGlow .e-right{top:0; bottom:0; width:5px;}
@@ -287,6 +295,7 @@
   <div class="guide">
     <h2>AI Study Buddy — what it is &amp; how to start</h2>
     <p class="lead">A friendly tutor that reads a photo of a homework question and works through it with you — checking your answer step by step, or coaching you when you're stuck, with hints before answers. Any subject, any year level. This is a beta and can occasionally make a mistake, so always sanity-check its arithmetic.</p>
+    <p class="lead"><a href="#" onclick="openProgress();return false;"><b>📈 See my progress &amp; review →</b></a> — a private, on-device summary of what you've practised and where you're improving.</p>
 
     <div class="box safe"><b>Honestly, it's easier than it looks.</b> "API key" sounds technical, but the whole thing is just: make an account, add a few dollars, click <i>Create key</i>, and copy-paste a long password into this app. No coding, no installing anything. Most parents are done in about five minutes — and you only do it once per device. The links below each open in a new tab, so keep this page open to paste back into.</div>
 
@@ -358,16 +367,16 @@
   <header>
     <h1><span class="mark">AI Study Buddy</span></h1>
     <span class="head-tools">
-      <button class="quiet voice-toggle" id="muteBtn" title="Turn the tutor's spoken voice on or off"><span id="muteIcon">🗣️</span> <span id="muteWord">Voice on</span></button>
-      <button class="quiet" id="progressBtn" title="My progress — stored only on this device">📈 Progress</button>
-      <button class="quiet" id="helpBtn" title="What this is and how to get set up">❓ Help</button>
+      <button class="voice-toggle" id="muteBtn" title="Tutor voice — tap to turn on or off" aria-label="Tutor voice"><span class="v-dot"></span> Voice</button>
+      <button class="quiet" id="helpBtn" title="What AI Study Buddy is">❓ About</button>
     </span>
   </header>
   <div class="scoreboard-row">
     <span class="scorebar">⭐ <b id="pts">0</b> &nbsp; 🔥 <b id="streak">0</b></span>
   </div>
-  <div class="ver" id="verLine">v3.6 beta · published 13 Jun 2026 · web edition</div>
-  <p class="sub-compact">Photograph a question, highlight it, and work through it together. <span class="beta-tag">🧪 Beta — double-check the tutor's arithmetic.</span></p>
+  <div class="ver" id="verLine">v3.9 beta · published 13 Jun 2026 · web edition</div>
+  <p class="tagline">The ultimate study companion. Any age, any subject… by your side.</p>
+  <p class="sub-compact">Snap a question, highlight it, and work through it together. <span class="beta-tag">🧪 Beta — double-check the tutor's arithmetic.</span></p>
 
   <div class="panel" id="setupPanel">
     <div id="setupOpen">
@@ -448,26 +457,25 @@
     <div class="capture-choices">
       <button class="cap-box" id="uploadBtn">
         <span class="cap-ico">🖼️</span>
-        <span class="cap-title">Upload an image</span>
-        <span class="cap-sub">a photo or screenshot</span>
+        <span class="cap-title">Upload Image</span>
       </button>
       <button class="cap-box" id="cameraBtn">
         <span class="cap-ico">📷</span>
-        <span class="cap-title">Use camera</span>
-        <span class="cap-sub" id="camBoxSub">snap the question live</span>
+        <span class="cap-title">Use Camera</span>
       </button>
-    </div>
-    <div class="btn-row" style="margin-top:10px">
-      <select id="camSelect" title="Choose camera" style="display:none"></select>
     </div>
     <div class="cam-stage" id="camStage" style="display:none; margin-top:10px;">
       <div class="cam-off" id="camOff"></div>
       <video id="camVideo" autoplay playsinline style="display:none"></video>
+      <div class="countdown" id="countdown">3</div>
       <div class="flash" id="flash"></div>
     </div>
-    <div class="shutter-row" id="shutterRow" style="display:none">
-      <button class="primary big shutter" id="snapNowBtn">📸 Snap now</button>
-      <button class="big" id="autoSnapBtn" title="Hands-free — counts 3·2·1 so you can hold the page with both hands">⏱ Hands-free 3·2·1</button>
+    <div class="cam-controls" id="camControls" style="display:none">
+      <select id="camSelect" title="Choose camera (front / back)"></select>
+      <div class="shutter-row" id="shutterRow">
+        <button class="primary big shutter" id="snapNowBtn">📸 Snap now</button>
+        <button class="big" id="autoSnapBtn" title="Hands-free — counts 3·2·1 so you can hold the page with both hands">⏱ Hands-free 3·2·1</button>
+      </div>
     </div>
     <div class="fallback">Question on this screen? <kbd>⌃⌘⇧4</kbd> to screenshot it, then <kbd>⌘V</kbd> anywhere on this page. You can also drag an image in or <a href="#" id="fileLink">choose a file</a>.</div>
     <input type="file" id="takePhotoInput" accept="image/*" capture="environment" style="display:none">
@@ -528,8 +536,7 @@
         <div id="stepReview"></div>
       </div>
       <div class="speak-row">
-        <button class="quiet" onclick="speak(sectionText.main)">🔊 Read aloud</button>
-        <button class="quiet" onclick="stopSpeak()">⏹ Stop</button>
+        <button class="quiet" onclick="speak(sectionText.main)">🔁 Repeat this</button>
       </div>
     </div>
 
@@ -541,8 +548,8 @@
 
     <div class="vault" id="vault" style="display:none">
       <div style="font-size:1.5rem">🔒</div>
-      <p id="vaultText">Write your attempt down first — then check it.</p>
-      <button class="primary" id="revealBtn">I've had a go — reveal the answer</button>
+      <p id="vaultText">Have a go first. Stuck, or had a crack? Either way I'll walk you through the strategy and the full solution.</p>
+      <button class="primary" id="revealBtn">Walk me through it →</button>
     </div>
 
     <div class="block answer-block" id="answerBlock">
@@ -557,8 +564,7 @@
         <ol class="steps" id="workedSteps"></ol>
       </div>
       <div class="speak-row">
-        <button class="quiet" onclick="speak(sectionText.solution)">🔊 Read aloud</button>
-        <button class="quiet" onclick="stopSpeak()">⏹ Stop</button>
+        <button class="quiet" onclick="speak(sectionText.solution)">🔁 Repeat this</button>
       </div>
     </div>
 
@@ -592,8 +598,7 @@
 </div>
 <div class="toast" id="toast"></div>
 <div id="audioDock" style="display:none">
-  <button class="quiet" id="dockPlay" title="Read this aloud" aria-label="Read aloud">🔊</button>
-  <button class="quiet" id="dockStop" title="Stop / pause" aria-label="Stop">⏸</button>
+  <button class="quiet" id="dockToggle" title="Pause / resume the tutor's voice" aria-label="Pause or resume">⏸</button>
 </div>
 <div id="fxPulse"></div>
 <div id="fxGlow"><span class="e-top"></span><span class="e-right"></span><span class="e-bottom"></span><span class="e-left"></span></div>
@@ -721,7 +726,7 @@ function award(points, msg, bumpStreak){
 /* ================= capture: photo first ================= */
 // Honest labelling: on desktop this button opens a picker, not a camera
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-if (isMobile){ $('camBoxSub').textContent = 'opens your camera'; }
+
 function stopCamera(){
   if (camStream){ camStream.getTracks().forEach(t => t.stop()); camStream = null; }
 }
@@ -733,12 +738,8 @@ function readImageFile(file){
 }
 $('uploadBtn').addEventListener('click', () => $('fileInput').click());
 $('cameraBtn').addEventListener('click', async () => {
-  if (isMobile){
-    $('takePhotoInput').click();          // native camera on phones/tablets — far better than a live view
-  } else {
-    await startCamera();                   // desktop: live in-page view + shutter
-    if (camStream) $('shutterRow').style.display='flex';
-  }
+  await startCamera();                     // live in-page view on every device
+  if (camStream) $('camControls').style.display='block';
 });
 $('takePhotoInput').addEventListener('change', e => { readImageFile(e.target.files[0]); e.target.value=''; });
 $('fileLink').addEventListener('click', e => { e.preventDefault(); $('fileInput').click(); });
@@ -803,7 +804,7 @@ async function listCameras(){
     }
   }catch(e){}
 }
-$('camSelect').addEventListener('change', e => startCamera(e.target.value));
+$('camSelect').addEventListener('change', e => { startCamera(e.target.value); $('camControls').style.display='block'; });
 
 function grabFrame(){
   const v = $('camVideo');
@@ -1216,8 +1217,8 @@ function renderResults(isPractice, restore){
       fillSolution('The correct answer is ' + (coaching.correct_answer||''));
     } else {
       $('vault').style.display='block';
-      $('vaultText').textContent = 'Have another crack with the feedback above — then check the full solution.';
-      $('revealBtn').textContent = "I've fixed it up — show the answer & strategy";
+      $('vaultText').textContent = 'Try the fix above if you can — or if you\'re stuck, let\'s walk through the strategy and the full solution together.';
+      $('revealBtn').textContent = "Walk me through it →";
       fillSolution('The correct answer is ' + (coaching.correct_answer||''));
       if (!restore){
         streak = 0; $('streak').textContent = streak;
@@ -1236,8 +1237,8 @@ function renderResults(isPractice, restore){
     $('nextHintBtn').style.display='inline-block'; $('nextHintBtn').textContent='Show hint 1';
     $('finalAnswer').textContent = coaching.final_answer || '';
     $('vault').style.display='block';
-    $('vaultText').textContent = 'Write your attempt down first — then reveal the answer and walk the strategy.';
-    $('revealBtn').textContent = "I've had a go — reveal the answer & strategy";
+    $('vaultText').textContent = 'Have a go first. Stuck, or had a crack? Either way I\'ll walk you through the strategy and the full solution.';
+    $('revealBtn').textContent = "Walk me through it →";
     fillSolution('The answer is ' + (coaching.final_answer||''));
   }
 
@@ -1569,13 +1570,13 @@ document.addEventListener('click', e => { if (e.target && e.target.id === 'setup
 $('helpCloseBtn').addEventListener('click', () => $('helpModal').classList.remove('show'));
 $('helpModal').addEventListener('click', e => { if (e.target === $('helpModal')) $('helpModal').classList.remove('show'); });
 
-$('progressBtn').addEventListener('click', () => {
-  const pan = $('progressPanel');
-  const show = pan.style.display === 'none';
-  pan.style.display = show ? 'block' : 'none';
-  if (show){ renderStats(); pan.scrollIntoView({behavior:'smooth'}); }
-});
 $('closeProgressBtn').addEventListener('click', () => { $('progressPanel').style.display='none'; });
+// progress is opened from the About modal's "See my progress" link
+function openProgress(){
+  $('helpModal').classList.remove('show');
+  const pan = $('progressPanel');
+  pan.style.display='block'; renderStats(); pan.scrollIntoView({behavior:'smooth'});
+}
 $('clearLogBtn').addEventListener('click', () => {
   if (confirm('Clear the locally stored question history on this device?')){ localStorage.removeItem('sb_log'); renderStats(); }
 });
@@ -1606,7 +1607,7 @@ $('reviewBtn').addEventListener('click', async () => {
 $('stickyQ').addEventListener('click', () => $('stickyQ').classList.toggle('big'));
 
 /* ================= speech: system voices + optional premium (ElevenLabs) ================= */
-let voiceList = [], muted = false, currentAudio = null, lastSpoken = '';
+let voiceList = [], muted = false, currentAudio = null, lastSpoken = '', audioState = 'idle';
 let elKey = localStorage.getItem('sb_el_key') || null, elVoices = [];
 
 function rebuildVoiceOptions(){
@@ -1685,11 +1686,10 @@ function toast(msg){
   setTimeout(()=>t.classList.remove('show'),2000);
 }
 function setVoiceBtn(){
-  $('muteIcon').textContent = muted ? '🔇' : '🗣️';
-  $('muteWord').textContent = muted ? 'Voice off' : 'Voice on';
   $('muteBtn').classList.toggle('is-off', muted);
-  const dock = document.getElementById('audioDock');
-  if (dock) dock.style.display = (muted || !lastSpoken) ? 'none' : 'flex';
+  $('muteBtn').setAttribute('aria-pressed', String(!muted));
+  if (muted){ stopSpeak(); }
+  setDock();
 }
 $('muteBtn').addEventListener('click', () => {
   muted = !muted;
@@ -1722,30 +1722,48 @@ function speechText(text){
   t = t.replace(/(\d+)\s*\/\s*(\d+)/g, '$1 over $2');
   return t;
 }
+function setDock(){
+  const dock = document.getElementById('audioDock'), btn = document.getElementById('dockToggle');
+  if (!dock || !btn) return;
+  if (muted || audioState === 'idle'){ dock.style.display='none'; return; }
+  dock.style.display='flex';
+  btn.textContent = audioState === 'playing' ? '⏸' : '▶';
+  btn.setAttribute('aria-label', audioState === 'playing' ? 'Pause' : 'Resume');
+}
 function speak(text){
   if (!text || muted) return;
   lastSpoken = String(text);
-  const dock = document.getElementById('audioDock');
-  if (dock) dock.style.display='flex';
-  stopSpeak();
+  stopSpeak();                       // always clear any current speech first — never stack
   const selVal = $('voiceSelect').value || '';
   const rate = parseFloat($('rateSlider').value) || 1;
   const spoken = speechText(text);
+  audioState = 'playing'; setDock();
   if (selVal.startsWith('el:') && elKey){
     elSpeak(spoken, selVal.slice(3), rate);
     return;
   }
-  if (!('speechSynthesis' in window)) return;
-  // make sure the voice list is loaded (handles the race where speak fires before voices arrive)
+  if (!('speechSynthesis' in window)){ audioState='idle'; setDock(); return; }
   if (!voiceList.length) populateVoices();
   const u = new SpeechSynthesisUtterance(spoken);
   let v = null;
   if (selVal.startsWith('sys:')) v = voiceList[+selVal.slice(4)];
-  if (!v) v = voiceList[0] || null;   // fall back to best-ranked; if still none, browser default voice is used
+  if (!v) v = voiceList[0] || null;
   if (v) u.voice = v;
   u.rate = rate;
   u.lang = (v && v.lang) || 'en-AU';
+  u.onend = () => { audioState='idle'; setDock(); };
   speechSynthesis.speak(u);
+}
+function pauseResume(){
+  if (audioState === 'playing'){
+    if (currentAudio){ currentAudio.pause(); }
+    else if ('speechSynthesis' in window){ speechSynthesis.pause(); }
+    audioState = 'paused'; setDock();
+  } else if (audioState === 'paused'){
+    if (currentAudio){ currentAudio.play(); }
+    else if ('speechSynthesis' in window){ speechSynthesis.resume(); }
+    audioState = 'playing'; setDock();
+  }
 }
 async function elSpeak(text, voiceId, rate){
   try{
@@ -1758,6 +1776,7 @@ async function elSpeak(text, voiceId, rate){
     const blob = await r.blob();
     currentAudio = new Audio(URL.createObjectURL(blob));
     currentAudio.playbackRate = rate;
+    currentAudio.onended = () => { audioState='idle'; setDock(); };
     currentAudio.play();
   }catch(e){
     // premium hiccup — fall back to the system voice so the tutoring never goes silent
@@ -1772,12 +1791,12 @@ async function elSpeak(text, voiceId, rate){
 function stopSpeak(){
   if ('speechSynthesis' in window) speechSynthesis.cancel();
   if (currentAudio){ currentAudio.pause(); currentAudio = null; }
+  audioState = 'idle'; setDock();
 }
 (function wireDock(){
-  const play=$('dockPlay'), stop=$('dockStop');
-  if (!play) return;
-  play.addEventListener('click', () => { if (lastSpoken){ const wasMuted=muted; muted=false; speak(lastSpoken); muted=wasMuted; } });
-  stop.addEventListener('click', stopSpeak);
+  const btn=$('dockToggle');
+  if (!btn) return;
+  btn.addEventListener('click', pauseResume);   // the dock pauses/resumes the SAME utterance — never starts a new one
 })();
 
 /* ================= colour themes ================= */
