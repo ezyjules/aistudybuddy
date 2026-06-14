@@ -431,7 +431,7 @@
   <div class="scoreboard-row">
     <span class="scorebar">⭐ <b id="pts">0</b> &nbsp; 🔥 <b id="streak">0</b></span>
   </div>
-  <div class="ver" id="verLine">v4.11 beta · published 13 Jun 2026 · web edition</div>
+  <div class="ver" id="verLine">v4.13 beta · published 13 Jun 2026 · web edition</div>
   <p class="creed">Strongest in maths and the sciences, where method matters most — and ready for any subject. Plaito walks you through the thinking, never just the answer.</p>
   <p class="sub-compact">Snap a question, highlight it, and work through it together. <span class="beta-tag">🧪 Beta — double-check the tutor's arithmetic.</span></p>
 
@@ -722,8 +722,29 @@
 /* ================= standalone setup: passcode + API key ================= */
 const $ = id => document.getElementById(id);
 
-let apiKey = localStorage.getItem('sb_api_key') || null;
 let provider = localStorage.getItem('sb_provider') || 'openai';
+// dual-key store: each provider keeps its own key, the radio picks which is active
+let keys = {
+  openai: localStorage.getItem('sb_openai_key') || null,
+  anthropic: localStorage.getItem('sb_anthropic_key') || null
+};
+// migrate the old single-slot key (sb_api_key) into the right provider slot
+(function migrateKey(){
+  const old = localStorage.getItem('sb_api_key');
+  if (old && !keys[provider]){
+    keys[provider] = old;
+    localStorage.setItem(provider==='openai'?'sb_openai_key':'sb_anthropic_key', old);
+  }
+  localStorage.removeItem('sb_api_key');
+})();
+let apiKey = keys[provider] || null;   // the ACTIVE key (downstream code uses this)
+let elKey = localStorage.getItem('sb_el_key') || null, elVoices = [];
+let voiceList = [], muted = false, currentAudio = null, lastSpoken = '', audioState = 'idle', speechGen = 0;
+function setActiveProvider(pv){
+  provider = pv;
+  apiKey = keys[pv] || null;
+  localStorage.setItem('sb_provider', provider);
+}
 let profile = localStorage.getItem('sb_profile') || '';
 
 function renderSetup(){
@@ -732,8 +753,10 @@ function renderSetup(){
   $('setupClosed').style.display = done ? 'flex' : 'none';
   $('setupPanel').classList.toggle('closed', done);
   if (done){
+    const both = keys.openai && keys.anthropic;
     $('setupSummary').textContent =
-      (provider === 'openai' ? '🤖 ChatGPT key ✓' : '🔑 Claude key ✓') +
+      (provider === 'openai' ? '🤖 ChatGPT active' : '🔑 Claude active') +
+      (both ? ' (both keys saved)' : '') +
       '  ·  ' + (profile ? '🎓 ' + profile : '🪄 adapting automatically');
   } else {
     const r = document.querySelector('input[name=provider][value="' + provider + '"]');
@@ -749,7 +772,17 @@ function openSetup(){
 }
 function updateKeyPlaceholder(){
   const pv = document.querySelector('input[name=provider]:checked')?.value || 'openai';
-  $('apiKeyInput').placeholder = apiKey && pv === provider ? '✓ key connected — paste a new one to replace' : (pv === 'openai' ? 'sk-…' : 'sk-ant-…');
+  // selecting a provider makes it active immediately (its key, if saved, becomes live)
+  setActiveProvider(pv);
+  const has = !!keys[pv];
+  $('apiKeyInput').placeholder = has ? '✓ ' + (pv==='openai'?'ChatGPT':'Claude') + ' key saved — paste a new one to replace' : (pv === 'openai' ? 'sk-…' : 'sk-ant-…');
+  // live status line reflects the active key
+  const st = $('keyStatus');
+  if (st){
+    if (has){ st.style.display='block'; st.className='key-status ok'; st.textContent = '✓ ' + (pv==='openai'?'ChatGPT':'Claude') + ' key active on this device'; }
+    else { st.style.display='none'; }
+  }
+  rebuildVoiceOptions();
   const note = document.getElementById('providerNote');
   if (note) note.textContent = (pv === 'openai')
     ? 'ChatGPT also gives you a good built-in voice from the same key — nothing else to set up.'
@@ -780,13 +813,16 @@ function connectKey(){
   if (!v){ st.style.display='block'; st.className='key-status bad'; st.textContent='Paste a key first.'; return; }
   if (chosen === 'anthropic' && !v.startsWith('sk-ant-')){ st.style.display='block'; st.className='key-status bad'; st.textContent="That doesn't look like a Claude key (sk-ant-…)."; return; }
   if (chosen === 'openai' && !v.startsWith('sk-')){ st.style.display='block'; st.className='key-status bad'; st.textContent="That doesn't look like a ChatGPT key (sk-…)."; return; }
-  apiKey = v; provider = chosen;
-  if ($('rememberKey').checked) localStorage.setItem('sb_api_key', apiKey); else localStorage.removeItem('sb_api_key');
-  localStorage.setItem('sb_provider', provider);
+  keys[chosen] = v;
+  if ($('rememberKey').checked) localStorage.setItem(chosen==='openai'?'sb_openai_key':'sb_anthropic_key', v);
+  else localStorage.removeItem(chosen==='openai'?'sb_openai_key':'sb_anthropic_key');
+  setActiveProvider(chosen);
   $('apiKeyInput').value = '';
   updateKeyPlaceholder();
   st.style.display='block'; st.className='key-status ok';
   st.textContent = '✓ ' + (provider==='openai'?'ChatGPT':'Claude') + ' key connected on this device';
+  const other = provider==='openai'?'anthropic':'openai';
+  if (keys[other]) st.textContent += ' · both keys saved, switch any time with the buttons above';
   rebuildVoiceOptions();
   if (provider==='openai'){
     const sel=$('voiceSelect'); if (sel && !sel.value.startsWith('el:')) sel.value='oai:nova';
@@ -802,15 +838,14 @@ $('setupDoneBtn').addEventListener('click', () => {
   if (typed){
     if (chosen === 'anthropic' && !typed.startsWith('sk-ant-')){ alert("A Claude key starts with sk-ant- — that looks like something else."); return; }
     if (chosen === 'openai' && !typed.startsWith('sk-')){ alert("An OpenAI key starts with sk- — that looks like something else."); return; }
-    apiKey = typed;
-    if ($('rememberKey').checked) localStorage.setItem('sb_api_key', apiKey);
-    else localStorage.removeItem('sb_api_key');
-  } else if (!apiKey || chosen !== provider){
+    keys[chosen] = typed;
+    if ($('rememberKey').checked) localStorage.setItem(chosen==='openai'?'sb_openai_key':'sb_anthropic_key', typed);
+    else localStorage.removeItem(chosen==='openai'?'sb_openai_key':'sb_anthropic_key');
+  } else if (!keys[chosen]){
     alert("Paste an API key for " + (chosen === 'openai' ? 'ChatGPT (OpenAI)' : 'Claude (Anthropic)') + " to finish setup.");
     return;
   }
-  provider = chosen;
-  localStorage.setItem('sb_provider', provider);
+  setActiveProvider(chosen);
   profile = $('profileInput').value.trim();
   localStorage.setItem('sb_profile', profile);
   $('apiKeyInput').value = '';
@@ -1216,7 +1251,7 @@ async function callAPI(messages){
     const data = await response.json();
     if (data.error){
       if (/api key|auth/i.test(data.error.message || '')){
-        apiKey = null; localStorage.removeItem('sb_api_key'); openSetup();
+        keys[provider]=null; localStorage.removeItem(provider==='openai'?'sb_openai_key':'sb_anthropic_key'); apiKey=null; openSetup();
         throw new Error("that OpenAI key was rejected — re-enter it in setup");
       }
       throw new Error(data.error.message || 'API error');
@@ -1236,7 +1271,7 @@ async function callAPI(messages){
   const data = await response.json();
   if (data.error){
     if (/authentication|invalid x-api-key/i.test(data.error.message || '')){
-      apiKey = null; localStorage.removeItem('sb_api_key'); openSetup();
+      keys[provider]=null; localStorage.removeItem(provider==='openai'?'sb_openai_key':'sb_anthropic_key'); apiKey=null; openSetup();
       throw new Error("that Claude key was rejected — re-enter it in setup");
     }
     throw new Error(data.error.message || 'API error');
@@ -1818,9 +1853,6 @@ $('reviewBtn').addEventListener('click', async () => {
 $('stickyQ').addEventListener('click', () => $('stickyQ').classList.toggle('big'));
 
 /* ================= speech: system voices + optional premium (ElevenLabs) ================= */
-let voiceList = [], muted = false, currentAudio = null, lastSpoken = '', audioState = 'idle';
-let elKey = localStorage.getItem('sb_el_key') || null, elVoices = [];
-
 const OAI_VOICES = ['alloy','echo','fable','onyx','nova','shimmer'];
 function rebuildVoiceOptions(){
   const sel = $('voiceSelect');
@@ -2034,19 +2066,23 @@ function pauseResume(){
   }
 }
 async function oaiSpeak(text, voice, rate){
+  const myGen = speechGen;
   try{
     const r = await fetch('https://api.openai.com/v1/audio/speech', {
       method:'POST',
       headers:{ 'Authorization': 'Bearer ' + apiKey, 'Content-Type':'application/json' },
       body: JSON.stringify({ model:'tts-1', voice: voice, input: text.slice(0, 3500) })
     });
+    if (myGen !== speechGen) return;          // a newer speak() superseded this — drop it
     if (!r.ok) throw new Error('oai tts failed');
     const blob = await r.blob();
+    if (myGen !== speechGen) return;          // re-check after awaiting the blob
     currentAudio = new Audio(URL.createObjectURL(blob));
     currentAudio.playbackRate = rate;
-    currentAudio.onended = () => { audioState='idle'; setDock(); };
+    currentAudio.onended = () => { if(myGen===speechGen){ audioState='idle'; setDock(); } };
     currentAudio.play();
   }catch(e){
+    if (myGen !== speechGen) return;
     if ('speechSynthesis' in window){
       const u = new SpeechSynthesisUtterance(text);
       if (voiceList[0]) u.voice = voiceList[0];
@@ -2055,19 +2091,23 @@ async function oaiSpeak(text, voice, rate){
   }
 }
 async function elSpeak(text, voiceId, rate){
+  const myGen = speechGen;
   try{
     const r = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId + '?output_format=mp3_44100_96', {
       method:'POST',
       headers:{ 'xi-api-key': elKey, 'Content-Type':'application/json' },
       body: JSON.stringify({ text: text.slice(0, 2400), model_id: 'eleven_turbo_v2_5' })
     });
+    if (myGen !== speechGen) return;
     if (!r.ok) throw new Error('tts failed');
     const blob = await r.blob();
+    if (myGen !== speechGen) return;
     currentAudio = new Audio(URL.createObjectURL(blob));
     currentAudio.playbackRate = rate;
-    currentAudio.onended = () => { audioState='idle'; setDock(); };
+    currentAudio.onended = () => { if(myGen===speechGen){ audioState='idle'; setDock(); } };
     currentAudio.play();
   }catch(e){
+    if (myGen !== speechGen) return;
     // premium hiccup — fall back to the system voice so the tutoring never goes silent
     if ('speechSynthesis' in window){
       const u = new SpeechSynthesisUtterance(text);
@@ -2078,6 +2118,7 @@ async function elSpeak(text, voiceId, rate){
   }
 }
 function stopSpeak(){
+  speechGen++;                       // invalidate any in-flight TTS fetch (async providers)
   if ('speechSynthesis' in window) speechSynthesis.cancel();
   if (currentAudio){ currentAudio.pause(); currentAudio = null; }
   audioState = 'idle'; setDock();
