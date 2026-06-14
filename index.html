@@ -36,23 +36,42 @@
     background-size:28px 28px; line-height:1.55; padding:0 0 90px;
   }
   .wrap{max-width:880px; margin:0 auto; padding:24px 20px;}
+  header#topHeader{display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:nowrap; margin:4px 0 18px; padding:14px 18px; background:var(--card); border:1.5px solid var(--ink); border-radius:14px; box-shadow:0 2px 0 var(--ink);}
+  .brand-lockup{display:flex; flex-direction:column; align-items:flex-start; gap:3px; text-decoration:none; color:var(--ink); min-width:0; flex:1 1 auto;}
+  .brand-lockup .mark{font-family:var(--display); font-weight:800; font-size:clamp(1.9rem,4.25vw,2.4rem); letter-spacing:-0.02em; background:linear-gradient(transparent 56%, var(--hi) 56%); padding:0 5px; align-self:flex-start;}
+  .brand-tagline{font-family:var(--display); font-weight:800; font-size:1.12rem; color:var(--ink); line-height:1.4;}
+  #topHeader .ver{font-family:var(--mono); font-size:.6rem; color:var(--ink-soft); opacity:.55; letter-spacing:.03em; margin:0;}
   header{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:4px;}
   h1{font-family:var(--display); font-weight:800; font-size:clamp(1.7rem,4vw,2.4rem); letter-spacing:-0.02em;}
   h1 .mark{background:linear-gradient(transparent 55%, var(--hi) 55%); padding:0 4px;}
   .scorebar{font-family:var(--mono); font-size:.95rem; background:var(--card); border:1.5px solid var(--ink); border-radius:999px; padding:7px 16px; box-shadow:0 2px 0 var(--ink); white-space:nowrap;}
-  .head-tools{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+  .head-tools{display:flex; gap:6px; align-items:center; margin-top:-2px; flex:0 0 auto; white-space:nowrap;}
   .scoreboard-row{display:flex; justify-content:center; margin:6px 0 14px;}
+  #topHeader .quiet{border:none; background:transparent; box-shadow:none; font-size:.88rem; color:var(--ink-soft); padding:7px 10px;}
+  #topHeader .quiet:hover{color:var(--ink); background:var(--mode-active); transform:none;}
   .voice-toggle{display:inline-flex; align-items:center; gap:7px; white-space:nowrap; font-size:.85rem; padding:6px 13px; border:1.5px solid var(--line); background:var(--card); box-shadow:none; color:var(--ink);}
   .voice-toggle:hover{transform:none; background:var(--mode-active); border-color:var(--ink-soft);}
   .v-dot{width:10px; height:10px; border-radius:50%; background:var(--tick); display:inline-block; box-shadow:0 0 0 2px color-mix(in srgb, var(--tick) 25%, transparent);}
   .voice-toggle.is-off .v-dot{background:var(--cross); box-shadow:0 0 0 2px color-mix(in srgb, var(--cross) 25%, transparent);}
-  .scorebar b{font-size:1.05rem;}
+  .scorebar b{font-size:1.05rem; color:var(--hi-deep);}
+  .sb-div{opacity:.35; margin:0 2px;}
   .sub{color:var(--ink-soft); max-width:64ch; margin-bottom:18px; font-size:.95rem;}
   .ver{font-family:var(--mono); font-size:.68rem; color:var(--ink-soft); opacity:.75; margin:-2px 0 8px; letter-spacing:.04em;}
   .tagline{font-family:var(--display); font-weight:800; font-size:1.12rem; line-height:1.4; margin:4px 0 0;}
-  body.in-question .tagline, body.in-question .creed, body.in-question .sub-compact, body.in-question .scoreboard-row, body.in-question .ver, body.in-question #setupPanel{display:none;}
-  body.in-question .seg{margin-top:4px;}
+  .header-copy{margin:0 0 16px; padding-left:20px;}
+
+  #siteFooter{margin:34px 0 0; padding:16px 18px; background:var(--card); border:1.5px solid var(--ink); border-radius:14px; box-shadow:0 2px 0 var(--ink); display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center;}
+  .foot-brand .mark{background:linear-gradient(transparent 55%, var(--hi) 55%); padding:0 4px; font-family:var(--display); font-weight:800; font-size:1.15rem;}
+  .foot-links{display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:center;}
+  .foot-link{border:none; background:transparent; box-shadow:none; color:var(--ink); font-size:.88rem; font-weight:600; text-decoration:underline; cursor:pointer; padding:2px 4px;}
+  .foot-link:hover{transform:none; color:var(--hi-deep); background:transparent;}
+  .foot-sep{color:var(--line);}
+  .foot-copy{font-size:.78rem; color:var(--ink-soft);}
+  body.in-question .header-copy, body.in-question #setupPanel{display:none;}
+  body.in-question #topHeader{margin-bottom:10px;}
+  body.in-question .seg{margin-top:0;}
   .creed{color:var(--ink); font-size:.98rem; line-height:1.5; margin:0 0 10px; max-width:62ch;}
+  .tok{color:var(--line); font-size:.72rem; opacity:.6; margin-left:6px; font-variant-numeric:tabular-nums; cursor:default;}
   .sub-compact{color:var(--ink-soft); font-size:.9rem; margin-bottom:16px;}
   .beta-tag{display:inline-block; font-size:.8rem; opacity:.85;}
   .fb-inline{font-size:.8rem; color:var(--ink-soft); text-decoration:underline;}
@@ -83,7 +102,7 @@
   .seg button:hover{transform:none; background:var(--mode-active);}
   .seg button.on{background:var(--hi); color:var(--ink);}
   .seg button+button{border-left:1.5px solid var(--ink);}
-  .seg-desc{font-size:.82rem; color:var(--ink-soft); margin:-6px 0 14px; padding:0 2px;}
+  .seg-desc{font-size:.82rem; color:var(--ink-soft); margin:-6px 0 14px; padding:0 2px; text-align:center;}
   kbd{font-family:var(--mono); font-size:.85em; background:var(--paper); border:1px solid var(--line); border-bottom-width:2px; border-radius:5px; padding:1px 6px;}
   select{font-family:var(--body); font-size:.85rem; padding:7px 10px; border:1.5px solid var(--line); border-radius:8px; background:var(--card); color:var(--ink); max-width:100%;}
 
@@ -420,20 +439,21 @@
 </div>
 
 <div class="wrap">
-  <header>
-    <h1><span class="mark">Plaito</span></h1>
-    <span class="head-tools">
+  <header id="topHeader">
+    <a href="#" class="brand-lockup" id="brandHome" aria-label="Plaito home">
+      <span class="mark">Plaito</span>
+      <span class="brand-tagline">The patient, methodical, wise AI tutor. Any age, any subject.</span>
+      <span class="ver" id="verLine">v4.22 beta · pub 13 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    </a>
+    <nav class="head-tools">
+      <button class="quiet" id="helpBtn" title="What Plaito is">About</button>
       <button class="voice-toggle" id="muteBtn" title="Tutor voice — tap to turn on or off" aria-label="Tutor voice"><span class="v-dot"></span> Voice</button>
-      <button class="quiet" id="helpBtn" title="What Plaito is">❓ About</button>
-    </span>
+    </nav>
+    <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
-  <p class="tagline">The patient, methodical, wise AI tutor. Any age, any subject.</p>
-  <div class="scoreboard-row">
-    <span class="scorebar">⭐ <b id="pts">0</b> &nbsp; 🔥 <b id="streak">0</b></span>
+  <div class="header-copy" id="headerCopy">
+    <p class="creed">Strongest in maths and the sciences, where method matters most, and ready for any subject. Plaito walks you through the thinking, never just the answer. Just snap a question and work through it together. <span class="beta-tag">🧪 Beta — double-check the tutor's arithmetic.</span></p>
   </div>
-  <div class="ver" id="verLine">v4.13 beta · published 13 Jun 2026 · web edition</div>
-  <p class="creed">Strongest in maths and the sciences, where method matters most — and ready for any subject. Plaito walks you through the thinking, never just the answer.</p>
-  <p class="sub-compact">Snap a question, highlight it, and work through it together. <span class="beta-tag">🧪 Beta — double-check the tutor's arithmetic.</span></p>
 
   <div class="panel" id="setupPanel">
     <div id="setupOpen">
@@ -671,8 +691,43 @@
     </div>
     <p id="reviewOut" style="white-space:pre-wrap; margin-top:12px;"></p>
   </div>
+
+  <footer id="siteFooter">
+    <div class="foot-brand"><span class="mark">Plaito</span></div>
+    <nav class="foot-links">
+      <button class="foot-link" id="privacyBtn">Privacy</button>
+      <span class="foot-sep">·</span>
+      <button class="foot-link" onclick="openFeedback()">Feedback</button>
+      <span class="foot-sep">·</span>
+      <button class="foot-link" id="footAboutBtn">About</button>
+    </nav>
+    <div class="foot-copy">© 2026 Plaito · Always learning.</div>
+  </footer>
 </div>
 <div class="toast" id="toast"></div>
+
+<div class="modal-bg" id="privacyModal" role="dialog" aria-modal="true" aria-label="Privacy">
+  <div class="guide">
+    <h2 style="margin-top:0">Privacy</h2>
+    <p><b>The short version: Plaito has no server and no accounts, so there's nowhere for us to collect or store your data.</b> Everything Plaito needs lives in your own browser on this device.</p>
+
+    <h3>What's stored, and where</h3>
+    <p>Your API key(s), your year-level/subject notes, your theme, and your progress log are saved in this browser's local storage — on your device only. They're never sent to us (there is no "us" server to send them to), and they stay until you clear your browser data. Don't tick "remember" on a shared computer.</p>
+
+    <h3>What leaves your device, and to whom</h3>
+    <p>When you ask for help, the question (your photo and any text) is sent directly to the AI provider <i>you chose</i> — Anthropic (Claude) or OpenAI (ChatGPT) — to generate the tutoring. If you turn on premium voices, the text to be spoken is sent to OpenAI or ElevenLabs to make the audio. That's the only place your question content goes, and only to the provider you picked. Your key is sent only to that same provider.</p>
+
+    <h3>Analytics</h3>
+    <p>Plaito uses Google Analytics to count visits and understand broad usage (how many people, roughly where, which devices). This sets cookies and sends standard visit data to Google. It does <b>not</b> capture your questions, your working, or your API keys. If you'd rather not be counted, a tracker-blocking browser or extension will stop it.</p>
+
+    <h3>Children</h3>
+    <p>Plaito is designed to be used by students, often with a parent setting it up. Because we collect nothing ourselves, the main privacy consideration is the third parties above (your chosen AI provider, and Google Analytics), each of which has its own privacy policy worth a look.</p>
+
+    <div class="modal-actions">
+      <button class="quiet" id="privacyCloseBtn">Close</button>
+    </div>
+  </div>
+</div>
 <div id="audioDock" style="display:none">
   <button class="quiet" id="dockToggle" title="Pause / resume the tutor's voice" aria-label="Pause or resume">⏸</button>
 </div>
@@ -740,6 +795,7 @@ let keys = {
 let apiKey = keys[provider] || null;   // the ACTIVE key (downstream code uses this)
 let elKey = localStorage.getItem('sb_el_key') || null, elVoices = [];
 let voiceList = [], muted = false, currentAudio = null, lastSpoken = '', audioState = 'idle', speechGen = 0;
+let lastTokens = null;   // {in, out, total} for the most recent API call — surfaced as a tiny dev readout
 function setActiveProvider(pv){
   provider = pv;
   apiKey = keys[pv] || null;
@@ -830,6 +886,18 @@ function connectKey(){
   }
   toast((provider==='openai'?'ChatGPT':'Claude') + ' key connected ✓');
 }
+document.getElementById('privacyBtn').addEventListener('click', () => $('privacyModal').classList.add('show'));
+document.getElementById('privacyCloseBtn').addEventListener('click', () => $('privacyModal').classList.remove('show'));
+document.getElementById('privacyModal').addEventListener('click', e => { if (e.target.id==='privacyModal') $('privacyModal').classList.remove('show'); });
+document.getElementById('footAboutBtn').addEventListener('click', () => $('helpModal').classList.add('show'));
+document.getElementById('brandHome').addEventListener('click', (e) => {
+  e.preventDefault();
+  document.body.classList.remove('in-question');
+  if (typeof goNewPhoto === 'function' && (pageDataUrl || (typeof coaching!=='undefined' && coaching))) {
+    // only reset if mid-question; otherwise just scroll up
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+});
 $('apiKeyBtn').addEventListener('click', connectKey);
 $('apiKeyInput').addEventListener('keydown', e => { if (e.key==='Enter'){ e.preventDefault(); connectKey(); } });
 $('setupDoneBtn').addEventListener('click', () => {
@@ -945,7 +1013,7 @@ document.addEventListener('drop', e => { e.preventDefault(); if (e.dataTransfer.
 
 /* Enter key drives the flow: highlight drawn → analyse; live camera up → snap */
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape'){ $('helpModal').classList.remove('show'); $('splitModal').classList.remove('show'); return; }
+  if (e.key === 'Escape'){ $('helpModal').classList.remove('show'); $('splitModal').classList.remove('show'); $('privacyModal').classList.remove('show'); return; }
   if (e.key !== 'Enter') return;
   const t = e.target;
   if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
@@ -1256,6 +1324,7 @@ async function callAPI(messages){
       }
       throw new Error(data.error.message || 'API error');
     }
+    if (data.usage){ lastTokens = { in:data.usage.prompt_tokens||0, out:data.usage.completion_tokens||0, total:data.usage.total_tokens||0 }; updateTokenReadout(); }
     return data.choices?.[0]?.message?.content || '';
   }
   const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -1276,7 +1345,14 @@ async function callAPI(messages){
     }
     throw new Error(data.error.message || 'API error');
   }
+  if (data.usage){ const i=data.usage.input_tokens||0, o=data.usage.output_tokens||0; lastTokens = { in:i, out:o, total:i+o }; updateTokenReadout(); }
   return (data.content || []).filter(b => b.type==='text').map(b => b.text).join('\n');
+}
+function updateTokenReadout(){
+  const el = document.getElementById('tokenReadout');
+  if (!el || !lastTokens) return;
+  el.textContent = '~' + lastTokens.total.toLocaleString() + ' tokens';
+  el.title = 'Last question: ' + lastTokens.in.toLocaleString() + ' in + ' + lastTokens.out.toLocaleString() + ' out = ' + lastTokens.total.toLocaleString() + ' tokens';
 }
 const parseJSON = t => JSON.parse(t.replace(/```json|```/g,'').trim());
 const SPLIT_SHAPE = `{"shared_instruction":"any instruction that applies to all parts, e.g. 'Simplify completely' — empty string if none","parts":[{"label":"the part label as printed, e.g. 'i' or 'a'","question":"the full question text for this part, with the shared instruction prepended so it stands alone","student_answer":"the student's handwritten answer for THIS part, transcribed exactly. Empty string if none visible"}]}`;
@@ -1418,7 +1494,7 @@ function renderResults(isPractice, restore){
       fillSolution('Confirmed answer: ' + (coaching.correct_answer||''));
       $('answerBlock').style.display='block';
       if (!restore){
-        award(30 + streak*5, '✓ Correct! +' + (30 + streak*5) + ' points', true);
+        award(30 + streak*5, '✓ Correct!', true);
         logPerf({ t:Date.now(), topic:coaching.topic, mode:'check', result:'correct' });
       }
     } else if (coaching.verdict === 'no_working'){
@@ -1620,7 +1696,7 @@ function doReveal(){
   if (!scored){
     scored = true;
     const p = Math.max(30 - hintsUsed*5, 10);
-    award(p, '+' + p + ' points — question done!' + (hintsUsed===0 ? ' No hints needed 💪' : ''), null);
+    award(p, hintsUsed===0 ? 'Worked through with no hints 💪' : 'Nice work — question complete.', null);
     logPerf({ t:Date.now(), topic:coaching.topic, mode: e && e.isPractice ? 'practice' : 'solve', result:'completed', hints:hintsUsed });
   }
   renderSessionChips();
