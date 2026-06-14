@@ -67,7 +67,9 @@
   .foot-link:hover{transform:none; color:var(--hi-deep); background:transparent;}
   .foot-sep{color:var(--line);}
   .foot-copy{font-size:.78rem; color:var(--ink-soft);}
-  body.in-question .header-copy, body.in-question #setupPanel{display:none;}
+  body.in-question .header-copy{display:none;}
+  body.in-question #setupPanel:not(.closed){display:none;}  /* hide only the big expanded wizard */
+  body.in-question #setupPanel.closed{display:block;}        /* keep the slim summary + Edit reachable */
   body.in-question #topHeader{margin-bottom:10px;}
   body.in-question .seg{margin-top:0;}
   .creed{color:var(--ink); font-size:.98rem; line-height:1.5; margin:0 0 10px; max-width:62ch;}
@@ -443,7 +445,7 @@
     <a href="#" class="brand-lockup" id="brandHome" aria-label="Plaito home">
       <span class="mark">Plaito</span>
       <span class="brand-tagline">The patient, methodical, wise AI tutor. Any age, any subject.</span>
-      <span class="ver" id="verLine">v4.22 beta · pub 13 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+      <span class="ver" id="verLine">v4.23 beta · pub 13 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     </a>
     <nav class="head-tools">
       <button class="quiet" id="helpBtn" title="What Plaito is">About</button>
