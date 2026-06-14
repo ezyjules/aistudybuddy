@@ -113,8 +113,9 @@
   /* question selector */
   #selector{display:none;}
   .sel-help{background:var(--mode-active); border:1.5px solid var(--hi-deep); border-radius:10px; padding:10px 14px; font-size:.92rem; margin-bottom:12px;}
-  .sel-stage{position:relative; user-select:none; -webkit-user-select:none; touch-action:none; line-height:0; border-radius:10px; overflow:hidden; border:1.5px solid var(--line);}
-  .sel-stage img{width:100%; display:block; pointer-events:none;}
+  .sel-stage{position:relative; user-select:none; -webkit-user-select:none; touch-action:none; line-height:0; border-radius:10px; overflow:hidden; border:1.5px solid var(--line); display:inline-block; max-width:100%; margin:0 auto;}
+  .sel-stage img{max-width:100%; max-height:60vh; width:auto; height:auto; display:block; pointer-events:none;}
+  .sel-wrap{text-align:center;}
   .sel-rect{position:absolute; border:3px solid var(--hi-deep); background:rgba(255,214,10,.22); box-shadow:0 0 0 9999px rgba(20,33,61,.35); display:none; pointer-events:none;}
 
   .loading{display:none; margin:22px auto; text-align:center; font-family:var(--mono); color:var(--ink-soft);}
@@ -430,7 +431,7 @@
   <div class="scoreboard-row">
     <span class="scorebar">⭐ <b id="pts">0</b> &nbsp; 🔥 <b id="streak">0</b></span>
   </div>
-  <div class="ver" id="verLine">v4.9 beta · published 13 Jun 2026 · web edition</div>
+  <div class="ver" id="verLine">v4.10 beta · published 13 Jun 2026 · web edition</div>
   <p class="creed">Strongest in maths and the sciences, where method matters most — and ready for any subject. Plaito walks you through the thinking, never just the answer.</p>
   <p class="sub-compact">Snap a question, highlight it, and work through it together. <span class="beta-tag">🧪 Beta — double-check the tutor's arithmetic.</span></p>
 
@@ -546,9 +547,11 @@
   <!-- STEP 2: highlight one question -->
   <div class="panel" id="selector">
     <div class="sel-help">📄 Page captured. Box the part you want help with:<br>• <b>Single, self-contained question</b> → box just that one.<br>• <b>Multi-part question</b> (a shared instruction with i, ii, iii…) → box the instruction <i>and</i> all its parts; I'll offer to split them and work through one at a time.<br>Checking an answer? Include your working in the box. ✍️ Clearer handwriting reads more accurately.</div>
-    <div class="sel-stage" id="selStage">
-      <img id="pageImg" alt="The captured page">
-      <div class="sel-rect" id="selRect"></div>
+    <div class="sel-wrap">
+      <div class="sel-stage" id="selStage">
+        <img id="pageImg" alt="The captured page">
+        <div class="sel-rect" id="selRect"></div>
+      </div>
     </div>
     <div class="btn-row">
       <button class="primary" id="tutorSelBtn" disabled>Tutor this question</button>
