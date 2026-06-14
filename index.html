@@ -50,7 +50,7 @@
   .sub{color:var(--ink-soft); max-width:64ch; margin-bottom:18px; font-size:.95rem;}
   .ver{font-family:var(--mono); font-size:.68rem; color:var(--ink-soft); opacity:.75; margin:-2px 0 8px; letter-spacing:.04em;}
   .tagline{font-family:var(--display); font-weight:800; font-size:1.12rem; line-height:1.4; margin:4px 0 0;}
-  body.working .tagline, body.working .creed, body.working .sub-compact, body.working .scoreboard-row, body.working .ver{display:none;}
+  body.working .tagline, body.working .creed, body.working .sub-compact, body.working .scoreboard-row, body.working .ver, body.working #setupPanel{display:none;}
   body.working .seg{margin-top:4px;}
   .creed{color:var(--ink); font-size:.98rem; line-height:1.5; margin:0 0 10px; max-width:62ch;}
   .sub-compact{color:var(--ink-soft); font-size:.9rem; margin-bottom:16px;}
@@ -90,6 +90,7 @@
 
   .panel{background:var(--card); border:1.5px solid var(--line); border-radius:var(--radius); padding:18px; box-shadow:0 2px 0 var(--line); margin-bottom:18px;}
   .cam-stage{position:relative; border-radius:10px; overflow:hidden; background:#0B1226; min-height:220px; display:flex; align-items:center; justify-content:center;}
+  .cam-stage[style*="display:none"], .cam-stage[style*="display: none"]{min-height:0;}
   .cam-stage video{width:100%; display:block;}
   .cam-off{color:#AFC0E8; text-align:center; padding:36px 18px; font-size:.95rem;}
   .countdown{position:absolute; inset:0; display:none; align-items:center; justify-content:center; font-family:var(--display); font-weight:800; font-size:6rem; color:var(--hi); background:rgba(11,18,38,.45);}
@@ -379,7 +380,7 @@
     <p><a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">→ Open the OpenAI keys page in a new tab</a></p>
 
     <h3>Nicer voice (optional) — ElevenLabs</h3>
-    <p>The tutor reads aloud using the free voices built into your device. They're fine, but a little robotic. <b>ElevenLabs</b> makes startlingly human AI voices, and it's optional and free to start.</p>
+    <p><b>If you're using ChatGPT, you already get a good voice for free from the same key</b> — no need for this. ElevenLabs is mainly worth it if you're using <b>Claude</b> (which has no voice of its own) and want something more natural than the device's built-in voices. It's optional and free to start.</p>
     <ol>
       <li>Sign up at <a href="https://elevenlabs.io" target="_blank" rel="noopener"><b>elevenlabs.io</b></a> (new tab — the free tier covers roughly 10 minutes of speech a month, plenty to try).</li>
       <li>Click your profile (bottom-left) → <b>API Keys</b> → <b>Create API Key</b>. Name it <code>study-buddy</code>.</li>
@@ -429,7 +430,7 @@
   <div class="scoreboard-row">
     <span class="scorebar">⭐ <b id="pts">0</b> &nbsp; 🔥 <b id="streak">0</b></span>
   </div>
-  <div class="ver" id="verLine">v4.7 beta · published 13 Jun 2026 · web edition</div>
+  <div class="ver" id="verLine">v4.9 beta · published 13 Jun 2026 · web edition</div>
   <p class="creed">Strongest in maths and the sciences, where method matters most — and ready for any subject. Plaito walks you through the thinking, never just the answer.</p>
   <p class="sub-compact">Snap a question, highlight it, and work through it together. <span class="beta-tag">🧪 Beta — double-check the tutor's arithmetic.</span></p>
 
@@ -486,7 +487,7 @@
           <input type="range" id="rateSlider" min="0.7" max="1.3" step="0.05" value="1" title="Speaking speed" aria-label="Speaking speed">
           <button class="quiet" id="testVoiceBtn">▶ Test</button>
         </div>
-        <p class="key-note">Want a properly human voice? <b>ElevenLabs</b> is a company that makes startlingly natural AI voices. It's optional: sign up free at <a href="https://elevenlabs.io" target="_blank" rel="noopener">elevenlabs.io</a> (the free tier covers ~10 minutes of speech a month), grab your API key from your profile, and paste it here — starred ⭐ voices will join the list above.</p>
+        <p class="key-note"><b>Using ChatGPT?</b> You already get a good voice free — skip this. <b>Using Claude?</b> Claude has no voice, so for natural speech add <b>ElevenLabs</b> (optional): sign up free at <a href="https://elevenlabs.io" target="_blank" rel="noopener">elevenlabs.io</a>, paste the key here, and ⭐ voices join the list.</p>
         <div class="key-row">
           <input type="password" id="elKeyInput" placeholder="sk_…  (optional)" autocomplete="off" aria-label="ElevenLabs API key">
           <button id="elKeyBtn">Connect voices</button>
@@ -608,15 +609,16 @@
 
     <div class="vault" id="vault" style="display:none">
       <div style="font-size:1.5rem">🔒</div>
-      <p id="vaultText">Have a go first. Stuck, or had a crack? Either way I'll walk you through the strategy and the full solution.</p>
-      <button class="primary" id="revealBtn">Walk me through it →</button>
+      <p id="vaultText">Have a go first. Stuck, or had a crack? Either way, let's work through it together — the tutor's way.</p>
+      <button class="primary big" id="revealBtn" style="width:100%">🧭 Walk me through it, step by step</button>
+      <button class="path-skip" id="revealSkip">or skip straight to the worked answer</button>
     </div>
 
     <div class="block answer-block" id="answerBlock">
       <div class="section-label">Answer</div>
       <span class="answer-final" id="finalAnswer"></span>
 
-      <div id="pathChoice">
+      <div id="pathChoice" style="display:none">
         <p class="path-q">Let's work it out together — the tutor's way.</p>
         <button class="primary big" id="choiceStrategy" style="width:100%">🧭 Walk me through it, step by step</button>
         <button class="path-skip" id="choiceSolution">or skip straight to the worked answer</button>
@@ -640,10 +642,10 @@
     </div>
 
     <div class="block">
-      <div class="section-label">Ask the tutor</div>
+      <div class="section-label">Ask Plaito</div>
       <div class="chat-thread" id="chatThread"></div>
       <div class="ask-row">
-        <input id="askInput" type="text" placeholder="Ask anything about this question…" aria-label="Ask the tutor a question">
+        <input id="askInput" type="text" placeholder="Ask anything about this question…" aria-label="Ask Plaito a question">
         <button id="micBtn" title="Ask by voice">🎙️</button>
         <button class="primary" id="askBtn">Ask</button>
       </div>
@@ -1570,11 +1572,11 @@ $('nextHintBtn').addEventListener('click', () => {
   }
 });
 
-$('revealBtn').addEventListener('click', () => {
+function doReveal(){
   answerRevealed = true;
   $('vault').style.display='none';
   $('answerBlock').style.display='block';
-  resetPathChoice();
+  $('pathChoice').style.display='none';   // vault already made the choice; don't show it again
   const e = session[currentIdx];
   if (e) e.revealed = true;
   if (!scored){
@@ -1584,9 +1586,10 @@ $('revealBtn').addEventListener('click', () => {
     logPerf({ t:Date.now(), topic:coaching.topic, mode: e && e.isPractice ? 'practice' : 'solve', result:'completed', hints:hintsUsed });
   }
   renderSessionChips();
-  // ask, aloud, which path they'd like — the tutor leads verbally
-  speak("Nice work having a go. Would you like me to walk you through the strategy step by step, or show you the full worked solution?");
-});
+}
+// vault gate now leads straight into the chosen path — no second choice screen
+$('revealBtn').addEventListener('click', () => { doReveal(); showStrategyPath(); });
+$('revealSkip').addEventListener('click', () => { doReveal(); showSolutionPath(); });
 $('choiceStrategy').addEventListener('click', showStrategyPath);
 $('choiceSolution').addEventListener('click', showSolutionPath);
 $('seeSolutionBtn').addEventListener('click', () => { $('workedWrap').style.display='block'; speak(sectionText.solution); $('workedWrap').scrollIntoView({behavior:'smooth', block:'nearest'}); });
@@ -1607,7 +1610,7 @@ async function askTutor(){
   $('askInput').value=''; addBubble('You', q);
   $('askBtn').disabled = true; $('askInput').disabled = true;
   const tb = document.createElement('div');
-  tb.className = 'bubble tutor typing'; tb.textContent = 'Tutor is thinking';
+  tb.className = 'bubble tutor typing'; tb.textContent = 'Plaito is thinking';
   $('chatThread').appendChild(tb); tb.scrollIntoView({behavior:'smooth', block:'nearest'});
   thinkingOn();
   history.push({ role:"user", content: q + "\n\n(Conversational follow-up — plain friendly text, 1–5 sentences. The final answer has " + (answerRevealed ? "already been revealed; you may discuss it." : "NOT been revealed — do not state it.") + ")" });
