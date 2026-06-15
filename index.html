@@ -496,7 +496,7 @@
       </nav>
     </div>
     <div class="brand-tagline">The patient, methodical, wise AI tutor. Any age, any subject.</div>
-    <span class="ver" id="verLine">v5.24 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    <span class="ver" id="verLine">v5.25 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
@@ -819,19 +819,6 @@
 <div id="fxRing"></div>
 
 <script>
-/* TEMP DIAGNOSTIC: surface any uncaught error on-screen so we can see iOS failures */
-window.addEventListener('error', function(ev){
-  try {
-    var d = document.getElementById('__errbar') || (function(){
-      var x = document.createElement('div'); x.id='__errbar';
-      x.style.cssText='position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#D64545;color:#fff;font:12px monospace;padding:8px 12px;white-space:pre-wrap;max-height:40vh;overflow:auto';
-      document.body.appendChild(x); return x;
-    })();
-    d.textContent = '⚠️ ' + (ev.message||'error') + '\n' + ((ev.filename||'')+' :' + (ev.lineno||'?')+':'+(ev.colno||'?'));
-  } catch(e){}
-});
-</script>
-<script>
 /* ================= standalone setup: passcode + API key ================= */
 const $ = id => document.getElementById(id);
 
@@ -873,6 +860,7 @@ let keys = {
 let apiKey = keys[provider] || null;   // the ACTIVE key (downstream code uses this)
 let elKey = store.getItem('sb_el_key') || null, elVoices = [];
 let voiceList = [], muted = false, currentAudio = null, lastSpoken = '', audioState = 'idle', speechGen = 0;
+const OAI_VOICES = ['alloy','echo','fable','onyx','nova','shimmer'];   // moved up: rebuildVoiceOptions() runs during early setup render
 let lastTokens = null;   // {in, out, total} for the most recent API call — surfaced as a tiny dev readout
 let wasCorrect = false;  // did the student get THIS question right? (changes the lock-in flow + tone)
 function setActiveProvider(pv){
@@ -2150,7 +2138,6 @@ $('reviewBtn').addEventListener('click', async () => {
 $('stickyQ').addEventListener('click', () => $('stickyQ').classList.toggle('big'));
 
 /* ================= speech: system voices + optional premium (ElevenLabs) ================= */
-const OAI_VOICES = ['alloy','echo','fable','onyx','nova','shimmer'];
 function rebuildVoiceOptions(){
   const sel = $('voiceSelect');
   const prev = sel.value;
