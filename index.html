@@ -496,7 +496,7 @@
       </nav>
     </div>
     <div class="brand-tagline">The patient, methodical, wise AI tutor. Any age, any subject.</div>
-    <span class="ver" id="verLine">v5.23 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    <span class="ver" id="verLine">v5.24 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
@@ -818,6 +818,19 @@
 <div id="fxBeam"></div>
 <div id="fxRing"></div>
 
+<script>
+/* TEMP DIAGNOSTIC: surface any uncaught error on-screen so we can see iOS failures */
+window.addEventListener('error', function(ev){
+  try {
+    var d = document.getElementById('__errbar') || (function(){
+      var x = document.createElement('div'); x.id='__errbar';
+      x.style.cssText='position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#D64545;color:#fff;font:12px monospace;padding:8px 12px;white-space:pre-wrap;max-height:40vh;overflow:auto';
+      document.body.appendChild(x); return x;
+    })();
+    d.textContent = '⚠️ ' + (ev.message||'error') + '\n' + ((ev.filename||'')+' :' + (ev.lineno||'?')+':'+(ev.colno||'?'));
+  } catch(e){}
+});
+</script>
 <script>
 /* ================= standalone setup: passcode + API key ================= */
 const $ = id => document.getElementById(id);
