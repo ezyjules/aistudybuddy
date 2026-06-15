@@ -221,6 +221,8 @@
   #setupPanel .key-row > button{flex:0 0 auto; width:172px; justify-content:center; white-space:nowrap;}
   #setupPanel .key-row > button.mic-btn{min-width:0; width:46px; padding-left:0; padding-right:0;}
   .row-status{font-size:.82rem; font-weight:700; margin:8px 0 0; color:var(--tick);}
+  .linkish{display:inline; background:none; border:none; box-shadow:none; padding:0; margin:0; font:inherit; color:var(--ink); font-weight:700; text-decoration:underline; cursor:pointer; transform:none;}
+  .linkish:hover{color:var(--hi-deep); background:none; transform:none;}
   .setup-step{margin:14px 0 18px;}
   .provider-row{display:flex; gap:18px; margin:8px 0 10px; font-size:.92rem; flex-wrap:wrap;}
   .provider-note{font-size:.8rem; color:var(--ink-soft); margin:0 0 8px;}
@@ -494,7 +496,7 @@
       </nav>
     </div>
     <div class="brand-tagline">The patient, methodical, wise AI tutor. Any age, any subject.</div>
-    <span class="ver" id="verLine">v5.20 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    <span class="ver" id="verLine">v5.21 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
@@ -504,7 +506,7 @@
   <h2 class="box-heading" id="setupHeading">🎒 Let's get set up for class</h2>
   <div class="panel panel-setup" id="setupPanel">
     <div id="setupOpen">
-      <p class="key-note" style="margin-top:0">This app has no company behind it — no accounts, no server, nothing collected. Everything it needs lives right here on your device, which is why we set it up once at the top. Takes about two minutes, then it folds away. <a href="#" id="setupHelpLink">New here? Read the full guide →</a></p>
+      <p class="key-note" style="margin-top:0">This app has no company behind it — no accounts, no server, nothing collected. Everything it needs lives right here on your device, which is why we set it up once at the top. Takes about two minutes, then it folds away. <button type="button" class="linkish" id="setupHelpLink">New here? Read the full guide →</button></p>
 
       <div class="setup-step">
         <span class="p-label">1 · Tell us a bit about yourself</span>
@@ -533,7 +535,7 @@
 
       <div class="setup-step">
         <span class="p-label">3 · Connect an API key</span>
-        <p class="key-note">The tutoring brain is rented from an AI company — that's what the key is for. Like a prepaid SIM for AI: load a little credit with Claude or ChatGPT, and each question sips about a cent. $5–10 usually lasts a whole school term. It's pay-as-you-go, separate from any subscription you might already have — no monthly fee. <a href="#" id="keyHelpLink">Get your key and credit set up in a few steps →</a></p>
+        <p class="key-note">The tutoring brain is rented from an AI company — that's what the key is for. Like a prepaid SIM for AI: load a little credit with Claude or ChatGPT, and each question sips about a cent. $5–10 usually lasts a whole school term. It's pay-as-you-go, separate from any subscription you might already have — no monthly fee. <button type="button" class="linkish" id="keyHelpLink">Get your key and credit set up in a few steps →</button></p>
         <div class="provider-row">
           <label><input type="radio" name="provider" value="openai" checked> ChatGPT (OpenAI)</label>
           <label><input type="radio" name="provider" value="anthropic"> Claude (Anthropic)</label>
@@ -915,7 +917,7 @@ function checkKeyLive(){
   const v = $('apiKeyInput').value.trim();
   const st = $('keyStatus');
   if (!v){
-    if (apiKey && chosen===provider){ st.style.display='block'; st.className='key-status ok'; st.textContent='✓ '+(provider==='openai'?'ChatGPT':'Claude')+' key already connected on this device'; }
+    if (apiKey && chosen===provider){ st.style.display='block'; st.className='key-status ok'; st.textContent='✓ '+(provider==='openai'?'ChatGPT':'Claude')+' key active on this device'; }
     else { st.style.display='none'; }
     return;
   }
@@ -941,7 +943,7 @@ function connectKey(){
   $('apiKeyInput').value = '';
   updateKeyPlaceholder();
   st.style.display='block'; st.className='key-status ok';
-  st.textContent = '✓ ' + (provider==='openai'?'ChatGPT':'Claude') + ' key connected on this device';
+  st.textContent = '✓ ' + (provider==='openai'?'ChatGPT':'Claude') + ' key active on this device';
   const other = provider==='openai'?'anthropic':'openai';
   if (keys[other]) st.textContent += ' · both keys saved, switch any time with the buttons above';
   rebuildVoiceOptions();
