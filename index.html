@@ -496,7 +496,7 @@
       </nav>
     </div>
     <div class="brand-tagline">The patient, methodical, wise AI tutor. Any age, any subject.</div>
-    <span class="ver" id="verLine">v5.27 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    <span class="ver" id="verLine">v5.28 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
@@ -1418,7 +1418,7 @@ function goNextInQueue(){ if (partQueue.length) runQueue(); }
 
 function buildSystem(){
   const pitch = profile
-    ? `The student's context, set by them or their parent: "${profile}". Pitch every explanation, method, and piece of terminology to that level and curriculum, use only techniques a student at that stage would have met, match the regional spelling and conventions, and generate practice questions at that standard. If a first name is given in that context, address the student by it NATURALLY and SPARINGLY — the way a real tutor does: an occasional warm "Nice work, [name]" or "Right, [name], let's look", not in every sentence. Never overuse it. If no name is given, simply don't use one.`
+    ? `The student's context, set by them or their parent: "${profile}". Pitch every explanation, method, and piece of terminology to that level and curriculum, use only techniques a student at that stage would have met, match the regional spelling and conventions, and generate practice questions at that standard. If a first name is given in that context, use it: open your FIRST message to them by name (e.g. "Right, [name], let's take a look") and use it again at a natural high point such as praise ("Nice work, [name]") — then sparingly after that. Aim for the name once or twice per response, never in every sentence, never forced. If no name is given, simply don't use one.`
     : `No level or curriculum has been set. Infer the likely subject, country, and level from the question in the photo itself and pitch explanations accordingly; if genuinely ambiguous, pitch to a typical secondary-school level.`;
   return `You are a patient, encouraging study tutor for one student. ${pitch}
 
@@ -2189,6 +2189,16 @@ function rebuildVoiceOptions(){
     sel.appendChild(o);
   }
   if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
+  // make sure SOMETHING playable is selected, so auto-speak isn't silent for returning users
+  const cur = sel.value || '';
+  const playable = v => v && (v.startsWith('oai:') || v.startsWith('el:') || v.startsWith('sys:'));
+  if (!playable(cur)){
+    const firstReal = [...sel.options].find(o => playable(o.value));
+    // prefer OpenAI 'nova' if available
+    const nova = [...sel.options].find(o => o.value === 'oai:nova');
+    if (nova) sel.value = 'oai:nova';
+    else if (firstReal) sel.value = firstReal.value;
+  }
 }
 function populateVoices(){
   if (!('speechSynthesis' in window)) return;
