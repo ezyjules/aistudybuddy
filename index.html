@@ -14,6 +14,11 @@
 <title>Plaito — the AI tutor that guides you to the answer</title>
 <meta name="description" content="Plaito is the AI tutor that reads a photo of any homework question and works through it with you — checking your answer step by step or coaching you when you're stuck. Any subject, any age. It guides you towards the answer instead of just handing it over.">
 <meta name="theme-color" content="#FFD60A">
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Plaito%22%2C%22short_name%22%3A%22Plaito%22%2C%22start_url%22%3A%22./%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F2F5F3%22%2C%22theme_color%22%3A%22%23FFD60A%22%2C%22description%22%3A%22The%20patient%2C%20methodical%20AI%20tutor.%20Any%20age%2C%20any%20subject.%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage/svg%2Bxml%2C%253Csvg%2520xmlns%3D%2527http%3A//www.w3.org/2000/svg%2527%2520width%3D%2527180%2527%2520height%3D%2527180%2527%2520viewBox%3D%25270%25200%2520180%2520180%2527%253E%253Crect%2520width%3D%2527180%2527%2520height%3D%2527180%2527%2520rx%3D%252740%2527%2520fill%3D%2527%252314213D%2527/%253E%253Crect%2520x%3D%252734%2527%2520y%3D%252786%2527%2520width%3D%2527112%2527%2520height%3D%252740%2527%2520fill%3D%2527%2523FFD60A%2527/%253E%253Ctext%2520x%3D%252790%2527%2520y%3D%2527118%2527%2520font-family%3D%2527Georgia%2Cserif%2527%2520font-size%3D%252786%2527%2520font-weight%3D%2527800%2527%2520fill%3D%2527%2523ffffff%2527%2520text-anchor%3D%2527middle%2527%253EP%253C/text%253E%253C/svg%253E%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image/svg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Plaito">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27180%27%20height%3D%27180%27%20viewBox%3D%270%200%20180%20180%27%3E%3Crect%20width%3D%27180%27%20height%3D%27180%27%20rx%3D%2740%27%20fill%3D%27%252314213D%27/%3E%3Crect%20x%3D%2734%27%20y%3D%2786%27%20width%3D%27112%27%20height%3D%2740%27%20fill%3D%27%2523FFD60A%27/%3E%3Ctext%20x%3D%2790%27%20y%3D%27118%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2786%27%20font-weight%3D%27800%27%20fill%3D%27%2523ffffff%27%20text-anchor%3D%27middle%27%3EP%3C/text%3E%3C/svg%3E">
 <meta property="og:title" content="Plaito — the AI tutor that guides, not gives">
 <meta property="og:description" content="Snap a photo of any homework question and work through it together. The relentless, patient AI tutor — any subject, any age. Guides towards, not gives, the answers.">
 <meta property="og:type" content="website">
@@ -36,16 +41,17 @@
     background-size:28px 28px; line-height:1.55; padding:0 0 90px;
   }
   .wrap{max-width:880px; margin:0 auto; padding:24px 20px;}
-  header#topHeader{display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:nowrap; margin:4px 0 18px; padding:14px 18px; background:var(--card); border:1.5px solid var(--ink); border-radius:14px; box-shadow:0 2px 0 var(--ink);}
-  .brand-lockup{display:flex; flex-direction:column; align-items:flex-start; gap:3px; text-decoration:none; color:var(--ink); min-width:0; flex:1 1 auto;}
-  .brand-lockup .mark{font-family:var(--display); font-weight:800; font-size:clamp(1.9rem,4.25vw,2.4rem); letter-spacing:-0.02em; background:linear-gradient(transparent 56%, var(--hi) 56%); padding:0 5px; align-self:flex-start;}
-  .brand-tagline{font-family:var(--display); font-weight:800; font-size:1.12rem; color:var(--ink); line-height:1.4;}
+  header#topHeader{display:flex; flex-direction:column; align-items:flex-start; gap:8px; margin:4px 0 18px; padding:14px 18px; background:var(--card); border:1.5px solid var(--ink); border-radius:14px; box-shadow:0 2px 0 var(--ink);}
+  .header-row{display:flex; width:100%; align-items:center; justify-content:space-between; gap:14px;}
+  .brand-lockup{display:inline-flex; text-decoration:none; color:var(--ink); margin-right:auto;}
+  .brand-lockup .mark{font-family:var(--display); font-weight:800; font-size:clamp(1.9rem,4.25vw,2.4rem); letter-spacing:0.01em; background:linear-gradient(transparent 56%, var(--hi) 56%); padding:0 6px;}
+  .brand-tagline{font-family:var(--display); font-weight:800; font-size:1.12rem; color:var(--ink); line-height:1.4; margin:0; text-align:left; width:100%;}
   #topHeader .ver{font-family:var(--mono); font-size:.6rem; color:var(--ink-soft); opacity:.55; letter-spacing:.03em; margin:0;}
   header{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:4px;}
   h1{font-family:var(--display); font-weight:800; font-size:clamp(1.7rem,4vw,2.4rem); letter-spacing:-0.02em;}
   h1 .mark{background:linear-gradient(transparent 55%, var(--hi) 55%); padding:0 4px;}
   .scorebar{font-family:var(--mono); font-size:.95rem; background:var(--card); border:1.5px solid var(--ink); border-radius:999px; padding:7px 16px; box-shadow:0 2px 0 var(--ink); white-space:nowrap;}
-  .head-tools{display:flex; gap:6px; align-items:center; margin-top:-2px; flex:0 0 auto; white-space:nowrap;}
+  .head-tools{display:flex; gap:6px; align-items:center; flex:0 0 auto; white-space:nowrap;}
   .scoreboard-row{display:flex; justify-content:center; margin:6px 0 14px;}
   #topHeader .quiet{border:none; background:transparent; box-shadow:none; font-size:.88rem; color:var(--ink-soft); padding:7px 10px;}
   #topHeader .quiet:hover{color:var(--ink); background:var(--mode-active); transform:none;}
@@ -67,7 +73,7 @@
   .foot-link:hover{transform:none; color:var(--hi-deep); background:transparent;}
   .foot-sep{color:var(--line);}
   .foot-copy{font-size:.78rem; color:var(--ink-soft);}
-  body.in-question .header-copy{display:none;}
+  body.in-question .header-copy, body.in-question #captureHeading, body.in-question #setupHeading{display:none;}
   body.in-question #setupPanel:not(.closed){display:none;}  /* hide only the big expanded wizard */
   body.in-question #setupPanel.closed{display:block;}        /* keep the slim summary + Edit reachable */
   body.in-question #topHeader{margin-bottom:10px;}
@@ -110,7 +116,9 @@
 
 
   .panel{background:var(--card); border:1.5px solid var(--line); border-radius:var(--radius); padding:18px; box-shadow:0 2px 0 var(--line); margin-bottom:18px;}
-  .cam-stage{position:relative; border-radius:10px; overflow:hidden; background:#0B1226; min-height:220px; display:flex; align-items:center; justify-content:center;}
+  .cam-stage{position:relative; border-radius:10px; overflow:hidden; background:#0B1226; min-height:220px; max-height:52vh; display:flex; align-items:center; justify-content:center; margin:0 auto;}
+  .cam-stage video{max-height:52vh; width:auto; max-width:100%;}
+  @media (min-width:620px){ .cam-stage{max-width:520px;} }  /* frame it on tablet/desktop so controls stay in view */
   .cam-stage[style*="display:none"], .cam-stage[style*="display: none"]{min-height:0;}
   .cam-stage video{width:100%; display:block;}
   .cam-off{color:#AFC0E8; text-align:center; padding:36px 18px; font-size:.95rem;}
@@ -151,6 +159,10 @@
   #results{display:none;}
   .chip{display:inline-block; font-family:var(--mono); font-size:.78rem; background:var(--ink); color:#fff; border-radius:999px; padding:4px 14px; margin-bottom:12px;}
   .section-label{font-family:var(--mono); font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px;}
+  .box-heading{font-family:var(--display); font-weight:800; font-size:1.22rem; color:var(--ink); margin:18px 0 9px; display:flex; align-items:center; gap:9px; line-height:1.25;}
+  .box-heading .bh-num{display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:var(--ink); color:#fff; font-family:var(--mono); font-size:.82rem; flex:0 0 auto;}
+  .panel-setup{background:#FBFAF4; border-color:var(--hi-deep);}   /* warm tint sets the one-time setup apart */
+  .panel-capture{background:var(--card);}
   .block{background:var(--card); border:1.5px solid var(--line); border-radius:var(--radius); padding:18px 20px; margin-bottom:16px; box-shadow:0 2px 0 var(--line);}
   .speak-row{display:flex; gap:8px; justify-content:flex-end; margin-top:12px;}
   .readback{font-style:italic; color:var(--ink-soft); border-left:4px solid var(--hi); padding-left:12px; margin-bottom:12px;}
@@ -211,6 +223,7 @@
   .provider-row input{accent-color:var(--hi-deep);}
   #setupClosed{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
   #setupPanel.closed{padding:11px 16px;}
+  body.setup-collapsed #setupHeading{display:none;}
   .setup-summary{font-size:.9rem; font-weight:700;}
   #stickyQ{position:sticky; top:8px; z-index:40; background:var(--card); border:1.5px solid var(--ink); border-radius:12px; padding:8px 12px; display:none; gap:12px; align-items:center; box-shadow:0 2px 0 var(--ink); margin-bottom:14px; cursor:zoom-in;}
   #stickyQ img{max-height:64px; border-radius:6px;}
@@ -273,6 +286,8 @@
   .key-status{font-size:.85rem; font-weight:700; margin:8px 0 0;}
   .key-status.ok{color:var(--tick);}
   .key-status.bad{color:var(--cross);}
+  .install-guide{background:var(--mode-active); border-radius:10px; padding:12px 16px; font-size:.9rem; line-height:1.55; margin:4px 0 8px;}
+  .install-guide b{color:var(--ink);}
   .fb-btn{display:inline-block; font-family:var(--display); font-weight:600; font-size:.92rem; border:1.5px solid var(--ink); border-radius:10px; background:var(--hi); color:var(--ink); padding:11px 18px; text-decoration:none; box-shadow:0 2px 0 var(--ink);}
   .fb-btn:hover{box-shadow:0 3px 0 var(--ink); transform:translateY(-1px);}
   .key-note{font-size:.82rem; color:var(--ink-soft); margin-top:10px;}
@@ -413,6 +428,7 @@
       <li>Back here: in setup, choose <b>ChatGPT (OpenAI)</b>, paste the key, and finish.</li>
     </ol>
     <p><a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">→ Open the OpenAI keys page in a new tab</a></p>
+    <p style="font-size:.88rem; color:var(--ink-soft)">A note on "ChatGPT": your key pays OpenAI for whichever model Plaito uses under the hood — currently <b>GPT-5.4</b>, chosen for its strong reasoning (which matters most for maths). The same key and the same credit also cover the spoken voice, so it's one balance for everything.</p>
 
     <h3>Nicer voice (optional) — ElevenLabs</h3>
     <p><b>If you're using ChatGPT, you already get a good voice for free from the same key</b> — no need for this. ElevenLabs is mainly worth it if you're using <b>Claude</b> (which has no voice of its own) and want something more natural than the device's built-in voices. It's optional and free to start.</p>
@@ -440,6 +456,10 @@
       <li>If an answer looks wrong, tell the tutor in the chat — it'll recheck, and that's half the learning.</li>
     </ul>
 
+    <h3>📲 Add Plaito to your home screen</h3>
+    <p>For the best experience, add Plaito to your home screen — it opens like a real app, full-screen with no browser clutter, one tap away.</p>
+    <div class="install-guide" id="installGuide"></div>
+
     <h3>Tell us what you think</h3>
     <p>Plaito is in beta and we'd love your feedback — what's working, what's confusing, what you wish it did. It helps shape what comes next.</p>
     <div class="modal-actions" style="justify-content:flex-start; margin-bottom:18px;">
@@ -455,24 +475,26 @@
 
 <div class="wrap">
   <header id="topHeader">
-    <a href="#" class="brand-lockup" id="brandHome" aria-label="Plaito home">
-      <span class="mark">Plaito</span>
-      <span class="brand-tagline">The patient, methodical, wise AI tutor. Any age, any subject.</span>
-      <span class="ver" id="verLine">v4.26 beta · pub 13 Jun 26 <span id="tokenReadout" class="tok"></span></span>
-    </a>
-    <nav class="head-tools">
-      <button class="quiet" id="helpBtn" title="What Plaito is">About</button>
-      <button class="voice-toggle" id="muteBtn" title="Tutor voice — tap to turn on or off" aria-label="Tutor voice"><span class="v-dot"></span> Voice</button>
-    </nav>
+    <div class="header-row">
+      <a href="#" class="brand-lockup" id="brandHome" aria-label="Plaito home">
+        <span class="mark">PLAITO</span>
+      </a>
+      <nav class="head-tools">
+        <button class="quiet" id="helpBtn" title="What Plaito is">About</button>
+        <button class="voice-toggle" id="muteBtn" title="Tutor voice — tap to turn on or off" aria-label="Tutor voice"><span class="v-dot"></span> Voice</button>
+      </nav>
+    </div>
+    <div class="brand-tagline">The patient, methodical, wise AI tutor. Any age, any subject.</div>
+    <span class="ver" id="verLine">v5.2 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
     <p class="creed">Strongest in maths and the sciences, where method matters most, and ready for any subject. Plaito walks you through the thinking, never just the answer. Just snap a question and work through it together. <span class="beta-tag">🧪 Beta — double-check the tutor's arithmetic.</span></p>
   </div>
 
-  <div class="panel" id="setupPanel">
+  <h2 class="box-heading" id="setupHeading"><span class="bh-num">1</span> 🎒 Let's get set up for class</h2>
+  <div class="panel panel-setup" id="setupPanel">
     <div id="setupOpen">
-      <div class="section-label">🎒 First step! Let's get set up for class</div>
       <p class="key-note" style="margin-top:0">This app has no company behind it — no accounts, no server, nothing collected. Everything it needs lives right here on your device, which is why we set it up once at the top. Takes about two minutes, then it folds away. <a href="#" id="setupHelpLink">New here? Read the full guide →</a></p>
 
       <div class="setup-step">
@@ -541,16 +563,11 @@
     </div>
   </div>
 
-  <div class="seg" role="radiogroup" aria-label="What do you want to do?">
-    <button class="on" id="modeCheck" onclick="setMode('check')" role="radio" aria-checked="true">✅ Check my answer</button>
-    <button id="modeSolve" onclick="setMode('solve')" role="radio" aria-checked="false">🧭 Teach me how</button>
-  </div>
-  <p class="seg-desc" id="segDesc">You've done it — I'll check each step and unpack anything that's off.</p>
 
   <!-- STEP 1: get the question in -->
-  <div class="panel" id="cameraPanel">
-    <div class="section-label">📸 Show me the question. I'll show you the way.</div>
-    <p class="capture-intro">Share a test paper, exam, homework, practice question, or your own working-out — snap a photo or upload an image, and we'll work through it together. You can highlight a single question next.</p>
+  <h2 class="box-heading" id="captureHeading"><span class="bh-num">2</span> 📸 Show me what you're working on</h2>
+  <div class="panel panel-capture" id="cameraPanel">
+    <p class="capture-intro">A question, your working, however far you've got — finished, half-done, or just stuck. Snap a photo or upload, and we'll take it from there. I'll read where you are and pick up right there — checking your working if it's complete, or coaching you through if you're stuck.</p>
     <div class="capture-choices">
       <button class="cap-box" id="uploadBtn">
         <span class="cap-ico">🖼️</span>
@@ -581,7 +598,7 @@
 
   <!-- STEP 2: highlight one question -->
   <div class="panel" id="selector">
-    <div class="sel-help">📄 Page captured. Box the part you want help with:<br>• <b>Single, self-contained question</b> → box just that one.<br>• <b>Multi-part question</b> (a shared instruction with i, ii, iii…) → box the instruction <i>and</i> all its parts; I'll offer to split them and work through one at a time.<br>Checking an answer? Include your working in the box. ✍️ Clearer handwriting reads more accurately.</div>
+    <div class="sel-help">📄 Got it. Highlight the part you want help with — one question, a few, or the whole thing. I'll keep the rest of the page in view for context, so nothing's lost. <span style="opacity:.8">(Box more than one part and I'll take them one at a time.)</span></div>
     <div class="sel-wrap">
       <div class="sel-stage" id="selStage">
         <img id="pageImg" alt="The captured page">
@@ -826,6 +843,7 @@ function renderSetup(){
   $('setupOpen').style.display = done ? 'none' : 'block';
   $('setupClosed').style.display = done ? 'flex' : 'none';
   $('setupPanel').classList.toggle('closed', done);
+  document.body.classList.toggle('setup-collapsed', done);
   if (done){
     const both = keys.openai && keys.anthropic;
     $('setupSummary').textContent =
@@ -865,7 +883,24 @@ function updateKeyPlaceholder(){
 }
 document.querySelectorAll('input[name=provider]').forEach(r => r.addEventListener('change', updateKeyPlaceholder));
 
+function providerFromKey(v){
+  if (!v) return null;
+  if (v.startsWith('sk-ant-')) return 'anthropic';
+  if (v.startsWith('sk-')) return 'openai';
+  return null;
+}
+function autoDetectProvider(){
+  const v = $('apiKeyInput').value.trim();
+  const detected = providerFromKey(v);
+  if (!detected) return;
+  const current = document.querySelector('input[name=provider]:checked')?.value;
+  if (detected !== current){
+    const radio = document.querySelector('input[name=provider][value="'+detected+'"]');
+    if (radio){ radio.checked = true; updateKeyPlaceholder(); }
+  }
+}
 function checkKeyLive(){
+  autoDetectProvider();   // the key tells us the provider — make the radio follow it
   const chosen = document.querySelector('input[name=provider]:checked')?.value || 'anthropic';
   const v = $('apiKeyInput').value.trim();
   const st = $('keyStatus');
@@ -882,6 +917,7 @@ function checkKeyLive(){
 $('apiKeyInput').addEventListener('input', checkKeyLive);
 document.querySelectorAll('input[name=provider]').forEach(r=>r.addEventListener('change', () => { updateKeyPlaceholder(); checkKeyLive(); }));
 function connectKey(){
+  autoDetectProvider();   // let the key decide the provider before we save
   const chosen = document.querySelector('input[name=provider]:checked')?.value || 'anthropic';
   const v = $('apiKeyInput').value.trim();
   const st = $('keyStatus');
@@ -905,6 +941,20 @@ function connectKey(){
   }
   toast((provider==='openai'?'ChatGPT':'Claude') + ' key connected ✓');
 }
+(function fillInstallGuide(){
+  const el = document.getElementById('installGuide');
+  if (!el) return;
+  const ua = navigator.userAgent || '';
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+  const isAndroid = /Android/.test(ua);
+  if (isIOS){
+    el.innerHTML = "<b>On iPhone or iPad (Safari):</b><br>1. Tap the <b>Share</b> button (the square with an arrow) at the bottom or top of the screen.<br>2. Scroll down and tap <b>Add to Home Screen</b>.<br>3. Tap <b>Add</b> — Plaito will appear on your home screen like an app.";
+  } else if (isAndroid){
+    el.innerHTML = "<b>On Android (Chrome):</b><br>1. Tap the <b>⋮</b> menu (top right).<br>2. Tap <b>Add to Home screen</b> (or <b>Install app</b>).<br>3. Tap <b>Add</b> — Plaito will appear on your home screen like an app.";
+  } else {
+    el.innerHTML = "<b>On a computer (Chrome or Edge):</b> look for an <b>install icon</b> in the address bar (a screen with a downward arrow), or open the <b>⋮</b> menu and choose <b>Install Plaito</b>. On a phone, open this page in your browser and use its <b>Add to Home Screen</b> option.";
+  }
+})();
 document.getElementById('privacyBtn').addEventListener('click', () => $('privacyModal').classList.add('show'));
 document.getElementById('privacyCloseBtn').addEventListener('click', () => $('privacyModal').classList.remove('show'));
 document.getElementById('privacyModal').addEventListener('click', e => { if (e.target.id==='privacyModal') $('privacyModal').classList.remove('show'); });
@@ -929,7 +979,7 @@ $('setupDoneBtn').addEventListener('click', () => {
     if ($('rememberKey').checked) localStorage.setItem(chosen==='openai'?'sb_openai_key':'sb_anthropic_key', typed);
     else localStorage.removeItem(chosen==='openai'?'sb_openai_key':'sb_anthropic_key');
   } else if (!keys[chosen]){
-    alert("Paste an API key for " + (chosen === 'openai' ? 'ChatGPT (OpenAI)' : 'Claude (Anthropic)') + " to finish setup.");
+    alert("To finish setup, paste an API key — either ChatGPT (OpenAI) or Claude (Anthropic).");
     return;
   }
   setActiveProvider(chosen);
@@ -943,10 +993,11 @@ $('setupDoneBtn').addEventListener('click', () => {
 $('setupEditBtn').addEventListener('click', openSetup);
 
 /* ================= state ================= */
-let mode = 'check';
+let mode = 'auto';   // unified flow: the tutor detects attempt-state (none/partial/complete) and responds accordingly
 let pageDataUrl = null;          // full-resolution captured page
 let imageData = null;            // base64 of the cropped/selected question
 let focusDataUrl = null;
+let fullPageData = null;   // base64 of WHOLE page, sent as context when a crop is used (crop = focus, not amputation)
 let coaching = null;
 let hintIndex = 0, hintsUsed = 0;
 let answerRevealed = false, scored = false;
@@ -957,17 +1008,7 @@ let session = [], currentIdx = -1;
 const sectionText = { main:'', solution:'' };
 renderSetup();
 
-function setMode(m){
-  mode = m;
-  $('modeCheck').classList.toggle('on', m==='check');
-  $('modeSolve').classList.toggle('on', m==='solve');
-  $('modeCheck').setAttribute('aria-checked', m==='check');
-  $('modeSolve').setAttribute('aria-checked', m==='solve');
-  const d = $('segDesc');
-  if (d) d.textContent = m==='check'
-    ? "You've done it — I'll check each step and unpack anything that's off."
-    : "You're stuck — get the approach and hints first; the answer stays locked until you've had a go.";
-}
+function setMode(m){ mode = m; }   // retained for compatibility; unified flow auto-detects
 
 /* ================= score ================= */
 function thinkingOn(){ document.getElementById('fxGlow').classList.add('on'); }
@@ -1272,10 +1313,14 @@ function prepImage(dataUrl, cropBox, done){
   img.src = dataUrl;
 }
 $('tutorSelBtn').addEventListener('click', () => {
-  prepImage(pageDataUrl, selBox, (b64, url) => { imageData = b64; focusDataUrl = url; detectParts(); });
+  // crop = focus, but ALSO capture the full page so shared context (top instructions, data) isn't lost
+  prepImage(pageDataUrl, selBox, (b64, url) => {
+    imageData = b64; focusDataUrl = url;
+    prepImage(pageDataUrl, null, (fb64) => { fullPageData = fb64; detectParts(); });
+  });
 });
 $('wholePageBtn').addEventListener('click', () => {
-  prepImage(pageDataUrl, null, (b64, url) => { imageData = b64; focusDataUrl = url; detectParts(); });
+  prepImage(pageDataUrl, null, (b64, url) => { imageData = b64; focusDataUrl = url; fullPageData = null; detectParts(); });
 });
 
 // queue for multi-part questions
@@ -1356,6 +1401,8 @@ CHECKING DISCIPLINE — accuracy of the verdict matters above all. Before you wr
 - Common trap: rounding. Compute with full precision and only round at the end. Do not flag a "rounding error" unless the student's final rounded answer is genuinely different from the correctly-rounded answer.
 - When re-checking after the student corrects a misread answer: treat their stated answer as authoritative, recompute, and give a verdict consistent with it.
 
+TOPIC RECOGNITION — open with a brief, genuine flicker of recognition for what they're working on, the way a real tutor glances at the paper. Name the topic SPECIFICALLY ("ah, the quadratic formula", "oh, projectile motion", "right, the French subjunctive") — specificity proves you actually looked — and where natural add a light, TRUE characterization ("a classic", "this one trips a lot of people up", "satisfying once it clicks"). Then move straight into helping. Rules: keep it to half a sentence, never dwell; VARY it every time (never the same opener twice; sometimes a plain "right, let's take a look" with no flourish is better); NEVER gush, over-praise the subject, or pile on exclamation marks. Scale the register to the student's age/year from their profile: warmer and a touch more playful for younger students, more peer-like and efficient for older ones. READ THE ROOM — if they seem stressed or rushed (exam paper, lots of working, clearly mid-crunch), skip the flourish and just get to work. This recognition is spoken aloud, so make it sound natural and human.
+
 ENCOURAGEMENT — this is core to who you are. You are a warm, genuinely encouraging tutor who builds students up the way a great human teacher does. Follow these principles, which matter as much as correctness:
 - Lead with something real and specific they did well, before any correction. Praise the MOVE, not the person ("starting by factoring was exactly the right instinct"), never empty flattery ("great job!", "amazing!").
 - Even when an answer is wrong, find and name the genuine thing that was right — the setup, the method, the first three steps — so a mistake never feels like total failure. Locate the slip precisely and treat it as a small, fixable thing.
@@ -1401,7 +1448,7 @@ async function callAPI(messages){
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method:"POST",
       headers:{ "Content-Type":"application/json", "Authorization":"Bearer " + apiKey },
-      body: JSON.stringify({ model:"gpt-4o", max_tokens:2000, temperature:0.2, messages: toOpenAIMessages(messages) })
+      body: JSON.stringify({ model:"gpt-5.4", max_tokens:2000, temperature:0.2, messages: toOpenAIMessages(messages) })
     });
     const data = await response.json();
     if (data.error){
@@ -1445,6 +1492,15 @@ const parseJSON = t => JSON.parse(t.replace(/```json|```/g,'').trim());
 const SPLIT_SHAPE = `{"shared_instruction":"any instruction that applies to all parts, e.g. 'Simplify completely' — empty string if none","parts":[{"label":"the part label as printed, e.g. 'i' or 'a'","question":"the full question text for this part, with the shared instruction prepended so it stands alone","student_answer":"the student's handwritten answer for THIS part, transcribed exactly. Empty string if none visible"}]}`;
 function escapeHtml(x){ return String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+function buildContent(promptText){
+  const content = [{ type:"image", source:{ type:"base64", media_type:"image/png", data:imageData } }];
+  if (fullPageData){
+    content.push({ type:"image", source:{ type:"base64", media_type:"image/png", data:fullPageData } });
+    content.push({ type:"text", text:"NOTE: The FIRST image is the specific part the student highlighted and wants help with — focus your tutoring on that. The SECOND image is the full page it came from, for CONTEXT only (shared instructions, data, or diagrams that may sit outside the highlighted area). Use it to understand the question; tutor the highlighted part." });
+  }
+  content.push({ type:"text", text:promptText });
+  return content;
+}
 async function startTutoring(part){
   if (!imageData) return;
   stopSpeak();
@@ -1453,7 +1509,7 @@ async function startTutoring(part){
   $('selector').classList.add('fade-out');
   setTimeout(() => { $('selector').style.display='none'; $('selector').classList.remove('fade-out'); }, 260);
   $('errorBox').style.display='none'; $('results').style.display='none';
-  setLoading(mode==='check' ? 'reviewing your answer' : 'reviewing the question');
+  setLoading('reading your work');
   $('loading').style.display='block';
   thinkingOn();
   // when working a specific sub-part, tell the tutor exactly which one (and the attempt) so it doesn't grab the wrong part
@@ -1463,20 +1519,21 @@ async function startTutoring(part){
       + (part.student_answer ? " The student's handwritten answer for this part is: \"" + part.student_answer + "\". Treat that as their attempt." : " There is no attempt for this part yet.")
       + " Ignore any other sub-parts visible in the image.";
   }
-  const prompt = (mode==='check'
-    ? "Here is a question with the student's attempt. Check it. Respond ONLY with JSON in this exact shape: " + CHECK_SHAPE
-    : "Here is a question the student is stuck on. Coach them without giving the answer up front. Respond ONLY with JSON in this exact shape: " + SOLVE_SHAPE) + partNote;
-  history = [{ role:"user", content:[
-    { type:"image", source:{ type:"base64", media_type:"image/png", data:imageData } },
-    { type:"text", text:prompt }
-  ]}];
+  // UNIFIED FLOW: first assess how far the student got, then respond in the matching mode.
+  const prompt = "First, look carefully and decide how far the student has got:\n"
+    + "• COMPLETE attempt (they've worked it through to a final answer) → CHECK their work step by step. Respond ONLY with JSON in this CHECK shape: " + CHECK_SHAPE + "\n"
+    + "• PARTIAL attempt (they started but stopped partway, or got stuck mid-working) → pick up from where they stopped: acknowledge what they've done so far, then coach them onward from that point WITHOUT revealing the final answer up front. Respond ONLY with JSON in this COACH shape: " + SOLVE_SHAPE + "\n"
+    + "• NO attempt (just the question, no working) → coach them: give the approach and escalating hints, and KEEP THE FINAL ANSWER LOCKED until they have engaged. Respond ONLY with JSON in this COACH shape: " + SOLVE_SHAPE + "\n"
+    + "Choose the single best mode based on what you actually see. When in doubt between coaching and checking, prefer COACHING with the answer locked — never spoil the learning by handing over the answer to someone who hasn't completed a full attempt." + partNote;
+  history = [{ role:"user", content: buildContent(prompt) }];
   try{
     const text = await callAPI(history);
     history.push({ role:"assistant", content:text });
     coaching = parseJSON(text);
     if (coaching.error) throw new Error(coaching.error);
     const topicLabel = (part && part.label ? '(' + part.label + ') ' : '') + (coaching.topic || 'Question');
-    session.push({ topic: topicLabel, mode, isPractice:false, coaching, history, focusDataUrl, pageDataUrl, revealed:false, hintsShown:0, chatHTML:'', strategy:null, stratIdx:0 });
+    const detectedMode = (coaching.verdict !== undefined || Array.isArray(coaching.step_review)) ? 'check' : 'solve';
+    session.push({ topic: topicLabel, mode:detectedMode, isPractice:false, coaching, history, focusDataUrl, pageDataUrl, revealed:false, hintsShown:0, chatHTML:'', strategy:null, stratIdx:0 });
     currentIdx = session.length - 1;
     renderResults(false);
     renderSessionChips();
@@ -1516,7 +1573,8 @@ function renderResults(isPractice, restore){
   $('practiceQ').style.display = isPractice ? 'block' : 'none';
   if (isPractice) $('practiceQ').textContent = coaching.question_text || '';
 
-  const isCheck = !isPractice && mode==='check';
+  // unified flow: the tutor chose the mode; detect which by the shape it returned
+  const isCheck = !isPractice && (coaching.verdict !== undefined || Array.isArray(coaching.step_review));
   $('solveBody').style.display = isCheck ? 'none' : 'block';
   $('checkBody').style.display = isCheck ? 'block' : 'none';
   $('hintsBlock').style.display = isCheck ? 'none' : 'block';
@@ -1631,10 +1689,7 @@ async function recheckWithAnswer(corrected){
   $('analyzeThumb').src = focusDataUrl || ''; $('analyzeThumb').style.display = focusDataUrl ? 'block' : 'none';
   $('loading').style.display='block'; thinkingOn();
   const prompt = "Re-check this question. Ignore any handwriting you read for the final answer — the student confirms their actual final answer is: \"" + corrected + "\". Use THAT as their answer. Respond ONLY with JSON in this exact shape: " + CHECK_SHAPE;
-  history = [{ role:"user", content:[
-    { type:"image", source:{ type:"base64", media_type:"image/png", data:imageData } },
-    { type:"text", text:prompt }
-  ]}];
+  history = [{ role:"user", content: buildContent(prompt) }];
   try{
     const text = await callAPI(history);
     history.push({ role:"assistant", content:text });
