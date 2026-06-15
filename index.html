@@ -309,7 +309,7 @@
   .swatch{width:26px; height:26px; border-radius:50%; padding:0; border:1.5px solid var(--ink); background:linear-gradient(135deg, var(--a) 50%, var(--b) 50%); box-shadow:none;}
   .swatch:hover{transform:scale(1.12); box-shadow:none;}
   .swatch.active{outline:3px solid var(--hi-deep); outline-offset:2px;}
-  #voiceSelect{max-width:190px;}
+  #voiceSelect{max-width:280px;}
   #rateSlider{width:84px; accent-color:var(--hi-deep);}
   
   .bubble.typing{color:var(--ink-soft); font-style:italic;}
@@ -494,7 +494,7 @@
       </nav>
     </div>
     <div class="brand-tagline">The patient, methodical, wise AI tutor. Any age, any subject.</div>
-    <span class="ver" id="verLine">v5.6 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    <span class="ver" id="verLine">v5.7 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
@@ -550,7 +550,7 @@
 
       <div class="setup-step">
         <span class="p-label">4 · Pick a voice</span>
-        <p class="key-note">The tutor reads questions and explanations aloud. The voices in this list come free with your device — quality varies, so hit ▶ Test and pick the least robotic. (Mac tip: System Settings → Accessibility → Spoken Content → Manage Voices lets you download much nicer "Premium" ones for free — they'll appear here.)</p>
+        <p class="key-note">The tutor reads questions and explanations aloud. The dropdown groups every voice by where it comes from: <b>ChatGPT (OpenAI)</b> if you're using an OpenAI key, <b>Premium (ElevenLabs)</b> if you've added one, and <b>your device's built-in</b> voices (free, quality varies). Hit ▶ Test and pick your favourite. (Mac tip: System Settings → Accessibility → Spoken Content → Manage Voices downloads nicer built-in ones for free.)</p>
         <div class="p-group" style="margin:6px 0 12px">
           <select id="voiceSelect" aria-label="Choose a voice"></select>
           <input type="range" id="rateSlider" min="0.7" max="1.3" step="0.05" value="1" title="Speaking speed" aria-label="Speaking speed">
@@ -2120,24 +2120,31 @@ function rebuildVoiceOptions(){
   const sel = $('voiceSelect');
   const prev = sel.value;
   sel.innerHTML = '';
+  const addGroup = (label, items) => {
+    if (!items.length) return;
+    const g = document.createElement('optgroup'); g.label = label;
+    items.forEach(it => {
+      const o = document.createElement('option');
+      o.value = it.value; o.textContent = it.text;
+      g.appendChild(o);
+    });
+    sel.appendChild(g);
+  };
   // OpenAI voices — available off the SAME key used for tutoring, no extra setup
   if (provider === 'openai' && apiKey){
-    OAI_VOICES.forEach(name => {
-      const o = document.createElement('option');
-      o.value = 'oai:' + name; o.textContent = '🔊 ' + name.charAt(0).toUpperCase()+name.slice(1) + ' (OpenAI)';
-      sel.appendChild(o);
-    });
+    addGroup('🔊 ChatGPT voices (OpenAI)', OAI_VOICES.map(name => ({
+      value: 'oai:' + name,
+      text: name.charAt(0).toUpperCase() + name.slice(1)
+    })));
   }
-  elVoices.forEach(v => {
-    const o = document.createElement('option');
-    o.value = 'el:' + v.voice_id; o.textContent = '⭐ ' + v.name;
-    sel.appendChild(o);
-  });
-  voiceList.forEach((v,i) => {
-    const o = document.createElement('option');
-    o.value = 'sys:' + i; o.textContent = v.name + ' (' + v.lang + ')';
-    sel.appendChild(o);
-  });
+  // ElevenLabs premium voices (only if a key was added)
+  addGroup('⭐ Premium voices (ElevenLabs)', elVoices.map(v => ({
+    value: 'el:' + v.voice_id, text: v.name
+  })));
+  // device / browser built-in voices
+  addGroup('💻 Your device\'s built-in voices', voiceList.map((v,i) => ({
+    value: 'sys:' + i, text: v.name + ' (' + v.lang + ')'
+  })));
   if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
 }
 function populateVoices(){
