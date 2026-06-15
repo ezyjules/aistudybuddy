@@ -73,7 +73,7 @@
   .foot-link:hover{transform:none; color:var(--hi-deep); background:transparent;}
   .foot-sep{color:var(--line);}
   .foot-copy{font-size:.78rem; color:var(--ink-soft);}
-  body.in-question .header-copy, body.in-question #captureHeading, body.in-question #setupHeading{display:none;}
+  body.in-question .header-copy, body.in-question #captureHeading{display:none;}
   body.in-question #setupPanel:not(.closed){display:none;}  /* hide only the big expanded wizard */
   body.in-question #setupPanel.closed{display:block;}        /* keep the slim summary + Edit reachable */
   body.in-question #topHeader{margin-bottom:10px;}
@@ -98,6 +98,9 @@
   .shutter-row{display:flex; gap:10px; margin-top:10px;}
   .shutter-row button{flex:1;}
   button.primary{background:var(--hi); border:1.5px solid var(--ink); box-shadow:0 2px 0 var(--ink); color:var(--ink);}
+  .done-bar{display:block; width:100%; margin-top:8px; padding:15px 18px; font-family:var(--display); font-weight:800; font-size:1.08rem; color:#fff; background:var(--tick); border:1.5px solid var(--ink); border-radius:12px; box-shadow:0 3px 0 var(--ink); cursor:pointer; transition:transform .08s, box-shadow .08s;}
+  .done-bar:hover{transform:translateY(-1px); box-shadow:0 4px 0 var(--ink);}
+  .done-bar:active{transform:translateY(2px); box-shadow:0 1px 0 var(--ink);}
   button.primary:hover{box-shadow:0 3px 0 var(--ink); background:var(--hi);}
   button.primary:active{box-shadow:0 1px 0 var(--ink);}
   /* TERTIARY: text-only, lowest emphasis */
@@ -160,7 +163,6 @@
   .chip{display:inline-block; font-family:var(--mono); font-size:.78rem; background:var(--ink); color:#fff; border-radius:999px; padding:4px 14px; margin-bottom:12px;}
   .section-label{font-family:var(--mono); font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px;}
   .box-heading{font-family:var(--display); font-weight:800; font-size:1.22rem; color:var(--ink); margin:18px 0 9px; display:flex; align-items:center; gap:9px; line-height:1.25;}
-  .box-heading .bh-num{display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:var(--ink); color:#fff; font-family:var(--mono); font-size:.82rem; flex:0 0 auto;}
   .panel-setup{background:#FBFAF4; border-color:var(--hi-deep);}   /* warm tint sets the one-time setup apart */
   .panel-capture{background:var(--card);}
   .block{background:var(--card); border:1.5px solid var(--line); border-radius:var(--radius); padding:18px 20px; margin-bottom:16px; box-shadow:0 2px 0 var(--line);}
@@ -216,15 +218,22 @@
   #setupPanel .key-row{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
   #setupPanel .key-row input[type=password]{flex:1; min-width:220px; margin-bottom:0;}
   #setupPanel .key-row input[type=text]{flex:1; min-width:220px; margin-bottom:0; font-family:var(--body);}
+  #setupPanel .key-row > button{flex:0 0 auto; width:150px; justify-content:center;}
+  #setupPanel .key-row > button.mic-btn{min-width:0; width:46px; padding-left:0; padding-right:0;}
+  .row-status{font-size:.82rem; font-weight:700; margin:8px 0 0; color:var(--tick);}
   .setup-step{margin:14px 0 18px;}
   .provider-row{display:flex; gap:18px; margin:8px 0 10px; font-size:.92rem; flex-wrap:wrap;}
   .provider-note{font-size:.8rem; color:var(--ink-soft); margin:0 0 8px;}
   .provider-row label{display:flex; align-items:center; gap:6px; cursor:pointer;}
   .provider-row input{accent-color:var(--hi-deep);}
-  #setupClosed{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+  #setupClosed{display:flex; width:100%; align-items:center; justify-content:space-between; gap:12px; padding:13px 16px; background:var(--card); border:1.5px solid var(--line); border-radius:12px; box-shadow:0 2px 0 var(--line); cursor:pointer; text-align:left; transition:border-color .12s, background .12s;}
+  #setupClosed:hover{border-color:var(--tick); background:#FAFCFB;}
+  .setup-edit-hint{font-size:.85rem; font-weight:700; color:var(--ink-soft); white-space:nowrap; flex:0 0 auto;}
+  #setupClosed:hover .setup-edit-hint{color:var(--tick);}
   #setupPanel.closed{padding:11px 16px;}
-  body.setup-collapsed #setupHeading{display:none;}
-  .setup-summary{font-size:.9rem; font-weight:700;}
+  .setup-summary{font-size:.9rem; font-weight:700; display:flex; flex-direction:column; gap:1px; min-width:0;}
+  .setup-summary .sum-who{font-size:.95rem; font-weight:800; color:var(--ink); line-height:1.3;}
+  .setup-summary .sum-eng{font-size:.74rem; font-weight:600; color:var(--ink-soft); opacity:.85;}
   #stickyQ{position:sticky; top:8px; z-index:40; background:var(--card); border:1.5px solid var(--ink); border-radius:12px; padding:8px 12px; display:none; gap:12px; align-items:center; box-shadow:0 2px 0 var(--ink); margin-bottom:14px; cursor:zoom-in;}
   #stickyQ img{max-height:64px; border-radius:6px;}
   #stickyQ.big{cursor:zoom-out;}
@@ -485,14 +494,14 @@
       </nav>
     </div>
     <div class="brand-tagline">The patient, methodical, wise AI tutor. Any age, any subject.</div>
-    <span class="ver" id="verLine">v5.2 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    <span class="ver" id="verLine">v5.6 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
     <p class="creed">Strongest in maths and the sciences, where method matters most, and ready for any subject. Plaito walks you through the thinking, never just the answer. Just snap a question and work through it together. <span class="beta-tag">🧪 Beta — double-check the tutor's arithmetic.</span></p>
   </div>
 
-  <h2 class="box-heading" id="setupHeading"><span class="bh-num">1</span> 🎒 Let's get set up for class</h2>
+  <h2 class="box-heading" id="setupHeading">🎒 Let's get set up for class</h2>
   <div class="panel panel-setup" id="setupPanel">
     <div id="setupOpen">
       <p class="key-note" style="margin-top:0">This app has no company behind it — no accounts, no server, nothing collected. Everything it needs lives right here on your device, which is why we set it up once at the top. Takes about two minutes, then it folds away. <a href="#" id="setupHelpLink">New here? Read the full guide →</a></p>
@@ -500,10 +509,12 @@
       <div class="setup-step">
         <span class="p-label">1 · Tell us a bit about yourself</span>
         <div class="key-row">
-          <input type="text" id="profileInput" placeholder="e.g. Year 9, NSW Australia — surds, indices and trigonometry" aria-label="Where you're studying, your year level and topics of focus">
-          <button id="profileMicBtn" title="Dictate this">🎙️</button>
+          <input type="text" id="profileInput" placeholder="e.g. Ethan, Year 9, NSW Australia, working on surds and trig" aria-label="Where you're studying, your year level and topics of focus">
+          <button id="profileMicBtn" class="mic-btn" title="Dictate this">🎙️</button>
+          <button id="profileSaveBtn">Save</button>
         </div>
-        <p class="key-note">Where are you studying, what year are you in, and any topics of focus? This shapes the terminology, methods, and practice level the tutor uses, so it pitches things just right for you.</p>
+        <div class="row-status" id="profileStatus" style="display:none"></div>
+        <p class="key-note">Your first name (if you like), year level, where you're studying, and any topics of focus. The name just lets the tutor talk to you more personally, and the rest pitches the terminology, methods, and practice level just right for you. It all stays on this device.</p>
       </div>
 
       <div class="setup-step">
@@ -530,7 +541,7 @@
         <p class="provider-note" id="providerNote">ChatGPT also gives you a good built-in voice from the same key — nothing else to set up.</p>
         <div class="key-row">
           <input type="password" id="apiKeyInput" placeholder="sk-ant-…" autocomplete="off" aria-label="API key">
-          <button id="apiKeyBtn">Connect</button>
+          <button id="apiKeyBtn">Connect API key</button>
         </div>
         <p class="key-status" id="keyStatus" style="display:none"></p>
         <label class="remember-row"><input type="checkbox" id="rememberKey" checked> Remember on this device (don't tick on shared computers)</label>
@@ -552,22 +563,20 @@
         </div>
       </div>
 
-      <div class="btn-row" style="justify-content:flex-start; margin-top:4px">
-        <button class="primary" id="setupDoneBtn">✅ Done — ready for class</button>
-      </div>
+      <button class="done-bar" id="setupDoneBtn">✅ Done — ready for class</button>
     </div>
 
-    <div id="setupClosed" style="display:none">
+    <button id="setupClosed" style="display:none" type="button" aria-label="Edit your setup">
       <span class="setup-summary" id="setupSummary"></span>
-      <button class="quiet" id="setupEditBtn">⚙️ Edit my setup</button>
-    </div>
+      <span class="setup-edit-hint" id="setupEditBtn">⚙️ Edit my setup</span>
+    </button>
   </div>
 
 
   <!-- STEP 1: get the question in -->
-  <h2 class="box-heading" id="captureHeading"><span class="bh-num">2</span> 📸 Show me what you're working on</h2>
+  <h2 class="box-heading" id="captureHeading">📸 Show me what you're working on</h2>
   <div class="panel panel-capture" id="cameraPanel">
-    <p class="capture-intro">A question, your working, however far you've got — finished, half-done, or just stuck. Snap a photo or upload, and we'll take it from there. I'll read where you are and pick up right there — checking your working if it's complete, or coaching you through if you're stuck.</p>
+    <p class="capture-intro">Snap or upload a photo of anything you're stuck on. Finished, half-done, or not started, I'll see where you're at and pick up from there.</p>
     <div class="capture-choices">
       <button class="cap-box" id="uploadBtn">
         <span class="cap-ico">🖼️</span>
@@ -725,7 +734,7 @@
   </div>
 
   <footer id="siteFooter">
-    <div class="foot-brand"><span class="mark">Plaito</span></div>
+    <div class="foot-brand"><span class="mark">PLAITO</span></div>
     <nav class="foot-links">
       <button class="foot-link" id="privacyBtn">Privacy</button>
       <span class="foot-sep">·</span>
@@ -846,10 +855,11 @@ function renderSetup(){
   document.body.classList.toggle('setup-collapsed', done);
   if (done){
     const both = keys.openai && keys.anthropic;
-    $('setupSummary').textContent =
-      (provider === 'openai' ? '🤖 ChatGPT active' : '🔑 Claude active') +
-      (both ? ' (both keys saved)' : '') +
-      '  ·  ' + (profile ? '🎓 ' + profile : '🪄 adapting automatically');
+    const who = profile ? ('🎓 ' + profile) : '🪄 Adapting automatically';
+    const eng = (provider === 'openai' ? 'ChatGPT' : 'Claude') + (both ? ' · both keys saved' : '');
+    $('setupSummary').innerHTML =
+      '<span class="sum-who">' + who.replace(/</g,'&lt;') + '</span>' +
+      '<span class="sum-eng">🤖 ' + eng + '</span>';
   } else {
     const r = document.querySelector('input[name=provider][value="' + provider + '"]');
     if (r) r.checked = true;
@@ -990,7 +1000,7 @@ $('setupDoneBtn').addEventListener('click', () => {
   renderSetup();
   toast((provider==='openai'?'ChatGPT':'Claude') + ' key connected ✓');
 });
-$('setupEditBtn').addEventListener('click', openSetup);
+$('setupClosed').addEventListener('click', openSetup);
 
 /* ================= state ================= */
 let mode = 'auto';   // unified flow: the tutor detects attempt-state (none/partial/complete) and responds accordingly
@@ -1385,7 +1395,7 @@ function goNextInQueue(){ if (partQueue.length) runQueue(); }
 
 function buildSystem(){
   const pitch = profile
-    ? `The student's context, set by them or their parent: "${profile}". Pitch every explanation, method, and piece of terminology to that level and curriculum, use only techniques a student at that stage would have met, match the regional spelling and conventions, and generate practice questions at that standard.`
+    ? `The student's context, set by them or their parent: "${profile}". Pitch every explanation, method, and piece of terminology to that level and curriculum, use only techniques a student at that stage would have met, match the regional spelling and conventions, and generate practice questions at that standard. If a first name is given in that context, address the student by it NATURALLY and SPARINGLY — the way a real tutor does: an occasional warm "Nice work, [name]" or "Right, [name], let's look", not in every sentence. Never overuse it. If no name is given, simply don't use one.`
     : `No level or curriculum has been set. Infer the likely subject, country, and level from the question in the photo itself and pitch explanations accordingly; if genuinely ambiguous, pitch to a typical secondary-school level.`;
   return `You are a patient, encouraging study tutor for one student. ${pitch}
 
@@ -1908,6 +1918,19 @@ async function askTutor(){
 $('askBtn').addEventListener('click', askTutor);
 $('askInput').addEventListener('keydown', e => { if (e.key==='Enter') askTutor(); });
 
+function saveProfileNow(){
+  profile = $('profileInput').value.trim();
+  localStorage.setItem('sb_profile', profile);
+  const st = $('profileStatus');
+  if (st){
+    st.style.display = 'block';
+    st.textContent = profile ? '\u2713 Saved \u2014 the tutor will use this' : 'Cleared';
+    clearTimeout(st._t); st._t = setTimeout(() => { st.style.display='none'; }, 2600);
+  }
+}
+if ($('profileSaveBtn')) $('profileSaveBtn').addEventListener('click', saveProfileNow);
+if ($('profileInput')) $('profileInput').addEventListener('keydown', e => { if (e.key==='Enter'){ e.preventDefault(); saveProfileNow(); } });
+
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 if (SR){
   // dictation for the class profile field
@@ -1918,7 +1941,7 @@ if (SR){
     stopSpeak();
     try{ recP.start(); listeningP=true; $('profileMicBtn').classList.add('listening'); }catch(e){}
   });
-  recP.onresult = e => { $('profileInput').value = e.results[0][0].transcript; };
+  recP.onresult = e => { $('profileInput').value = e.results[0][0].transcript; saveProfileNow(); };
   recP.onend = () => { listeningP=false; $('profileMicBtn').classList.remove('listening'); };
   recP.onerror = () => { listeningP=false; $('profileMicBtn').classList.remove('listening'); };
 
