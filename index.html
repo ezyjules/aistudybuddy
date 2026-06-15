@@ -226,10 +226,10 @@
   .provider-note{font-size:.8rem; color:var(--ink-soft); margin:0 0 8px;}
   .provider-row label{display:flex; align-items:center; gap:6px; cursor:pointer;}
   .provider-row input{accent-color:var(--hi-deep);}
-  #setupClosed{display:flex; width:100%; align-items:center; justify-content:space-between; gap:12px; padding:13px 16px; background:var(--card); border:1.5px solid var(--line); border-radius:12px; box-shadow:0 2px 0 var(--line); cursor:pointer; text-align:left; transition:border-color .12s, background .12s;}
+  #setupClosed{display:flex; flex-direction:column; width:100%; align-items:stretch; gap:10px; padding:13px 16px; background:var(--card); border:1.5px solid var(--line); border-radius:12px; box-shadow:0 2px 0 var(--line); cursor:pointer; text-align:left; transition:border-color .12s, background .12s;}
   #setupClosed:hover{border-color:var(--tick); background:#FAFCFB;}
-  .setup-edit-hint{font-size:.85rem; font-weight:700; color:var(--ink-soft); white-space:nowrap; flex:0 0 auto;}
-  #setupClosed:hover .setup-edit-hint{color:var(--tick);}
+  .setup-edit-hint{display:block; width:100%; text-align:center; font-size:.85rem; font-weight:700; color:var(--ink-soft); padding:9px 12px; border:1.5px solid var(--line); border-radius:9px; background:var(--paper); transition:border-color .12s, color .12s, background .12s;}
+  #setupClosed:hover .setup-edit-hint{color:var(--tick); border-color:var(--tick); background:#FAFCFB;}
   #setupPanel.closed{padding:11px 16px;}
   .setup-summary{font-size:.9rem; font-weight:700; display:flex; flex-direction:column; gap:1px; min-width:0;}
   .setup-summary .sum-who{font-size:.95rem; font-weight:800; color:var(--ink); line-height:1.3;}
@@ -494,7 +494,7 @@
       </nav>
     </div>
     <div class="brand-tagline">The patient, methodical, wise AI tutor. Any age, any subject.</div>
-    <span class="ver" id="verLine">v5.19 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    <span class="ver" id="verLine">v5.20 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
