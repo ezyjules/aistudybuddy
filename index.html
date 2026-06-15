@@ -496,7 +496,7 @@
       </nav>
     </div>
     <div class="brand-tagline">The patient, methodical, wise AI tutor. Any age, any subject.</div>
-    <span class="ver" id="verLine">v5.25 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    <span class="ver" id="verLine">v5.27 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
@@ -772,7 +772,7 @@
   </div>
 </div>
 <div id="audioDock" style="display:none">
-  <button class="quiet" id="dockToggle" title="Pause / resume the tutor's voice" aria-label="Pause or resume">⏸</button>
+  <button class="quiet" id="dockToggle" title="Pause or stop the tutor's voice" aria-label="Pause or resume the tutor's voice">⏸</button>
 </div>
 <button id="fbTab" onclick="openFeedback()" aria-label="Give feedback">💬 Feedback</button>
 <div id="fbPanel" role="dialog" aria-modal="true" aria-label="Send feedback" style="display:none">
@@ -1837,6 +1837,18 @@ function renderStratStep(strat, i){
     return;
   }
   const step = strat[i];
+  // Randomise option order ONCE so the right answer isn't always 'A' (model defaults to index 0).
+  if (step && Array.isArray(step.options) && !step._shuffled){
+    const correctIdx = (typeof step.correct === 'number') ? step.correct : 0;
+    const correctVal = step.options[correctIdx];
+    // Fisher–Yates shuffle
+    for (let k = step.options.length - 1; k > 0; k--){
+      const j = Math.floor(Math.random() * (k + 1));
+      [step.options[k], step.options[j]] = [step.options[j], step.options[k]];
+    }
+    step.correct = step.options.indexOf(correctVal);   // track where the right one landed
+    step._shuffled = true;
+  }
   const block = document.createElement('div');
   block.style.marginTop = i ? '16px' : '0';
   const prog = document.createElement('div'); prog.className='strat-progress'; prog.textContent = 'Step ' + (i+1) + ' of ' + strat.length;
@@ -2425,8 +2437,7 @@ function stopSpeak(){
 }
 (function wireDock(){
   const btn=$('dockToggle');
-  if (!btn) return;
-  btn.addEventListener('click', pauseResume);   // the dock pauses/resumes the SAME utterance — never starts a new one
+  if (btn) btn.addEventListener('click', pauseResume);   // single master control: pause/resume the SAME utterance, reuses shared audio state — never starts new audio or clashes with other controls
 })();
 
 /* ================= colour themes ================= */
