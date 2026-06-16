@@ -87,10 +87,80 @@
   .contrast .other li::before{content:'✕'; position:absolute; left:0; color:var(--cross); font-weight:700;}
   .contrast .ours li::before{content:'✓'; position:absolute; left:0; color:var(--tick); font-weight:700;}
 
-  /* ---------- demo ---------- */
-  .demo-frame{background:var(--ink); border:1.5px solid var(--ink); border-radius:18px; box-shadow:0 4px 0 var(--ink); aspect-ratio:16/10; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; color:#fff; text-align:center; padding:30px; max-width:760px; margin:0 auto;}
-  .demo-frame .play{width:64px; height:64px; border-radius:50%; background:var(--hi); border:2px solid #fff; display:flex; align-items:center; justify-content:center; font-size:1.5rem; color:var(--ink);}
-  .demo-cap{color:#fff; opacity:.85; font-size:.95rem; max-width:42ch;}
+  /* ---------- demo: animated phone walkthrough ---------- */
+  .demo-stage{display:flex; flex-direction:column; align-items:center; gap:16px;}
+  .phone{width:330px; max-width:88vw; height:580px; background:var(--ink); border:3px solid var(--ink); border-radius:38px; box-shadow:0 8px 0 rgba(20,33,61,.25); padding:12px; position:relative;}
+  .phone-notch{position:absolute; top:14px; left:50%; transform:translateX(-50%); width:110px; height:20px; background:var(--ink); border-radius:0 0 14px 14px; z-index:3;}
+  .phone-screen{background:var(--paper); border-radius:28px; height:100%; overflow:hidden; position:relative; padding:14px 13px; display:flex; flex-direction:column; gap:8px;
+    background-image:linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size:20px 20px;}
+  .d-top{display:flex; align-items:center; gap:7px; padding:4px 2px 6px; flex:0 0 auto;}
+  .d-mark{font-family:var(--display); font-weight:800; font-size:.95rem; background:linear-gradient(transparent 56%, var(--hi) 56%); padding:0 5px;}
+  .d-subject{font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--ink-soft); text-transform:uppercase;}
+  .d-feed{flex:1 1 auto; display:flex; flex-direction:column; gap:8px; overflow:hidden;}
+
+  /* items animate in */
+  .d-feed > *{opacity:0; transform:translateY(10px); animation:dIn .42s ease forwards;}
+  @keyframes dIn{to{opacity:1; transform:none;}}
+
+  /* capture + analysing */
+  .d-capture{background:var(--ink); border-radius:12px; padding:18px; display:flex; flex-direction:column; align-items:center; gap:10px; color:#fff;}
+  .d-lens{width:54px; height:54px; border-radius:50%; border:3px solid var(--hi); display:flex; align-items:center; justify-content:center; font-size:1.5rem; position:relative;}
+  .d-lens.snap{animation:snap .5s ease;}
+  @keyframes snap{0%{transform:scale(1);}40%{transform:scale(.86); box-shadow:0 0 0 6px rgba(255,214,10,.4);}100%{transform:scale(1);}}
+  .d-capture-label{font-family:var(--mono); font-size:.66rem; letter-spacing:.05em; opacity:.9;}
+  .d-scan{font-family:var(--mono); font-size:.66rem; color:var(--hi); display:flex; align-items:center; gap:6px;}
+  .d-scan .d-typing span{background:var(--hi);}
+
+  .d-card{background:var(--card); border:1.5px solid var(--ink); border-radius:14px; box-shadow:0 2px 0 var(--ink); padding:12px;}
+  .d-photo{background:#FFFDF5; border:1px dashed var(--hi-deep); border-radius:9px; padding:12px;}
+  .d-photo.sci{background:#F4FBFF; border-color:#7FB7D6;}
+  .d-photo-label{font-family:var(--mono); font-size:.6rem; letter-spacing:.06em; color:var(--ink-soft); margin-bottom:8px;}
+  .d-eq{font-family:var(--display); font-weight:600; font-size:.9rem; color:var(--ink);}
+  .d-eq-big{font-size:1.4rem; font-weight:800; margin-top:3px;}
+  .d-eq i{font-style:italic;}
+  .d-blank{font-family:var(--body); font-size:.82rem; color:var(--ink-soft); font-style:italic; margin-top:7px;}
+
+  .d-bubble{max-width:84%; padding:8px 12px; border-radius:14px; font-size:.82rem; line-height:1.42;}
+  .d-bubble i{font-style:italic;} .d-bubble b{font-weight:700;}
+  .d-tutor{background:var(--card); border:1.5px solid var(--ink); border-bottom-left-radius:4px; align-self:flex-start; box-shadow:0 1.5px 0 var(--ink);}
+  .d-student{background:var(--ink); color:#fff; border-bottom-right-radius:4px; align-self:flex-end;}
+  .d-hint{align-self:center; font-size:.64rem; font-family:var(--mono); color:var(--ink-soft); background:rgba(224,180,0,.16); border:1px solid var(--hi-deep); border-radius:20px; padding:4px 10px; text-align:center;}
+
+  /* multiple-choice quiz */
+  .d-quiz{background:var(--card); border:1.5px solid var(--ink); border-radius:14px; box-shadow:0 2px 0 var(--ink); padding:11px;}
+  .d-quiz-q{font-family:var(--display); font-weight:700; font-size:.8rem; margin-bottom:8px;}
+  .d-opt{border:1.5px solid var(--line); border-radius:9px; padding:7px 10px; font-size:.78rem; margin-bottom:6px; transition:border-color .25s, background .25s;}
+  .d-opt:last-child{margin-bottom:0;}
+  .d-opt.picked{border-color:var(--tick); background:#F3FAF6; font-weight:700;}
+  .d-opt.picked::after{content:' ✓'; color:var(--tick);}
+
+  /* typing dots */
+  .d-typing{display:inline-flex; gap:3px; vertical-align:middle;}
+  .d-typing span{width:5px; height:5px; border-radius:50%; background:var(--ink-soft); animation:dotPulse 1s infinite;}
+  .d-typing span:nth-child(2){animation-delay:.15s;} .d-typing span:nth-child(3){animation-delay:.3s;}
+  @keyframes dotPulse{0%,60%,100%{opacity:.3; transform:translateY(0);}30%{opacity:1; transform:translateY(-3px);}}
+
+  .d-win{background:#F3FAF6; border-color:var(--tick); text-align:center;}
+  .d-win-badge{display:inline-block; font-family:var(--display); font-weight:800; font-size:.85rem; color:#fff; background:var(--tick); border-radius:20px; padding:3px 13px; margin-bottom:6px; animation:winPop .5s ease;}
+  @keyframes winPop{0%{transform:scale(.6);}50%{transform:scale(1.12);}100%{transform:scale(1);}}
+  .d-win-text{font-size:.8rem; color:var(--ink);}
+  .d-workings{font-family:var(--mono); font-size:.68rem; color:var(--ink-soft); text-align:left; margin-top:8px; line-height:1.6; border-top:1px solid var(--line); padding-top:7px;}
+
+  .demo-dots{display:flex; gap:8px;}
+  .demo-dots .dot{width:9px; height:9px; border-radius:50%; background:var(--line); transition:background .3s, transform .3s;}
+  .demo-dots .dot.on{background:var(--ink); transform:scale(1.15);}
+  .demo-foot{font-size:.92rem; color:var(--ink-soft); text-align:center; margin:0; max-width:44ch;}
+
+  /* confetti */
+  .d-confetti{position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; z-index:5;}
+  .d-confetti i{position:absolute; width:7px; height:11px; top:-14px; opacity:0; animation:confFall 1.4s ease-in forwards;}
+  @keyframes confFall{0%{opacity:1; transform:translateY(0) rotate(0);}100%{opacity:0; transform:translateY(440px) rotate(360deg);}}
+
+  @media (prefers-reduced-motion: reduce){
+    .d-feed > *{opacity:1; transform:none; animation:none;}
+    .d-confetti{display:none;}
+    .d-typing{display:none !important;}
+  }
 
   /* ---------- who it's for ---------- */
   .for-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; text-align:center;}
@@ -98,6 +168,15 @@
   .for-card .ico{font-size:1.8rem;}
   .for-card h3{font-family:var(--display); font-weight:800; font-size:1.1rem; margin:10px 0 6px;}
   .for-card p{margin:0; color:var(--ink-soft); font-size:.95rem;}
+
+  /* ---------- works everywhere ---------- */
+  .devices-row{display:flex; justify-content:center; gap:18px; flex-wrap:wrap; margin-bottom:22px;}
+  .device{background:var(--card); border:1.5px solid var(--ink); border-radius:var(--radius); box-shadow:0 3px 0 var(--ink); padding:20px 28px; display:flex; flex-direction:column; align-items:center; gap:8px; min-width:130px;}
+  .device .d-ico{line-height:1; color:var(--ink);}
+  .device .d-ico svg{width:38px; height:38px; display:block;}
+  .device span{font-family:var(--display); font-weight:700; font-size:1rem;}
+  .devices-note{max-width:56ch; margin:0 auto; text-align:center; color:var(--ink-soft); font-size:1rem;}
+  .devices-note b{color:var(--ink);}
 
   /* ---------- final CTA band ---------- */
   .final{background:var(--ink); border-radius:22px; padding:54px 30px; text-align:center; color:#fff; margin:10px 0 54px;}
@@ -140,8 +219,8 @@
   <!-- HERO -->
   <div class="hero">
     <p class="eyebrow">The AI tutor for homework, study &amp; exam prep</p>
-    <h1>The AI tutor that <span class="hl">guides, never gives</span> — so kids actually learn, instead of copying the answer.</h1>
-    <p class="hero-sub">Snap a photo of any study question. Plaito works through it <b>with</b> your child — checking their working, or coaching them when they're stuck. It shows the <b>how</b>, never just the what.</p>
+    <h1>The AI tutor that <span class="hl">guides, never gives</span> — so students actually learn it, instead of just copying.</h1>
+    <p class="hero-sub">Snap a photo of any study question. Plaito works through it <b>with</b> you — checking your working, or coaching you when you're stuck. It shows the <b>how</b>, never just the what.</p>
     <a href="app.html" class="cta-primary" id="heroCta">Get started with Plaito →</a>
     <p class="cta-note">Free to use · runs on a few dollars of your own AI credit · <b>no subscription</b></p>
   </div>
@@ -197,11 +276,18 @@
 
   <!-- DEMO -->
   <section id="demo">
-    <p class="sec-label">See it in action</p>
-    <h2>Watch Plaito work through a question</h2>
-    <div class="demo-frame reveal">
-      <div class="play">▶</div>
-      <div class="demo-cap">A short walkthrough is coming here soon. For now, the best way to see it is to try it yourself — it's free to start.</div>
+    <p class="sec-label">A quick walkthrough</p>
+    <h2>How Plaito works through a question</h2>
+    <div class="demo-stage">
+      <div class="phone" id="demoPhone" aria-label="An animated walkthrough of Plaito tutoring a question">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="d-top"><span class="d-mark">PLAITO</span> <span class="d-subject" id="dSubject"></span></div>
+          <div class="d-feed" id="demoFeed"></div>
+        </div>
+      </div>
+      <div class="demo-dots" id="demoDots"><span class="dot on"></span><span class="dot"></span></div>
+      <p class="demo-foot">Two ways in: check your working, or get coached from a blank page. Either way, no answers handed over.</p>
     </div>
   </section>
 
@@ -226,6 +312,18 @@
         <p>A patient spoken tutor that talks through the thinking, not just text on a screen.</p>
       </div>
     </div>
+  </section>
+
+  <!-- WORKS EVERYWHERE -->
+  <section id="devices">
+    <p class="sec-label">Works everywhere</p>
+    <h2>Any device, nothing to install</h2>
+    <div class="devices-row reveal">
+      <div class="device"><div class="d-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2.5"/><line x1="11" y1="18.5" x2="13" y2="18.5"/></svg></div><span>Phone</span></div>
+      <div class="device"><div class="d-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2.5"/><line x1="11" y1="18" x2="13" y2="18"/></svg></div><span>iPad &amp; tablet</span></div>
+      <div class="device"><div class="d-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="11" rx="1.5"/><line x1="2" y1="19" x2="22" y2="19"/></svg></div><span>Laptop &amp; desktop</span></div>
+    </div>
+    <p class="devices-note reveal">Plaito runs right in your web browser — nothing to download from an app store. On a phone or tablet you can <b>add it to your home screen</b> and it opens just like an app, full-screen and one tap away.</p>
   </section>
 
   <!-- FINAL CTA -->
@@ -269,6 +367,102 @@
   document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
   // safety net: never leave content invisible if the observer doesn't fire
   setTimeout(function(){ document.querySelectorAll('.reveal:not(.in)').forEach(function(el){ el.classList.add('in'); }); }, 1200);
+
+  /* ---------- demo walkthrough: two alternating vignettes ---------- */
+  (function demoWalkthrough(){
+    var phone = document.getElementById('demoPhone');
+    var feed = document.getElementById('demoFeed');
+    var subjectEl = document.getElementById('dSubject');
+    var dots = document.querySelectorAll('#demoDots .dot');
+    if (!feed) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var timers = [];
+    function clearTimers(){ timers.forEach(clearTimeout); timers = []; }
+    function at(ms, fn){ timers.push(setTimeout(fn, ms)); }
+    function add(html){ var d = document.createElement('div'); d.innerHTML = html; var el = d.firstElementChild; feed.appendChild(el); return el; }
+    var typing = '<span class="d-typing"><span></span><span></span><span></span></span>';
+
+    function confetti(){
+      if (reduce) return;
+      var screen = phone.querySelector('.phone-screen');
+      var box = document.createElement('div'); box.className = 'd-confetti';
+      var colors = ['#FFD60A','#2F9E6E','#14213D','#E0B400'];
+      for (var i=0;i<24;i++){ var c=document.createElement('i'); c.style.left=Math.random()*100+'%'; c.style.background=colors[i%colors.length]; c.style.animationDelay=(Math.random()*0.3)+'s'; box.appendChild(c); }
+      screen.appendChild(box);
+      at(1800, function(){ if (box.parentNode) box.remove(); });
+    }
+
+    // ---- Vignette A: MATHS — quiz to workings (they had a go) ----
+    function mathsVignette(done){
+      subjectEl.textContent = 'Maths';
+      var cap = add('<div class="d-capture"><div class="d-lens">📷</div><div class="d-capture-label">Tap to snap your question</div></div>');
+      at(700, function(){ cap.querySelector('.d-lens').classList.add('snap'); cap.querySelector('.d-lens').textContent='📸'; });
+      at(1300, function(){ cap.querySelector('.d-capture-label').innerHTML = '<span class="d-scan">'+typing+' Reading your question…</span>'; });
+      at(2500, function(){
+        cap.remove();
+        add('<div class="d-card"><div class="d-photo"><div class="d-photo-label">📐 MATHS · YOUR WORKING</div><div class="d-eq">Right triangle: legs 6 cm &amp; 8 cm.</div><div class="d-eq">Find the hypotenuse.</div><div class="d-eq" style="margin-top:5px">Your answer: <b>10 cm</b> ✏️</div></div></div>');
+      });
+      at(3700, function(){ add('<div class="d-bubble d-tutor">'+typing+'</div>'); });
+      at(4700, function(){ feed.lastChild.innerHTML = 'Spot on — 10 cm is right. Let\'s lock in <b>how</b> you\'d justify it. Which rule applies here?'; });
+      at(5800, function(){
+        add('<div class="d-quiz"><div class="d-quiz-q">Which relationship do we use?</div>'
+          + '<div class="d-opt" data-o="0">SOH CAH TOA (trig ratios)</div>'
+          + '<div class="d-opt" data-o="1">a² + b² = c² (Pythagoras)</div>'
+          + '<div class="d-opt" data-o="2">Area = ½ × base × height</div></div>');
+      });
+      at(7300, function(){ var o=feed.querySelector('.d-opt[data-o="1"]'); if(o) o.classList.add('picked'); });
+      at(8100, function(){ add('<div class="d-bubble d-tutor">Exactly — two sides and a right angle means Pythagoras. Here\'s the full working:</div>'); });
+      at(9300, function(){
+        add('<div class="d-card d-win"><div class="d-win-badge">✓ Solved together</div>'
+          + '<div class="d-workings">c² = 6² + 8²<br>c² = 36 + 64 = 100<br>c = √100 = 10 cm</div></div>');
+        confetti();
+      });
+      at(12200, done);
+    }
+
+    // ---- Vignette B: SCIENCE — blank question, coached from scratch ----
+    function scienceVignette(done){
+      subjectEl.textContent = 'Science';
+      var cap = add('<div class="d-capture"><div class="d-lens">📷</div><div class="d-capture-label">Tap to snap your question</div></div>');
+      at(700, function(){ cap.querySelector('.d-lens').classList.add('snap'); cap.querySelector('.d-lens').textContent='📸'; });
+      at(1300, function(){ cap.querySelector('.d-capture-label').innerHTML = '<span class="d-scan">'+typing+' Reading your question…</span>'; });
+      at(2500, function(){
+        cap.remove();
+        add('<div class="d-card"><div class="d-photo sci"><div class="d-photo-label">🔬 SCIENCE · QUESTION</div><div class="d-eq">Why is sodium (Na) so much more reactive than neon (Ne)?</div><div class="d-blank">— no working yet —</div></div></div>');
+      });
+      at(3700, function(){ add('<div class="d-bubble d-tutor">'+typing+'</div>'); });
+      at(4800, function(){ feed.lastChild.innerHTML = 'Blank one — no worries, let\'s reason it out. Think about their <b>outer shells</b>: how many electrons does sodium have in its outer shell?'; });
+      at(6400, function(){ add('<div class="d-hint">🔒 I\'ll guide you, not just give the answer</div>'); });
+      at(7300, function(){ add('<div class="d-bubble d-student">Just one?</div>'); });
+      at(8300, function(){ add('<div class="d-bubble d-tutor">Right — one lonely electron. Neon\'s outer shell is already full. So which atom is more "keen" to react?</div>'); });
+      at(9900, function(){ add('<div class="d-bubble d-student">Sodium — it wants to lose that electron!</div>'); });
+      at(11000, function(){ add('<div class="d-card d-win"><div class="d-win-badge">✓ Worked it out</div><div class="d-win-text">You reasoned it from electron shells yourself.</div></div>'); confetti(); });
+      at(13900, done);
+    }
+
+    var vignettes = [mathsVignette, scienceVignette];
+    var idx = 0;
+    function runNext(){
+      feed.innerHTML = '';
+      var old = phone.querySelector('.d-confetti'); if (old) old.remove();
+      dots.forEach(function(d,i){ d.classList.toggle('on', i === idx); });
+      if (reduce){
+        // static: just show the maths end-state, no looping
+        subjectEl.textContent = 'Maths';
+        add('<div class="d-card"><div class="d-photo"><div class="d-photo-label">📐 MATHS</div><div class="d-eq">2<i>x</i> + 5 = 13</div></div></div>');
+        add('<div class="d-bubble d-tutor">Plaito guides you through it step by step — checking your working, or coaching from a blank page.</div>');
+        add('<div class="d-card d-win"><div class="d-win-badge">✓ Solved together</div></div>');
+        return;
+      }
+      vignettes[idx](function(){ idx = (idx + 1) % vignettes.length; clearTimers(); runNext(); });
+    }
+
+    var started = false;
+    var pObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting && !started){ started = true; runNext(); } });
+    }, { threshold: 0.4 });
+    pObs.observe(phone);
+  })();
 </script>
 
 </body>
