@@ -252,12 +252,15 @@
     if (el) el.addEventListener('click', function(){ ctaClick(id); });
   });
 
-  // If a returning user has already finished setup, send them straight to the app
+  // If they've already set up, relabel the CTAs so they know they'll go straight to tutoring
+  // (no forced redirect — they can still read the whole landing if they want)
   try {
     if (localStorage.getItem('sb_setup_done') === '1') {
-      window.location.replace('app.html');
+      var nav = document.getElementById('navCta'); if (nav) nav.textContent = 'Back to Plaito →';
+      var hero = document.getElementById('heroCta'); if (hero) hero.textContent = 'Continue with Plaito →';
+      var fin = document.getElementById('finalCta'); if (fin) fin.textContent = 'Continue with Plaito →';
     }
-  } catch(e){ /* storage blocked — just show the landing */ }
+  } catch(e){}
 
   // Scroll-reveal: minimal motion that adds meaning
   var io = new IntersectionObserver(function(entries){

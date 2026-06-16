@@ -488,7 +488,7 @@
 <div class="wrap">
   <header id="topHeader">
     <div class="header-row">
-      <a href="#" class="brand-lockup" id="brandHome" aria-label="Plaito home">
+      <a href="index.html" class="brand-lockup" id="brandHome" aria-label="Plaito home — back to the landing page">
         <span class="mark">PLAITO</span>
       </a>
       <nav class="head-tools">
@@ -497,7 +497,7 @@
       </nav>
     </div>
     <div class="brand-tagline">The patient, methodical, wise AI tutor. Any age, any subject.</div>
-    <span class="ver" id="verLine">v5.29 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    <span class="ver" id="verLine">v5.30 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
@@ -994,12 +994,15 @@ document.getElementById('privacyCloseBtn').addEventListener('click', () => $('pr
 document.getElementById('privacyModal').addEventListener('click', e => { if (e.target.id==='privacyModal') $('privacyModal').classList.remove('show'); });
 document.getElementById('footAboutBtn').addEventListener('click', () => $('helpModal').classList.add('show'));
 document.getElementById('brandHome').addEventListener('click', (e) => {
-  e.preventDefault();
-  document.body.classList.remove('in-question');
-  if (typeof goNewPhoto === 'function' && (pageDataUrl || (typeof coaching!=='undefined' && coaching))) {
-    // only reset if mid-question; otherwise just scroll up
+  // If they're mid-question, don't navigate away (would lose their work) — just scroll to top.
+  // Otherwise let the link go to the landing page (index.html).
+  const midQuestion = document.body.classList.contains('in-question');
+  if (midQuestion){
+    e.preventDefault();
+    window.scrollTo({top:0, behavior:'smooth'});
+    return;
   }
-  window.scrollTo({top:0, behavior:'smooth'});
+  // not mid-question: allow normal navigation to index.html (the landing)
 });
 $('apiKeyBtn').addEventListener('click', connectKey);
 $('apiKeyInput').addEventListener('keydown', e => { if (e.key==='Enter'){ e.preventDefault(); connectKey(); } });
