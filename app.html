@@ -448,10 +448,10 @@
   .wkeyok.show{display:block;}
   .wtf{width:100%; font-family:var(--body); font-size:.96rem; padding:11px 13px; border:1.5px solid var(--ink); border-radius:10px; margin-bottom:14px;}
 
-  .wswatches{display:flex; gap:10px; flex-wrap:wrap; margin:4px 0 4px;}
-  .wsw{width:42px; height:42px; border-radius:10px; border:2px solid var(--line); cursor:pointer; transition:transform .1s, border-color .1s;}
-  .wsw:hover{transform:scale(1.08);}
-  .wsw.sel{border-color:var(--ink); box-shadow:0 0 0 2px var(--hi);}
+  .wswatches{display:flex; gap:12px; flex-wrap:wrap; margin:4px 0 4px;}
+  .wsw{width:40px; height:40px; border-radius:50%; padding:0; border:1.5px solid var(--ink); background:linear-gradient(135deg, var(--a) 50%, var(--b) 50%); cursor:pointer; transition:transform .1s;}
+  .wsw:hover{transform:scale(1.12);}
+  .wsw.sel{outline:3px solid var(--hi-deep); outline-offset:2px;}
 
   .wvoice-picker{display:flex; gap:10px; align-items:center; margin-bottom:4px;}
   .wvoicesel{flex:1; font-family:var(--body); font-size:.95rem; padding:11px 12px; border:1.5px solid var(--ink); border-radius:10px; background:var(--card); color:var(--ink);}
@@ -500,7 +500,7 @@
   <div class="wiz-card">
     <div class="wiz-head">
       <span class="wiz-mark">PLAITO</span>
-      <span class="wiz-ver" id="wizVer">v5.52 beta</span>
+      <span class="wiz-ver" id="wizVer">v5.54 beta</span>
       <div class="wiz-prog" id="wizProg"></div>
     </div>
     <div class="wiz-body">
@@ -716,7 +716,7 @@
       </nav>
     </div>
     <div class="brand-tagline">The patient, methodical, wise AI tutor. Any age, any subject.</div>
-    <span class="ver" id="verLine">v5.52 beta · pub 18 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    <span class="ver" id="verLine">v5.54 beta · pub 18 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
@@ -2445,20 +2445,20 @@ if ('speechSynthesis' in window){
 }
 
 async function loadElVoices(){
-  if (!elKey) return;
+  if (!elKey) return false;
   let r;
   try{
     r = await fetch('https://api.elevenlabs.io/v1/voices', { headers:{ 'xi-api-key': elKey } });
   }catch(e){
     // network/shield block — the key itself may be fine, so keep it
     alert("Couldn't reach ElevenLabs — a browser shield or network block may be stopping api.elevenlabs.io. Your key has been kept; try again with Shields down for this site, or in another browser.");
-    return;
+    return false;
   }
   if (!r.ok){
     elKey = null; store.removeItem('sb_el_key'); elVoices = []; rebuildVoiceOptions();
     $('elKeyInput').placeholder = 'sk_…  (optional)';
     alert('ElevenLabs rejected that key (' + r.status + "). Create a key at elevenlabs.io → API Keys with Text-to-Speech and Voices (read) permissions — or leave it unrestricted — then paste the new one here.");
-    return;
+    return false;
   }
   const data = await r.json();
   elVoices = data.voices || [];
@@ -2468,6 +2468,7 @@ async function loadElVoices(){
     $('elKeyInput').value = '';
     $('elKeyInput').placeholder = '⭐ premium voices connected';
   }
+  return elVoices.length > 0;
 }
 $('elKeyBtn').addEventListener('click', () => {
   const k = $('elKeyInput').value.trim();
@@ -2763,7 +2764,9 @@ applyTheme(store.getItem('sb_theme') || 'graph');
     themeOrder.forEach(function(name){
       var t = (typeof THEMES!=='undefined') && THEMES[name]; if (!t) return;
       var sw = document.createElement('div'); sw.className='wsw'+(name===chosenTheme?' sel':'');
-      sw.style.background = t['--hi'] || '#FFD60A';
+      // two-colour diagonal swatch matching the real app: --a = paper, --b = accent
+      sw.style.setProperty('--a', t['--paper'] || '#F2F5F3');
+      sw.style.setProperty('--b', t['--hi'] || '#FFD60A');
       sw.title = name;
       sw.addEventListener('click', function(){
         chosenTheme = name;
@@ -2825,15 +2828,15 @@ applyTheme(store.getItem('sb_theme') || 'graph');
       try{
         elKey = k;
         if (typeof store!=='undefined') store.setItem('sb_el_key', k);
-        if (typeof loadElVoices === 'function'){ await loadElVoices(); }
-        // loadElVoices clears elKey on failure — check it survived
-        if (elKey && typeof elVoices!=='undefined' && elVoices.length){
+        var ok = (typeof loadElVoices === 'function') ? await loadElVoices() : false;
+        if (ok && elVoices.length){
           wizElStatus('ok', '✓ ' + elVoices.length + ' premium voices connected — pick one above');
-          renderVoice();   // refresh the wizard dropdown so the ⭐ voices appear
-          var sel=$w('wizVoiceSelect'); // preselect first premium voice if present
+          renderVoice();   // refresh the wizard dropdown so the ⭐ ElevenLabs voices appear
+          var sel=$w('wizVoiceSelect');
           for (var i=0;i<sel.options.length;i++){ if (sel.options[i].value.indexOf('el:')===0){ sel.selectedIndex=i; break; } }
-        } else if (elKey){
-          wizElStatus('ok', '✓ Key accepted — voices will load in the app.');
+        } else if (elKey && ok===false && elVoices.length===0){
+          // loadElVoices kept the key but couldn't list voices (e.g. shield/network) — alert already shown by it
+          wizElStatus('bad', "Couldn't load voices — see the message, or try again with shields down.");
         } else {
           wizElStatus('bad', 'That key was rejected. Check it has Text-to-Speech permission and try again.');
         }
@@ -2880,6 +2883,14 @@ applyTheme(store.getItem('sb_theme') || 'graph');
       });
     }catch(e){}
     sel.appendChild(gd);
+    // include ElevenLabs premium voices if a key has loaded them (so they appear right here in the wizard)
+    try{
+      if (typeof elVoices!=='undefined' && elVoices.length){
+        var ge=document.createElement('optgroup'); ge.label='\u2b50 Premium voices (ElevenLabs)';
+        elVoices.forEach(function(v){ var o=document.createElement('option'); o.value='el:'+v.voice_id; o.textContent=v.name; ge.appendChild(o); });
+        sel.insertBefore(ge, sel.firstChild);
+      }
+    }catch(e){}
     // premium blurb
     $w('wizPremiumBlurb').innerHTML = isO
       ? 'Your ChatGPT voices are already included. For an even more lifelike voice, add an <b>ElevenLabs</b> key (paid). You can also add a separate <b>OpenAI</b> voice key if you prefer.'
