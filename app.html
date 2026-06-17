@@ -387,9 +387,218 @@
   .shake{animation:funkyShake .6s ease;}
   @keyframes funkyShake{0%,100%{transform:translateX(0) rotate(0)}14%{transform:translateX(-9px) rotate(-.6deg)}30%{transform:translateX(8px) rotate(.6deg)}46%{transform:translateX(-6px)}62%{transform:translateX(5px)}80%{transform:translateX(-3px)}}
   @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+
+  /* ============ ONBOARDING WIZARD ============ */
+  .wiz-overlay{position:fixed; inset:0; z-index:1000; background:var(--paper); display:flex; align-items:flex-start; justify-content:center; overflow-y:auto; padding:24px 16px;
+    background-image:linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size:26px 26px;}
+  .wiz-card{width:100%; max-width:560px; background:var(--card); border:1.5px solid var(--ink); border-radius:18px; box-shadow:0 4px 0 var(--ink); overflow:hidden; margin:auto;}
+  .wiz-head{padding:18px 22px 0; position:relative;}
+  .wiz-mark{font-family:var(--display); font-weight:800; font-size:1.2rem; background:linear-gradient(transparent 56%, var(--hi) 56%); padding:0 5px;}
+  .wiz-ver{position:absolute; top:18px; right:22px; font-family:var(--mono); font-size:.62rem; color:var(--ink-soft); opacity:.6; letter-spacing:.03em;}
+  .wiz-prog{display:flex; gap:6px; margin:16px 0 0;}
+  .wiz-prog .seg{height:5px; flex:1; background:var(--line); border-radius:3px; transition:background .3s;}
+  .wiz-prog .seg.done{background:var(--tick);}
+  .wiz-prog .seg.cur{background:var(--hi-deep);}
+  .wiz-body{padding:22px;}
+  .wiz-kicker{font-family:var(--mono); font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px;}
+  .wiz-h{font-family:var(--display); font-weight:800; font-size:1.4rem; line-height:1.15; margin:0 0 6px;}
+  .wiz-sub{color:var(--ink-soft); font-size:.95rem; margin:0 0 18px;}
+  .wiz-step{display:none;} .wiz-step.active{display:block;}
+
+  .wtier{border:1.5px solid var(--line); border-radius:12px; padding:15px 16px; margin-bottom:12px; transition:border-color .15s, background .15s; position:relative; cursor:pointer;}
+  .wtier.sel{border-color:var(--tick); background:rgba(47,158,110,.07); box-shadow:0 2px 0 var(--tick);}
+  .wtier.disabled{opacity:.55; cursor:not-allowed; background:rgba(0,0,0,.02);}
+  .wtier-head{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:5px;}
+  .wtier-head h3{font-family:var(--display); font-weight:800; font-size:1.08rem; margin:0; display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .wtier-letter{display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:7px; background:var(--ink); color:#fff; font-family:var(--mono); font-size:.8rem; font-weight:600; flex:0 0 auto;}
+  .wtier.sel .wtier-letter{background:var(--tick);}
+  .wtier-price{font-family:var(--display); font-weight:800; font-size:1rem; color:var(--ink); white-space:nowrap;}
+  .wtier p{margin:0; font-size:.87rem; color:var(--ink-soft);}
+  .wsoon{font-family:var(--mono); font-size:.58rem; letter-spacing:.05em; text-transform:uppercase; background:var(--ink-soft); color:#fff; padding:2px 7px; border-radius:10px; font-weight:600;}
+  .wtier-pick{font-size:.78rem; font-weight:700; color:var(--tick); margin-top:8px; display:none;}
+  .wtier.sel .wtier-pick{display:block;}
+
+  .wchoice{border:1.5px solid var(--line); border-radius:12px; padding:15px 16px; margin-bottom:12px; cursor:pointer; transition:border-color .15s, background .15s;}
+  .wchoice:hover{border-color:var(--ink-soft);}
+  .wchoice.sel{border-color:var(--tick); background:rgba(47,158,110,.07); box-shadow:0 2px 0 var(--tick);}
+  .wchoice h3{font-family:var(--display); font-weight:800; font-size:1.05rem; margin:0 0 4px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .wchoice p{margin:0; font-size:.88rem; color:var(--ink-soft);}
+  .wtag{font-family:var(--mono); font-size:.6rem; background:var(--hi); color:var(--ink); padding:2px 7px; border-radius:10px; font-weight:600; letter-spacing:.03em;}
+  .wtag.wv{background:#E3F0FF; color:#1B5E9B;}
+
+  .whowto{list-style:none; margin:0 0 14px; padding:0; counter-reset:s;}
+  .whowto li{counter-increment:s; position:relative; padding:10px 0 10px 38px; border-bottom:1px dashed var(--line); font-size:.92rem;}
+  .whowto li:last-child{border:none;}
+  .whowto li::before{content:counter(s); position:absolute; left:0; top:8px; width:25px; height:25px; background:var(--ink); color:#fff; border-radius:50%; font-family:var(--mono); font-size:.78rem; display:flex; align-items:center; justify-content:center;}
+  .whowto b{font-weight:700;}
+  .wpill{display:inline-block; background:var(--hi); color:var(--ink); font-family:var(--mono); font-size:.82rem; font-weight:600; padding:1px 7px; border-radius:6px; border:1px solid var(--hi-deep);}
+  .wopenbtn{display:inline-block; margin:2px 0 16px; font-family:var(--display); font-weight:700; font-size:.85rem; color:var(--ink); background:var(--hi); border:1.5px solid var(--ink); border-radius:9px; padding:8px 15px; text-decoration:none; box-shadow:0 2px 0 var(--ink);}
+
+  .wnote{font-size:.84rem; border-radius:10px; padding:10px 13px; margin-bottom:14px;}
+  .wnote-priv{background:rgba(224,180,0,.10); border:1px solid var(--hi-deep);}
+  .wnote-priv b{color:var(--ink);}
+  .wnote-payg{background:rgba(43,168,196,.08); border:1px solid #7FB7D6; color:#1B5E9B;}
+
+  .wlabel{font-weight:700; font-size:.88rem; margin:6px 0 6px;}
+  .wopt{font-weight:400; color:var(--ink-soft); font-size:.8rem;}
+  .wmini{font-size:.85rem; color:var(--ink-soft); margin:0 0 12px;}
+  .wrule{height:1px; background:var(--line); margin:20px 0;}
+  .wkey{width:100%; font-family:var(--mono); font-size:.95rem; padding:13px 14px; border:1.5px solid var(--ink); border-radius:10px;}
+  .wkeyok{font-size:.88rem; font-weight:700; color:var(--tick); margin-top:10px; padding:9px 12px; background:rgba(47,158,110,.08); border:1.5px solid var(--tick); border-radius:9px; display:none;}
+  .wkeyok.show{display:block;}
+  .wtf{width:100%; font-family:var(--body); font-size:.96rem; padding:11px 13px; border:1.5px solid var(--ink); border-radius:10px; margin-bottom:14px;}
+
+  .wswatches{display:flex; gap:10px; flex-wrap:wrap; margin:4px 0 4px;}
+  .wsw{width:42px; height:42px; border-radius:10px; border:2px solid var(--line); cursor:pointer; transition:transform .1s, border-color .1s;}
+  .wsw:hover{transform:scale(1.08);}
+  .wsw.sel{border-color:var(--ink); box-shadow:0 0 0 2px var(--hi);}
+
+  .wvoice-picker{display:flex; gap:10px; align-items:center; margin-bottom:4px;}
+  .wvoicesel{flex:1; font-family:var(--body); font-size:.95rem; padding:11px 12px; border:1.5px solid var(--ink); border-radius:10px; background:var(--card); color:var(--ink);}
+  .wplaybtn{font-family:var(--display); font-weight:700; font-size:.85rem; color:var(--ink); background:var(--hi); border:1.5px solid var(--ink); border-radius:9px; padding:10px 16px; cursor:pointer; box-shadow:0 2px 0 var(--ink); white-space:nowrap;}
+  .wvgroup-label{font-family:var(--mono); font-size:.66rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); margin:14px 0 8px;}
+
+  .wpremium{margin-top:14px; border:1.5px solid var(--ink); border-radius:12px; background:var(--card); box-shadow:0 2px 0 var(--ink); overflow:hidden;}
+  .wpremium summary{cursor:pointer; padding:14px 16px; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:10px; transition:background .15s;}
+  .wpremium summary::-webkit-details-marker{display:none;}
+  .wprem-title{font-family:var(--display); font-weight:800; font-size:.98rem; color:var(--ink);}
+  .wprem-toggle{display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:50%; background:var(--hi); border:1.5px solid var(--ink); font-family:var(--mono); font-weight:600; font-size:1.1rem; line-height:1; flex:0 0 auto;}
+  .wpremium[open] .wprem-toggle{font-size:0;}
+  .wpremium[open] .wprem-toggle::after{content:'–'; font-size:1.1rem;}
+  .wpremium[open] summary{border-bottom:1.5px solid var(--line);}
+  .wpremium-body{padding:16px;}
+  .wpremium-body > p{margin:0 0 14px; font-size:.88rem; color:var(--ink-soft); line-height:1.65;}
+  .wprem-tabs{display:flex; gap:8px; margin-bottom:14px;}
+  .wprem-tab{flex:1; font-family:var(--display); font-weight:700; font-size:.9rem; color:var(--ink-soft); background:var(--card); border:1.5px solid var(--line); border-radius:9px; padding:9px 10px; cursor:pointer; transition:border-color .15s, background .15s, color .15s;}
+  .wprem-tab .wtabnote{display:block; font-family:var(--mono); font-size:.58rem; font-weight:400; letter-spacing:.03em; margin-top:2px;}
+  .wprem-tab.active{border-color:var(--ink); color:var(--ink); background:rgba(224,180,0,.10); box-shadow:0 2px 0 var(--hi-deep);}
+
+  .wiz-foot{display:flex; justify-content:space-between; align-items:center; padding:16px 22px; border-top:1.5px solid var(--line); background:rgba(0,0,0,.015);}
+  .wbtn{font-family:var(--display); font-weight:700; font-size:.95rem; border-radius:10px; padding:10px 20px; cursor:pointer; border:1.5px solid var(--ink); transition:transform .08s, box-shadow .08s;}
+  .wbtn-next{background:var(--hi); color:var(--ink); box-shadow:0 3px 0 var(--ink);}
+  .wbtn-next:disabled{background:var(--line); color:var(--ink-soft); border-color:var(--line); box-shadow:none; cursor:not-allowed; transform:none;}
+  .wbtn-next:hover{transform:translateY(-1px); box-shadow:0 4px 0 var(--ink);}
+  .wbtn-back{background:transparent; color:var(--ink-soft); border-color:var(--line);}
+  .wbtn-back:disabled{opacity:.4; cursor:default;}
+
+  .wiz-greet-ov{position:fixed; inset:0; background:rgba(20,33,61,.55); display:flex; align-items:center; justify-content:center; z-index:1100;}
+  .wiz-greet-card{background:var(--card); border:1.5px solid var(--ink); border-radius:18px; box-shadow:0 6px 0 var(--ink); padding:34px 40px; text-align:center; max-width:380px;}
+  .wiz-greet-card .gspk{font-size:2.2rem;}
+  .wiz-greet-card .ggreet{font-family:var(--display); font-weight:800; font-size:1.5rem; margin:12px 0 8px; background:linear-gradient(transparent 60%, var(--hi) 60%); display:inline-block; padding:0 8px;}
+  .wiz-greet-card .gsub{color:var(--ink-soft); font-size:.92rem;}
 </style>
 </head>
 <body>
+<!-- ============ FIRST-RUN ONBOARDING WIZARD (overlay; shown only when setup not done) ============ -->
+<div id="wizard" class="wiz-overlay" style="display:none" aria-hidden="true">
+  <div class="wiz-card">
+    <div class="wiz-head">
+      <span class="wiz-mark">PLAITO</span>
+      <span class="wiz-ver" id="wizVer">v5.51 beta</span>
+      <div class="wiz-prog" id="wizProg"></div>
+    </div>
+    <div class="wiz-body">
+
+      <!-- STEP 0: choose account -->
+      <div class="wiz-step" data-w="0">
+        <div class="wiz-kicker">Getting started</div>
+        <h2 class="wiz-h">Choose your account</h2>
+        <p class="wiz-sub">The tutoring is identical on every account — the difference is just how it's set up and paid for.</p>
+        <div class="wtier disabled">
+          <div class="wtier-head"><h3><span class="wtier-letter">A</span> Managed Account <span class="wsoon">Coming soon</span></h3><span class="wtier-price">$6.99/mo</span></div>
+          <p>We handle everything — no key, no setup. Just sign up and go. (+$4.99 per extra child.)</p>
+        </div>
+        <div class="wtier sel" data-wtier="byo">
+          <div class="wtier-head"><h3><span class="wtier-letter">B</span> Self-serve Account</h3><span class="wtier-price">Free</span></div>
+          <p>Use your own API key from ChatGPT or Claude (we'll walk you through it). Costs a few cents of credit per question — no subscription, ever.</p>
+          <div class="wtier-pick">● Selected</div>
+        </div>
+        <div class="wtier disabled">
+          <div class="wtier-head"><h3><span class="wtier-letter">C</span> Sponsored Account <span class="wsoon">Coming soon</span></h3><span class="wtier-price">Free</span></div>
+          <p>Free managed access for families who need it, through schools and our community pool.</p>
+        </div>
+        <div class="wnote wnote-priv" style="margin-top:6px">💾 <b>One-time setup, stored on this device.</b> Plaito keeps your key and settings right here in this browser — nothing is sent to us. That means it's quick, but you'll do this once on each device or browser you use.</div>
+      </div>
+
+      <!-- STEP 1: provider -->
+      <div class="wiz-step" data-w="1">
+        <div class="wiz-kicker">Step 1 of 4</div>
+        <h2 class="wiz-h">Which AI should power Plaito?</h2>
+        <p class="wiz-sub">Plaito borrows its "brain" from one of these. You'll get a key from them — it's quick, and we'll walk you through it.</p>
+        <div class="wchoice" data-wprov="anthropic"><h3>Claude <span class="wtag">$5 FREE TO START</span></h3><p>Anthropic's AI. $5 free credit to try, no card needed to start. (Voice is added separately — we'll help.)</p></div>
+        <div class="wchoice" data-wprov="openai"><h3>ChatGPT <span class="wtag wv">🔊 VOICE INCLUDED</span></h3><p>OpenAI's AI. Built-in spoken voices come from the same key — nothing else to set up.</p></div>
+      </div>
+
+      <!-- STEP 2: get + paste key -->
+      <div class="wiz-step" data-w="2">
+        <div class="wiz-kicker">Step 2 of 4</div>
+        <h2 class="wiz-h">Get your <span id="wizProvName">Claude</span> key</h2>
+        <p class="wiz-sub">Think of the key like a <b>pay-as-you-go SIM</b> for AI: you load a little credit with the provider and each question costs about a cent — no subscription. It's just a few steps; open the page, create the key, paste it below.</p>
+        <div class="wnote wnote-payg">💡 <b>Tip:</b> when you add credit, maybe skip "auto top-up" for the first month or two — that way there are no surprise charges while you're trying Plaito out.</div>
+        <ol class="whowto" id="wizHowto"></ol>
+        <a class="wopenbtn" id="wizOpenKey" href="#" target="_blank" rel="noopener">Open the key page in a new tab ↗</a>
+        <div class="wnote wnote-priv">🔒 <b>Keep this key to yourself</b> — it's like a password. Don't share it or post it anywhere.</div>
+        <div class="wlabel">Paste your key here</div>
+        <input class="wkey" id="wizKeyInput" placeholder="sk-ant-..." autocomplete="off">
+        <div class="wkeyok" id="wizKeyOk">✓ That's a valid key — we're ready to go!</div>
+      </div>
+
+      <!-- STEP 3: profile -->
+      <div class="wiz-step" data-w="3">
+        <div class="wiz-kicker">Step 3 of 4</div>
+        <h2 class="wiz-h">Who's Plaito tutoring?</h2>
+        <p class="wiz-sub">A few details let Plaito pitch everything at exactly the right level. None of it is required — but the more you share, the better the fit.</p>
+        <div class="wlabel">First name <span class="wopt">(optional)</span></div>
+        <input class="wtf" id="wizName" placeholder="Ethan">
+        <div class="wlabel">Location &amp; school year <span class="wopt">(optional)</span></div>
+        <input class="wtf" id="wizYear" placeholder="Year 9, NSW (Australia)">
+        <div class="wlabel">Subjects or curriculum <span class="wopt">(optional)</span></div>
+        <input class="wtf" id="wizSubjects" placeholder="Maths, Science — NSW syllabus">
+      </div>
+
+      <!-- STEP 4: personalise (colour + voice) -->
+      <div class="wiz-step" data-w="4">
+        <div class="wiz-kicker">Step 4 of 4</div>
+        <h2 class="wiz-h">Let's personalise Plaito</h2>
+        <p class="wiz-sub">Make it feel like yours — choose a look, then give your tutor a voice.</p>
+        <div class="wlabel">Colour theme</div>
+        <p class="wmini">A bit of fun — pick the accent colour Plaito wears.</p>
+        <div class="wswatches" id="wizSwatches"></div>
+        <div class="wrule"></div>
+        <div class="wlabel">Tutor voice</div>
+        <p class="wmini" id="wizVoiceSub">A spoken tutor talks through the thinking, not just text on screen. Choose a voice and tap ▶ to hear a sample.</p>
+        <div class="wvoice-picker">
+          <select class="wvoicesel" id="wizVoiceSelect"></select>
+          <button class="wplaybtn" id="wizTestVoice" type="button">▶ Test</button>
+        </div>
+        <div id="wizVoiceIncluded" class="wnote wnote-payg" style="display:none;margin-top:12px">🔊 <b>ChatGPT voices included</b> — these come from your key, a fraction of a cent each, pay-as-you-go.</div>
+        <div class="wvgroup-label">💻 Using a device voice</div>
+        <div class="wnote wnote-priv">💡 <b>Tip:</b> device voices are free and unlimited, but vary in quality. On iPhone, iPad and Mac you can download free <b>premium "Enhanced" voices</b> in Settings → Accessibility → Spoken Content for a big upgrade.</div>
+        <details class="wpremium">
+          <summary><span class="wprem-title">⭐ Add a more lifelike voice</span><span class="wprem-toggle" aria-hidden="true">+</span></summary>
+          <div class="wpremium-body">
+            <p id="wizPremiumBlurb"></p>
+            <div class="wprem-tabs">
+              <button class="wprem-tab active" data-wvp="eleven" type="button">ElevenLabs <span class="wtabnote">most lifelike</span></button>
+              <button class="wprem-tab" data-wvp="openai" type="button">OpenAI <span class="wtabnote">cheapest</span></button>
+            </div>
+            <ol class="whowto" id="wizPremiumHowto"></ol>
+            <a class="wopenbtn" id="wizPremiumOpen" href="#" target="_blank" rel="noopener">Open the voice key page in a new tab ↗</a>
+            <div class="wlabel">Paste your voice key here</div>
+            <input class="wkey" id="wizElKey" placeholder="Paste your voice key…" autocomplete="off">
+            <div class="wnote wnote-priv" style="margin-top:10px">🔒 <b>Keep this key to yourself too</b> — like the first one, it's private.</div>
+          </div>
+        </details>
+      </div>
+
+    </div>
+    <div class="wiz-foot">
+      <button class="wbtn wbtn-back" id="wizBack" type="button" disabled>← Back</button>
+      <button class="wbtn wbtn-next" id="wizNext" type="button">Next →</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-bg" id="splitModal" role="dialog" aria-modal="true" aria-label="Multiple questions detected">
   <div class="guide" style="max-width:520px">
     <h2>Looks like more than one question</h2>
@@ -497,7 +706,7 @@
       </nav>
     </div>
     <div class="brand-tagline">The patient, methodical, wise AI tutor. Any age, any subject.</div>
-    <span class="ver" id="verLine">v5.30 beta · pub 14 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    <span class="ver" id="verLine">v5.51 beta · pub 18 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
@@ -2478,6 +2687,232 @@ function applyTheme(name){
 }
 document.querySelectorAll('.swatch').forEach(s => s.addEventListener('click', () => applyTheme(s.dataset.theme)));
 applyTheme(store.getItem('sb_theme') || 'graph');
+
+/* ============ ONBOARDING WIZARD CONTROLLER ============
+   Runs LAST so every function/var it drives (applyTheme, setActiveProvider,
+   rebuildVoiceOptions, keys, store, setupDoneBtn handler) already exists.
+   It is a presentation layer ONLY: on finish it feeds the real setup fields
+   and clicks the real Done button, so the proven save path runs unchanged. */
+(function wizardController(){
+  var W = document.getElementById('wizard');
+  if (!W) return;
+
+  // ---- FIRST-RUN GATE: only show when setup isn't already done ----
+  // Returning users (sb_setup_done==='1' AND a real key present) never see it.
+  var alreadyDone = (store.getItem('sb_setup_done') === '1') && !!apiKey;
+  if (alreadyDone) return;   // <- existing users sail straight past, untouched
+
+  var TOTAL = 5, cur = 0, wprov = 'anthropic', wvp = 'eleven';
+
+  // dynamic key-step instructions (mirror the app's own guidance)
+  var howtos = {
+    anthropic: [
+      'Open <b>console.anthropic.com</b> and sign in (or create a free account).',
+      'In the left menu, click <b>API keys</b>.',
+      'Click <b>Create Key</b> — name it <span class="wpill">Plaito</span> so you know what it\'s for.',
+      'Copy the key (starts with <b>sk-ant-</b>) and paste it below.'
+    ],
+    openai: [
+      'Open <b>platform.openai.com</b> and sign in (or create an account).',
+      'Add a little credit under <b>Billing</b> (pay-as-you-go, about a cent a question).',
+      'Go to <b>API keys</b> → <b>Create new secret key</b>, name it <span class="wpill">Plaito</span>.',
+      'Copy the key (starts with <b>sk-</b>) and paste it below.'
+    ]
+  };
+  var keyUrls = { anthropic:'https://console.anthropic.com/settings/keys', openai:'https://platform.openai.com/api-keys' };
+  var elevenSteps = [
+    'Open <b>elevenlabs.io</b> and sign in (or create a free account).',
+    'Click your profile (bottom-left) \u2192 <b>API Keys</b>.',
+    'Click <b>Create API Key</b> and name it <span class="wpill">Plaito</span>.',
+    'Under permissions, make sure <b>Text to Speech</b> is enabled, then create it.',
+    'Copy the key and paste it below.'
+  ];
+  var openaiVoiceSteps = [
+    'Open <b>platform.openai.com</b> and sign in (or create an account).',
+    'Add a little credit under <b>Billing</b> (voice is pay-as-you-go, a fraction of a cent each).',
+    'Go to <b>API keys</b> \u2192 <b>Create new secret key</b>, name it <span class="wpill">Plaito Voice</span>.',
+    'Copy the key (starts with <b>sk-</b>) and paste it below.'
+  ];
+  var voiceKeyMeta = {
+    eleven: { steps: elevenSteps, url:'https://elevenlabs.io/app/settings/api-keys', ph:'Paste your ElevenLabs key\u2026' },
+    openai: { steps: openaiVoiceSteps, url:'https://platform.openai.com/api-keys', ph:'Paste your OpenAI voice key (sk-\u2026)' }
+  };
+
+  function $w(id){ return document.getElementById(id); }
+
+  function buildProg(){
+    var el = $w('wizProg'); el.innerHTML='';
+    for (var i=0;i<TOTAL;i++){ var d=document.createElement('div'); d.className='seg'+(i<cur?' done':i===cur?' cur':''); el.appendChild(d); }
+  }
+
+  // build colour swatches from the real THEMES so the wizard offers the same looks
+  var themeOrder = ['graph','ocean','forest','bubblegum','sunset','grape','midnight','slate'];
+  var chosenTheme = store.getItem('sb_theme') || 'graph';
+  function buildSwatches(){
+    var box = $w('wizSwatches'); if (!box) return; box.innerHTML='';
+    themeOrder.forEach(function(name){
+      var t = (typeof THEMES!=='undefined') && THEMES[name]; if (!t) return;
+      var sw = document.createElement('div'); sw.className='wsw'+(name===chosenTheme?' sel':'');
+      sw.style.background = t['--hi'] || '#FFD60A';
+      sw.title = name;
+      sw.addEventListener('click', function(){
+        chosenTheme = name;
+        box.querySelectorAll('.wsw').forEach(function(x){ x.classList.remove('sel'); });
+        sw.classList.add('sel');
+        try{ applyTheme(name); }catch(e){}   // live preview using the real theming
+      });
+      box.appendChild(sw);
+    });
+  }
+
+  function pickProvider(pv){
+    wprov = pv;
+    W.querySelectorAll('.wchoice').forEach(function(c){ c.classList.toggle('sel', c.dataset.wprov===pv); });
+  }
+  function renderHowto(){
+    $w('wizProvName').textContent = wprov==='anthropic'?'Claude':'ChatGPT';
+    var ol=$w('wizHowto'); ol.innerHTML='';
+    howtos[wprov].forEach(function(t){ var li=document.createElement('li'); li.innerHTML=t; ol.appendChild(li); });
+    $w('wizKeyInput').placeholder = wprov==='anthropic'?'sk-ant-...':'sk-...';
+    $w('wizOpenKey').href = keyUrls[wprov];
+  }
+  function checkKey(){
+    var v=$w('wizKeyInput').value.trim();
+    var ok = (wprov==='anthropic' && v.indexOf('sk-ant-')===0) || (wprov==='openai' && v.indexOf('sk-')===0 && v.indexOf('sk-ant-')!==0);
+    var valid = ok && v.length>12;
+    $w('wizKeyOk').classList.toggle('show', valid);
+    // the key is mandatory — block Next on the key step until a validly-formatted key is present
+    if (cur===2) setNextEnabled(valid);
+    return valid;
+  }
+
+  function setNextEnabled(on){
+    $w('wizNext').disabled = !on;
+  }
+  function pickVoiceProvider(vp){
+    wvp = vp;
+    W.querySelectorAll('.wprem-tab').forEach(function(t){ t.classList.toggle('active', t.dataset.wvp===vp); });
+    var m = voiceKeyMeta[vp];
+    var ol=$w('wizPremiumHowto'); ol.innerHTML='';
+    m.steps.forEach(function(t){ var li=document.createElement('li'); li.innerHTML=t; ol.appendChild(li); });
+    $w('wizElKey').placeholder = m.ph;
+    $w('wizPremiumOpen').href = m.url;
+  }
+  function renderVoice(){
+    var isO = (wprov==='openai');
+    $w('wizVoiceIncluded').style.display = isO?'block':'none';
+    $w('wizVoiceSub').textContent = isO
+      ? 'Your key includes voices — or use a device voice. Choose one and tap \u25b6 to hear it.'
+      : 'Pick a device voice now (free), or add a premium one below. Tap \u25b6 to hear it.';
+    // populate the wizard's own voice dropdown for preview (device voices always; OpenAI voices if applicable)
+    var sel=$w('wizVoiceSelect'); sel.innerHTML='';
+    if (isO){
+      var go=document.createElement('optgroup'); go.label='\ud83d\udd0a ChatGPT voices (included)';
+      ['nova','onyx','shimmer','alloy','echo','fable'].forEach(function(n){ var o=document.createElement('option'); o.value='oai:'+n; o.textContent=n.charAt(0).toUpperCase()+n.slice(1); go.appendChild(o); });
+      sel.appendChild(go);
+    }
+    var gd=document.createElement('optgroup'); gd.label='\ud83d\udcbb Your device voices (free)';
+    var sys=document.createElement('option'); sys.value='sys:default'; sys.textContent='System voice (default)'; gd.appendChild(sys);
+    try{
+      (window.speechSynthesis ? speechSynthesis.getVoices() : []).slice(0,8).forEach(function(v){
+        var o=document.createElement('option'); o.value='dev:'+v.name; o.textContent=v.name; gd.appendChild(o);
+      });
+    }catch(e){}
+    sel.appendChild(gd);
+    // premium blurb
+    $w('wizPremiumBlurb').innerHTML = isO
+      ? 'Your ChatGPT voices are already included. For an even more lifelike voice, add an <b>ElevenLabs</b> key (paid). You can also add a separate <b>OpenAI</b> voice key if you prefer.'
+      : 'For a more natural voice than your device offers, add a voice key. Pick a provider below \u2014 you\'ll need a key from whichever you choose (each has a quick setup).';
+    pickVoiceProvider('eleven');
+  }
+
+  var WIZ_STEP_NAMES = ['account','provider','key','profile','personalise'];
+  var wizFiredSteps = {};
+  function wizTrack(event, label){
+    if (typeof gtag !== 'function') return;
+    try{ gtag('event', event, label ? { step: label } : {}); }catch(e){}
+  }
+
+  function show(){
+    W.querySelectorAll('.wiz-step').forEach(function(st){ st.classList.toggle('active', +st.dataset.w===cur); });
+    $w('wizBack').disabled = (cur===0);
+    $w('wizNext').textContent = (cur===TOTAL-1) ? "Let's start class \u2192" : 'Next \u2192';
+    if (cur===2){ renderHowto(); checkKey(); }   // arriving at key step: gate Next on key validity
+    else setNextEnabled(true);                    // every other step: Next always allowed
+    if (cur===4) renderVoice();
+    buildProg();
+    // fire a per-step event the first time each step is reached (drop-off funnel)
+    var nm = WIZ_STEP_NAMES[cur] || ('step'+cur);
+    if (!wizFiredSteps[nm]){ wizFiredSteps[nm] = true; wizTrack('wizard_step', nm); }
+  }
+
+  function finish(){
+    // ---- feed the REAL setup controls, then click the REAL Done button ----
+    try{
+      // provider radio
+      var r = document.querySelector('input[name=provider][value="'+wprov+'"]');
+      if (r){ r.checked = true; if (typeof setActiveProvider==='function') setActiveProvider(wprov); }
+      // main key
+      var k = $w('wizKeyInput').value.trim();
+      if (k){ var realKey=document.getElementById('apiKeyInput'); if (realKey) realKey.value = k; }
+      // profile (compose from the 3 fields)
+      var parts = [ $w('wizName').value.trim(), $w('wizYear').value.trim(), $w('wizSubjects').value.trim() ].filter(Boolean);
+      var realProfile = document.getElementById('profileInput'); if (realProfile) realProfile.value = parts.join(', ');
+      // theme already applied live via applyTheme()
+      // premium voice key (optional)
+      var elk = $w('wizElKey').value.trim();
+      if (elk){ var realEl=document.getElementById('elKeyInput'); if (realEl) realEl.value = elk; if (typeof setElKey==='function'){ try{ setElKey(elk); }catch(e){} } }
+      // make sure the remember box is ticked (wizard implies "save on this device")
+      var rem=document.getElementById('rememberKey'); if (rem) rem.checked = true;
+    }catch(e){}
+
+    // greeting moment, then run the real Done path + reveal the app
+    var name = $w('wizName').value.trim();
+    var greet = name ? ("Alright " + name + ", let's get started!") : "Alright, let's get started!";
+    var ov=document.createElement('div'); ov.className='wiz-greet-ov';
+    ov.innerHTML='<div class="wiz-greet-card"><div class="gspk">\ud83d\udd0a</div><div class="ggreet">'+greet.replace(/</g,'&lt;')+'</div><div class="gsub">Plaito is ready \u2014 starting our first session\u2026</div></div>';
+    document.body.appendChild(ov);
+    try{ if (window.speechSynthesis){ var u=new SpeechSynthesisUtterance(greet); speechSynthesis.speak(u); } }catch(e){}
+
+    setTimeout(function(){
+      try{
+        var done=document.getElementById('setupDoneBtn');
+        if (done) done.click();   // <- the PROVEN save path (validates key, saves, sets flag, fires GA, renderSetup)
+      }catch(e){}
+      // if the real Done refused (e.g. no valid key), bail back into the wizard so nothing is lost
+      var ok = (store.getItem('sb_setup_done')==='1');
+      if (ok){
+        W.style.display='none'; W.setAttribute('aria-hidden','true');
+      }
+      if (ov.parentNode) ov.remove();
+    }, 1400);
+  }
+
+  function go(d){
+    // hard guard: cannot advance past the key step without a valid key
+    if (d>0 && cur===2 && !checkKey()){ return; }
+    if (d>0 && cur===TOTAL-1){ finish(); return; }
+    cur = Math.max(0, Math.min(TOTAL-1, cur+d));
+    show();
+  }
+
+  // ---- wire events ----
+  W.querySelectorAll('.wchoice').forEach(function(c){ c.addEventListener('click', function(){ pickProvider(c.dataset.wprov); }); });
+  W.querySelectorAll('.wprem-tab').forEach(function(t){ t.addEventListener('click', function(){ pickVoiceProvider(t.dataset.wvp); }); });
+  $w('wizKeyInput').addEventListener('input', checkKey);
+  $w('wizBack').addEventListener('click', function(){ go(-1); });
+  $w('wizNext').addEventListener('click', function(){ go(1); });
+  $w('wizTestVoice').addEventListener('click', function(){
+    try{ if (window.speechSynthesis){ var u=new SpeechSynthesisUtterance("Hi! I'm Plaito. Let's work through it together."); speechSynthesis.speak(u); } }catch(e){}
+  });
+
+  // ---- init + show ----
+  pickProvider('anthropic');
+  buildSwatches();
+  wizTrack('wizard_start', 'opened');
+  show();
+  W.style.display='flex'; W.setAttribute('aria-hidden','false');
+})();
 </script>
 </body>
 </html>
