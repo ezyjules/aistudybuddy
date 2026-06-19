@@ -508,7 +508,7 @@
   <div class="wiz-card">
     <div class="wiz-head">
       <span class="wiz-mark">PLAITO</span>
-      <span class="wiz-ver" id="wizVer">v5.56 beta</span>
+      <span class="wiz-ver" id="wizVer">v5.57 beta</span>
       <div class="wiz-prog" id="wizProg"></div>
     </div>
     <div class="wiz-body">
@@ -725,7 +725,7 @@
       </nav>
     </div>
     <div class="brand-tagline">The patient, methodical, polymath AI tutor. Any age, any subject.</div>
-    <span class="ver" id="verLine">v5.56 beta · pub 18 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    <span class="ver" id="verLine">v5.57 beta · pub 18 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
@@ -1791,6 +1791,7 @@ async function startTutoring(part){
     gtag('event', 'first_question', { step: 'used_the_app' });
     store.setItem('sb_first_q', '1');
   }
+  if (typeof gtag === 'function') gtag('event', 'question_asked', { step: 'asked' });
   stopSpeak();
   $('analyzeThumb').src = focusDataUrl || pageDataUrl || '';
   $('analyzeThumb').style.display = (focusDataUrl || pageDataUrl) ? 'block' : 'none';
@@ -2996,6 +2997,7 @@ applyTheme(store.getItem('sb_theme') || 'graph');
     ov.innerHTML='<div class="wiz-greet-card"><div class="gspk">\ud83d\udd0a</div><div class="ggreet">'+greet.replace(/</g,'&lt;')+'</div><div class="gsub">Plaito is ready, starting our first session\u2026</div></div>';
     document.body.appendChild(ov);
     try{ if (typeof speak==='function'){ speak(greet); } else if (window.speechSynthesis){ var u=new SpeechSynthesisUtterance(greet); speechSynthesis.speak(u); } }catch(e){}
+    try{ if (document.activeElement && W.contains(document.activeElement)) document.activeElement.blur(); }catch(e){}
     W.style.display='none'; W.setAttribute('aria-hidden','true');
 
     setTimeout(function(){ if (ov.parentNode) ov.remove(); }, 1600);
