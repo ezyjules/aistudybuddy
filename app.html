@@ -508,7 +508,7 @@
   <div class="wiz-card">
     <div class="wiz-head">
       <span class="wiz-mark">PLAITO</span>
-      <span class="wiz-ver" id="wizVer">v5.60 beta</span>
+      <span class="wiz-ver" id="wizVer">v5.62 beta</span>
       <div class="wiz-prog" id="wizProg"></div>
     </div>
     <div class="wiz-body">
@@ -726,7 +726,7 @@
       </nav>
     </div>
     <div class="brand-tagline">The patient, methodical, polymath AI tutor. Any age, any subject.</div>
-    <span class="ver" id="verLine">v5.60 beta · pub 18 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    <span class="ver" id="verLine">v5.62 beta · pub 18 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
@@ -2493,7 +2493,7 @@ function rebuildVoiceOptions(){
     })));
   }
   // ElevenLabs premium voices (only if a key was added)
-  addGroup('⭐ Premium voices (ElevenLabs)', elVoices.map(v => ({
+  addGroup('🎧 ElevenLabs voices', elVoices.map(v => ({
     value: 'el:' + v.voice_id, text: v.name
   })));
   // device / browser built-in voices
@@ -2670,11 +2670,11 @@ function speak(text){
   const rate = parseFloat($('rateSlider').value) || 1;
   const spoken = speechText(text);
   audioState = 'playing'; setDock();
-  if (selVal.startsWith('oai:') && provider==='openai' && apiKey){
+  if (selVal.startsWith('oai:') && (MANAGED || (provider==='openai' && apiKey))){
     oaiSpeak(spoken, selVal.slice(4), rate);
     return;
   }
-  if (selVal.startsWith('el:') && elKey){
+  if (selVal.startsWith('el:') && (MANAGED || elKey)){
     elSpeak(spoken, selVal.slice(3), rate);
     return;
   }
@@ -2997,9 +2997,9 @@ applyTheme(store.getItem('sb_theme') || 'graph');
     // include ElevenLabs premium voices if a key has loaded them (so they appear right here in the wizard)
     try{
       if (typeof elVoices!=='undefined' && elVoices.length){
-        var ge=document.createElement('optgroup'); ge.label='\u2b50 Premium voices (ElevenLabs)';
+        var ge=document.createElement('optgroup'); ge.label='🎧 ElevenLabs voices';
         elVoices.forEach(function(v){ var o=document.createElement('option'); o.value='el:'+v.voice_id; o.textContent=v.name; ge.appendChild(o); });
-        sel.insertBefore(ge, sel.firstChild);
+        sel.insertBefore(ge, gd);
       }
     }catch(e){}
     // invited/managed accounts: all keys live on the proxy, so the "add a key" panel is hidden
