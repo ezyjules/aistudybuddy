@@ -508,7 +508,7 @@
   <div class="wiz-card">
     <div class="wiz-head">
       <span class="wiz-mark">PLAITO</span>
-      <span class="wiz-ver" id="wizVer">v5.62 beta</span>
+      <span class="wiz-ver" id="wizVer">v5.63 beta</span>
       <div class="wiz-prog" id="wizProg"></div>
     </div>
     <div class="wiz-body">
@@ -726,7 +726,7 @@
       </nav>
     </div>
     <div class="brand-tagline">The patient, methodical, polymath AI tutor. Any age, any subject.</div>
-    <span class="ver" id="verLine">v5.62 beta · pub 18 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    <span class="ver" id="verLine">v5.63 beta · pub 18 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
@@ -1316,16 +1316,18 @@ $('apiKeyBtn').addEventListener('click', connectKey);
 $('apiKeyInput').addEventListener('keydown', e => { if (e.key==='Enter'){ e.preventDefault(); connectKey(); } });
 $('setupDoneBtn').addEventListener('click', () => {
   const chosen = document.querySelector('input[name=provider]:checked')?.value || 'anthropic';
-  const typed = $('apiKeyInput').value.trim();
-  if (typed){
-    if (chosen === 'anthropic' && !typed.startsWith('sk-ant-')){ alert("A Claude key starts with sk-ant-, that looks like something else."); return; }
-    if (chosen === 'openai' && !typed.startsWith('sk-')){ alert("An OpenAI key starts with sk-, that looks like something else."); return; }
-    keys[chosen] = typed;
-    if ($('rememberKey').checked) store.setItem(chosen==='openai'?'sb_openai_key':'sb_anthropic_key', typed);
-    else store.removeItem(chosen==='openai'?'sb_openai_key':'sb_anthropic_key');
-  } else if (!keys[chosen]){
-    alert("To finish setup, paste an API key, either ChatGPT (OpenAI) or Claude (Anthropic).");
-    return;
+  if (!MANAGED){
+    const typed = $('apiKeyInput').value.trim();
+    if (typed){
+      if (chosen === 'anthropic' && !typed.startsWith('sk-ant-')){ alert("A Claude key starts with sk-ant-, that looks like something else."); return; }
+      if (chosen === 'openai' && !typed.startsWith('sk-')){ alert("An OpenAI key starts with sk-, that looks like something else."); return; }
+      keys[chosen] = typed;
+      if ($('rememberKey').checked) store.setItem(chosen==='openai'?'sb_openai_key':'sb_anthropic_key', typed);
+      else store.removeItem(chosen==='openai'?'sb_openai_key':'sb_anthropic_key');
+    } else if (!keys[chosen]){
+      alert("To finish setup, paste an API key, either ChatGPT (OpenAI) or Claude (Anthropic).");
+      return;
+    }
   }
   setActiveProvider(chosen);
   profile = $('profileInput').value.trim();
@@ -1334,7 +1336,8 @@ $('setupDoneBtn').addEventListener('click', () => {
   store.setItem('sb_setup_done', '1');
   if (typeof gtag === 'function') gtag('event', 'setup_complete', { step: 'ready_for_class' });
   renderSetup();
-  toast((provider==='openai'?'ChatGPT':'Claude') + ' key connected ✓');
+  if (MANAGED){ if (typeof applyManagedUI==='function') applyManagedUI(); toast('Settings saved ✓'); }
+  else toast((provider==='openai'?'ChatGPT':'Claude') + ' key connected ✓');
 });
 $('setupClosed').addEventListener('click', openSettings);
 
