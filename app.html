@@ -508,7 +508,7 @@
   <div class="wiz-card">
     <div class="wiz-head">
       <span class="wiz-mark">PLAITO</span>
-      <span class="wiz-ver" id="wizVer">v5.59 beta</span>
+      <span class="wiz-ver" id="wizVer">v5.60 beta</span>
       <div class="wiz-prog" id="wizProg"></div>
     </div>
     <div class="wiz-body">
@@ -726,7 +726,7 @@
       </nav>
     </div>
     <div class="brand-tagline">The patient, methodical, polymath AI tutor. Any age, any subject.</div>
-    <span class="ver" id="verLine">v5.59 beta · pub 18 Jun 26 <span id="tokenReadout" class="tok"></span></span>
+    <span class="ver" id="verLine">v5.60 beta · pub 18 Jun 26 <span id="tokenReadout" class="tok"></span></span>
     <span id="pts" hidden>0</span><span id="streak" hidden>0</span>
   </header>
   <div class="header-copy" id="headerCopy">
@@ -1131,17 +1131,12 @@ function applyManagedUI(){
       if (er){ er.style.display='none'; var pv = er.previousElementSibling; if (pv && pv.classList && pv.classList.contains('key-note')) pv.style.display='none'; }
     }
     var vs = document.getElementById('voiceSelect');
-    if (vs && !document.getElementById('premiumToggleWrap')){
-      var w = document.createElement('label'); w.id='premiumToggleWrap';
-      w.style.cssText='display:flex;align-items:center;gap:8px;margin:8px 0;font-size:14px;cursor:pointer;';
-      w.innerHTML='<input type="checkbox" id="premiumToggle"> \u2b50 Turn on premium voices (uses more credit)';
-      vs.parentNode.insertBefore(w, vs.nextSibling);
-      document.getElementById('premiumToggle').addEventListener('change', function(e){
-        if (e.target.checked){ loadElVoices(); } else { elVoices=[]; rebuildVoiceOptions(); }
-        gaFam('voice_premium_toggle', { on: e.target.checked });
-      });
+    if (vs && !vs.dataset.mgdBound){
+      vs.dataset.mgdBound = '1';
       vs.addEventListener('change', function(){ gaFam('voice_selected', { voice: vs.value }); });
     }
+    // managed = every key lives on the proxy, so load the premium (ElevenLabs) voices automatically too
+    try{ if (typeof loadElVoices==='function' && (typeof elVoices==='undefined' || !elVoices.length)) loadElVoices(); }catch(e){}
     document.querySelectorAll('input[name=provider]').forEach(function(r){
       r.addEventListener('change', function(){ if (r.checked) gaFam('model_selected', { model: r.value }); });
     });
@@ -2977,13 +2972,16 @@ applyTheme(store.getItem('sb_theme') || 'graph');
   }
   function renderVoice(){
     var isO = (wprov==='openai');
-    $w('wizVoiceIncluded').style.display = isO?'block':'none';
-    $w('wizVoiceSub').textContent = isO
-      ? 'Your key includes voices, or use a device voice. Choose one and tap \u25b6 to hear it.'
-      : 'Pick a device voice now (free), or add a premium one below. Tap \u25b6 to hear it.';
+    var mgd = (typeof MANAGED!=='undefined' && MANAGED);
+    $w('wizVoiceIncluded').style.display = (isO||mgd)?'block':'none';
+    $w('wizVoiceSub').textContent = mgd
+      ? 'Choose any voice below and tap \u25b6 to hear it. ChatGPT and premium voices are ready.'
+      : (isO
+        ? 'Your key includes voices, or use a device voice. Choose one and tap \u25b6 to hear it.'
+        : 'Pick a device voice now (free), or add a premium one below. Tap \u25b6 to hear it.');
     // populate the wizard's own voice dropdown for preview (device voices always; OpenAI voices if applicable)
     var sel=$w('wizVoiceSelect'); sel.innerHTML='';
-    if (isO){
+    if (isO||mgd){
       var go=document.createElement('optgroup'); go.label='\ud83d\udd0a ChatGPT voices (included)';
       ['nova','onyx','shimmer','alloy','echo','fable'].forEach(function(n){ var o=document.createElement('option'); o.value='oai:'+n; o.textContent=n.charAt(0).toUpperCase()+n.slice(1); go.appendChild(o); });
       sel.appendChild(go);
@@ -3004,11 +3002,14 @@ applyTheme(store.getItem('sb_theme') || 'graph');
         sel.insertBefore(ge, sel.firstChild);
       }
     }catch(e){}
-    // premium blurb
-    $w('wizPremiumBlurb').innerHTML = isO
-      ? 'Your ChatGPT voices are already included. For an even more lifelike voice, add an <b>ElevenLabs</b> key (paid). You can also add a separate <b>OpenAI</b> voice key if you prefer.'
-      : 'For a more natural voice than your device offers, add a voice key. Pick a provider below, you\'ll need a key from whichever you choose (each has a quick setup).';
-    pickVoiceProvider('eleven');
+    // invited/managed accounts: all keys live on the proxy, so the "add a key" panel is hidden
+    var _det = W.querySelector('.wpremium'); if (_det) _det.style.display = mgd ? 'none' : '';
+    if (!mgd){
+      $w('wizPremiumBlurb').innerHTML = isO
+        ? 'Your ChatGPT voices are already included. For an even more lifelike voice, add an <b>ElevenLabs</b> key (paid). You can also add a separate <b>OpenAI</b> voice key if you prefer.'
+        : 'For a more natural voice than your device offers, add a voice key. Pick a provider below, you\'ll need a key from whichever you choose (each has a quick setup).';
+      pickVoiceProvider('eleven');
+    }
   }
 
   var WIZ_STEP_NAMES = ['account','provider','key','profile','personalise'];
@@ -3024,7 +3025,7 @@ applyTheme(store.getItem('sb_theme') || 'graph');
     $w('wizNext').textContent = (cur===TOTAL-1) ? "Let's start class \u2192" : 'Next \u2192';
     if (cur===2){ renderHowto(); checkKey(); }   // arriving at key step: gate Next on key validity
     else setNextEnabled(true);                    // every other step: Next always allowed
-    if (cur===4) renderVoice();
+    if (cur===4){ if (MANAGED && (typeof elVoices==='undefined' || !elVoices.length)){ try{ loadElVoices().then(function(){ renderVoice(); }); }catch(e){} } renderVoice(); }
     buildProg();
     // fire a per-step event the first time each step is reached (drop-off funnel)
     var nm = WIZ_STEP_NAMES[cur] || ('step'+cur);
@@ -3049,6 +3050,7 @@ applyTheme(store.getItem('sb_theme') || 'graph');
       var realVoice=document.getElementById('voiceSelect');
       var wv = $w('wizVoiceSelect') ? ($w('wizVoiceSelect').value||'') : '';
       if (realVoice && wv && [].some.call(realVoice.options, function(o){return o.value===wv;})) realVoice.value = wv;
+      if (wv) store.setItem('sb_voice', wv);
       if (typeof saveVoiceChoice==='function') saveVoiceChoice();
       if (typeof gaFam==='function') gaFam('managed_setup_done', { model: wprov });
     }catch(e){}
