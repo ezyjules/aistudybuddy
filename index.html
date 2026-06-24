@@ -494,5 +494,24 @@
   })();
 </script>
 
+<script>
+/* Invited access: if the landing page is opened with ?access=TOKEN&fam=ID, carry it into the app.
+   Same-origin localStorage means the app can read it even without the URL params, but we also
+   append them to the Open-Plaito links so the hand-off is explicit and survives a cleared store. */
+(function(){
+  try{
+    var q = new URLSearchParams(location.search);
+    var tok = q.get('access') || '', fam = q.get('fam') || '';
+    if (!tok) return;
+    try{ localStorage.setItem('sb_access', tok); if (fam) localStorage.setItem('sb_fam', fam); }catch(e){}
+    var qs = 'access=' + encodeURIComponent(tok) + (fam ? ('&fam=' + encodeURIComponent(fam)) : '');
+    ['navCta','heroCta','finalCta'].forEach(function(id){
+      var a = document.getElementById(id); if (!a) return;
+      var base = (a.getAttribute('href') || 'app.html').split('?')[0];
+      a.setAttribute('href', base + '?' + qs);
+    });
+  }catch(e){}
+})();
+</script>
 </body>
 </html>
